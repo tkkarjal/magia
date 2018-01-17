@@ -1,5 +1,5 @@
 function new_filename = add_postfix(filename,postfix)
-
+%
 if(ischar(filename))
     [p,n,e] = fileparts(filename);
     n = [n postfix];
