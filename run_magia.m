@@ -413,6 +413,7 @@ try
 catch ME
     error_message = aivo_parse_me(ME);
     aivo_set_info(subject,'error',error_message);
+    warning(error_message);
 end
 
 end
