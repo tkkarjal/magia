@@ -1,8 +1,5 @@
 function run_magia(subject)
 
-addpath(genpath('/scratch/shared/toolbox/Scripts/PET_pipeline'));
-addpath(genpath('/scratch/shared/toolbox/Scripts/metpet'));
-
 megapet_dir = getenv('MEGAPET_HOME');
 data_path = getenv('DATA_DIR');
 D = sprintf('%s/%s',data_path,subject);
