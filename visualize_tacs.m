@@ -17,16 +17,15 @@ else
 end
 
 t = mean(frames,2);
+d = sprintf('%s/tacs',results_dir);
+if(~exist(d,'dir'))
+    mkdir(d);
+end
 if(length(t)>1)
     N = size(tacs,1);
     if(length(input)~=length(t))
         p = spline(input(:,1),input(:,2));
         input = ppval(p,t);
-    end
-    
-    d = sprintf('%s/tacs',results_dir);
-    if(~exist(d,'dir'))
-        mkdir(d);
     end
     
     for i = 1:N
