@@ -12,7 +12,7 @@ brainmask = '/scratch/shared/templates/brainmask.nii';
 try
     found = aivo_check_found(subject);
     if(~found)
-        error('Could not magia %s because the image_id %s does not exist in AIVO.',subject);
+        error('Could not magia %s because the image_id does not exist in AIVO.',subject);
     end
     found = magia_check_found(subject);
     aivo_set_info(subject,'found',found);
