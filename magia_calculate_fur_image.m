@@ -15,6 +15,8 @@ if(any(k))
     fur_img = mask.*(img-ic)./I;
     if(max(fur_img(:))>10)
         fur_img = fur_img*0.001;
+    elseif(max(fur_img(:))<1e-3)
+        fur_img = fur_img*1000;
     end
     W = V(1);
     W.fname = fur_image_file;
