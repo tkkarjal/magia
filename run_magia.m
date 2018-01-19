@@ -17,7 +17,7 @@ try
     end
     
     githash = magia_get_githash();
-    magia_write_githash(subjects,githash);
+    magia_write_githash(subject,githash);
     
     magia_clean_files(subject);
     
