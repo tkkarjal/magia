@@ -10,6 +10,10 @@ template_dir = sprintf('%s/templates',megapet_dir);
 brainmask = '/scratch/shared/templates/brainmask.nii';
 
 try
+    found = aivo_check_found(subject);
+    if(~found)
+        error('Could not magia %s because the image_id %s does not exist in AIVO.',subject);
+    end
     found = magia_check_found(subject);
     aivo_set_info(subject,'found',found);
     if(~found)
