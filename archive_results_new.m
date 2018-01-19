@@ -50,6 +50,7 @@ f = {
     sprintf('%s/info_%s.txt',source_dir,subject)
     sprintf('%s/modeling_options_%s.txt',source_dir,subject)
     sprintf('%s/qc_%s.ps',source_dir,subject)
+    sprintf('%s/githash_%s.txt',source_dir,subject)
    };
 
 for i = 1:length(f)
