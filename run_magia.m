@@ -1,5 +1,7 @@
 function run_magia(subject)
 
+addpath /home/glereane/code/bramila/external/ISC_toolbox/niftitools
+
 megapet_dir = getenv('MEGAPET_HOME');
 data_path = getenv('DATA_DIR');
 D = sprintf('%s/%s',data_path,subject);
