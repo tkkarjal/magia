@@ -135,29 +135,7 @@ try
     
     fprintf('Starting processing of %s...\n',subject);
     
-    raw_pet_file_gz = sprintf('%s/nii/pet_%s.nii.gz',pet_dir,subject);
-    if(exist(raw_pet_file_gz,'file'))
-        cmd = sprintf('gunzip %s',raw_pet_file_gz);
-        system(cmd);
-    end
-    raw_pet_file = sprintf('%s/nii/pet_%s.nii',pet_dir,subject);
-    pet_file = sprintf('%s/pet_%s.nii',pet_dir,subject); % 4D NIFTI
-    if(exist(raw_pet_file,'file'))
-        copyfile(raw_pet_file,pet_file,'f');
-        cmd = sprintf('gzip %s',raw_pet_file);
-        system(cmd);
-    else
-        dcm_dir = sprintf('%s/dcm',pet_dir);
-        ecat_dir = sprintf('%s/ecat',pet_dir);
-        if(exist(dcm_dir,'dir'))
-            source_dir = dcm_dir;
-        elseif(exist(ecat_dir,'dir'))
-            source_dir = ecat_dir;
-        else
-            error('Could not find raw PET data (dcm or ecat) from %s.',pet_dir);
-        end
-        convert_to_nifti(source_dir,pet_dir,pet_file,cellstr(aivo_get_info(subject,'scanner')));
-    end
+    pet_file = magia_get_pet_file(subject);
     
     if(dyn)
         test_dyn = magia_test_dyn(subject);
