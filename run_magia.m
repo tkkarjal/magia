@@ -16,6 +16,9 @@ try
         error('Could not proceed with %s because some input data were missing.',subject);
     end
     
+    githash = magia_get_githash();
+    magia_write_githash(subjects,githash);
+    
     magia_clean_files(subject);
     
     % Read info
