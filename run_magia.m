@@ -107,8 +107,6 @@ try
         aivo_set_info(subject,'dynamic',dyn);
     end
     
-    pet_dir = sprintf('%s/PET',D);
-    
     modeling_options = aivo_read_modeling_options(subject);
     model = modeling_options.model;
     roi_set = modeling_options.roi_set;
@@ -208,6 +206,7 @@ try
         roi_masks = create_roi_masks2(resampled_seg_file,roi_info);
         tacs = calculate_roi_tacs(motion_corrected_pet,roi_masks);
         input = read_plasma(subject);
+        magia_input_qc(subject,input,plasma);
         brainmask = create_brainmask(subject,resampled_bet_file);
         parametric_images = calculate_parametric_images(motion_corrected_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
         deformation_field = spm_segment(mri_file);
@@ -244,7 +243,7 @@ try
         
         tacs = calculate_roi_tacs(motion_corrected_pet,roi_masks);
         input = get_ref_tac(motion_corrected_pet,ref_mask);
-        input_qc(subject,input,frames);
+        magia_input_qc(subject,input,plasma);
         brainmask = create_brainmask(subject,resampled_bet_file,specific_binding_mask);
         parametric_images = calculate_parametric_images(motion_corrected_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
         deformation_field = spm_segment(mri_file);
@@ -264,6 +263,7 @@ try
         roi_masks = get_roi_masks(mask_dir);
         tacs = calculate_roi_tacs(normalized_pet,roi_masks);
         input = read_plasma(subject);
+        magia_input_qc(subject,input,plasma);
         normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
         smooth_img(normalized_parametric_images,fwhm);
         
@@ -285,6 +285,7 @@ try
         roi_masks = create_roi_masks2(resampled_seg_file,roi_info);
         tacs = calculate_roi_tacs(pet_file,roi_masks);
         input = read_plasma(subject);
+        magia_input_qc(subject,input,plasma);
         brainmask = create_brainmask(subject,resampled_bet_file);
         parametric_images = calculate_parametric_images(pet_file,input,frames,modeling_options,results_dir,tracer,brainmask);
         deformation_field = spm_segment(mri_file);
@@ -311,7 +312,7 @@ try
         end
         tacs = calculate_roi_tacs(normalized_pet,roi_masks);
         input = get_ref_tac(normalized_pet,ref_mask);
-        input_qc(subject,input,frames);
+        magia_input_qc(subject,input,plasma);
         brainmask = create_brainmask(subject,brainmask,specific_binding_mask);
         normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
         smooth_img(normalized_parametric_images,fwhm);
@@ -324,6 +325,7 @@ try
         
         normalized_pet = normalize_using_template(pet_file,template_dir,tracer);
         input = read_plasma(subject);
+        magia_input_qc(subject,input,plasma);
         normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
         smooth_img(normalized_parametric_images,fwhm);
         roi_masks = get_roi_masks(mask_dir);
@@ -351,7 +353,7 @@ try
         remove_nonspecific_binding_from_rois(roi_masks,specific_binding_mask);
         tacs = calculate_roi_tacs(pet_file,roi_masks);
         input = get_ref_tac(pet_file,ref_mask);
-        input_qc(subject,input,frames);
+        magia_input_qc(subject,input,plasma);
         brainmask = create_brainmask(subject,resampled_bet_file,specific_binding_mask);
         parametric_images = calculate_parametric_images(pet_file,input,frames,modeling_options,results_dir,tracer,brainmask);
         deformation_field = spm_segment(mri_file);
