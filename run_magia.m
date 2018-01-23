@@ -127,7 +127,7 @@ try
         roi_info = read_roi_info(roi_set);
     end
     
-    if(strcmpi(model,'srtm') || strcmpi(model,'auc_ratio') || strcmpi(model,'patlak_ref'))
+    if(strcmpi(model,'srtm') || strcmpi(model,'suvr_dyn') || strcmpi(model,'suvr_static') || strcmpi(model,'patlak_ref'))
         switch tracer
             case {'[11c]carfentanil' '[18f]dopa'}
                 ref_region.label = 'OC';
