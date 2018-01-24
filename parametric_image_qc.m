@@ -6,6 +6,9 @@ switch model
     case 'srtm'
         f = sprintf('%s/swrpet_%s_bfsrtm_BP.nii',d,subject);
         msg = sprintf('BPnd QC: %s',subject);
+    case 'suvr_dyn'
+        f = sprintf('%s/swrpet_%s_suvr_dyn.nii',d,subject);
+        msg = sprintf('SUVR QC: %s',subject);
     otherwise
         f = '';
 end
