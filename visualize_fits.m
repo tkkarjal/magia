@@ -83,7 +83,34 @@ switch lower(model)
             add_to_qc_pic(subject,fig);
             close(fig);
         end
-    case {'fur','auc_ratio','static_ratio'}
+    case 'suvr_dyn'
+        fit_dir = sprintf('%s/fits',results_dir);
+        if(~exist(fit_dir,'dir'))
+            mkdir(fit_dir);
+        end
+        start_time = modeling_options.start_time;
+        end_time = modeling_options.end_time;
+        t = mean(frames,2);
+        idx = start_time <= frames(:,1) & end_time >= frames(:,2);
+        for i = 1:N
+            fig = figure('Visible','Off','Position',[100 100 700 400]);
+            mroi = mean(tacs(i,idx));
+            mref = mean(input(idx));
+            plot(t,tacs(i,:),'bo'); hold on; plot([start_time end_time],[mroi mroi],'b');
+            plot(t,input,'ko'); plot([start_time end_time],[mref mref],'k');
+            if(mroi <= mref)
+                plot([start_time start_time],[0 mref],'r--');
+                plot([end_time end_time],[0 mref],'r--');
+            else
+                plot([start_time start_time],[0 mroi],'r--');
+                plot([end_time end_time],[0 mroi],'r--');
+            end
+            add_to_qc_pic(subject,fig);
+            img_name = sprintf('%s/%s.png',fit_dir,roi_info.labels{i});
+            print('-noui',img_name,'-dpng');
+            close(fig);
+        end
+    case {'fur','suvr_static'}
         % Fit visualization not really applicable to these "models"
     otherwise
         warning('Fit visualization has not been implemented for %s.',model);

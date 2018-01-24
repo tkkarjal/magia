@@ -34,19 +34,9 @@ switch lower(modeling_options.model)
         print('-noui',img_name,'-dpng');
         add_to_qc_pic(subject,fig);
         close(fig);
-    case 'auc_ratio'
+    case {'suvr_dyn','suvr_static'}
         fig = figure('Visible','Off'); bar(table2array(T(:,1))); box off;
-        xlabel('Region of interest'); ylabel('AUC ratio');
-        set(gca,'xtick',1:length(T.Properties.RowNames));
-        set(gca,'xticklabel',T.Properties.RowNames);
-        xtickangle(90);
-        img_name = sprintf('%s/roi_bars.png',results_dir);
-        print('-noui',img_name,'-dpng');
-        add_to_qc_pic(subject,fig);
-        close(fig);
-    case 'static_ratio'
-        fig = figure('Visible','Off'); bar(table2array(T(:,1))); box off;
-        xlabel('Region of interest'); ylabel('Ratio');
+        xlabel('Region of interest'); ylabel('SUVR');
         set(gca,'xtick',1:length(T.Properties.RowNames));
         set(gca,'xticklabel',T.Properties.RowNames);
         xtickangle(90);
