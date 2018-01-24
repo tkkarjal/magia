@@ -54,14 +54,14 @@ switch model
     case 'fur'
         X = calculate_fur(input,tacs,frames);
         T = array2table(X,'VariableNames',{'FUR'},'RowNames',roi_info.labels);
-    case 'auc_ratio'
+    case 'suvr_dyn'
         startTime = modeling_options.start_time;
         endTime = modeling_options.end_time;
-        X = calculate_auc_ratio(input,tacs,frames,startTime,endTime);
-        T = array2table(X,'VariableNames',{'AUC_ratio'},'RowNames',roi_info.labels);
+        X = magia_suvr_dyn(input,tacs,frames,startTime,endTime);
+        T = array2table(X,'VariableNames',{'SUVR'},'RowNames',roi_info.labels);
     case 'static_ratio'
         X = calculate_static_ratio(input,tacs);
-        T = array2table(X,'VariableNames',{'ratio'},'RowNames',roi_info.labels);
+        T = array2table(X,'VariableNames',{'SUVR'},'RowNames',roi_info.labels);
     case '2tcm'
         X = zeros(N,6);
         %lb = modeling_options.lb;
