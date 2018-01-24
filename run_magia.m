@@ -236,15 +236,15 @@ try
         % check_roi_normality(ref_mask,meanpet_file)
         [ref_mask,thr] = data_driven_reference_region_correction_fwhm(ref_mask,meanpet_file);
         
-        specific_binding_mask = create_specific_binding_mask(meanpet_file,thr);
         if(rc)
+            specific_binding_mask = create_specific_binding_mask(meanpet_file,thr);
             remove_nonspecific_binding_from_rois(roi_masks,specific_binding_mask);
         end
         
         tacs = calculate_roi_tacs(motion_corrected_pet,roi_masks);
         input = get_ref_tac(motion_corrected_pet,ref_mask);
         magia_input_qc(subject,input,plasma);
-        brainmask = create_brainmask(subject,resampled_bet_file,specific_binding_mask);
+        brainmask = create_brainmask(subject,resampled_bet_file);
         parametric_images = calculate_parametric_images(motion_corrected_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
         deformation_field = spm_segment(mri_file);
         mri_histogram_qc(subject,mri_file);
@@ -306,14 +306,14 @@ try
         
         sub_mask_dir = sprintf('%s/%s/masks',data_path,subject);
         [ref_mask,thr] = data_driven_reference_region_correction_fwhm(ref_mask,normalized_meanpet,sub_mask_dir);
-        specific_binding_mask = create_specific_binding_mask(normalized_meanpet,thr);
         if(rc)
+            specific_binding_mask = create_specific_binding_mask(normalized_meanpet,thr);
             remove_nonspecific_binding_from_rois(roi_masks,specific_binding_mask,sub_mask_dir);
         end
         tacs = calculate_roi_tacs(normalized_pet,roi_masks);
         input = get_ref_tac(normalized_pet,ref_mask);
         magia_input_qc(subject,input,plasma);
-        brainmask = create_brainmask(subject,brainmask,specific_binding_mask);
+        brainmask = create_brainmask(subject,brainmask);
         normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
         smooth_img(normalized_parametric_images,fwhm);
         
@@ -372,12 +372,14 @@ try
         
         sub_mask_dir = sprintf('%s/%s/masks',data_path,subject);
         [ref_mask,thr] = data_driven_reference_region_correction_fwhm(ref_mask,normalized_pet,sub_mask_dir);
-        specific_binding_mask = create_specific_binding_mask(normalized_pet,thr);
-        remove_nonspecific_binding_from_rois(roi_masks,specific_binding_mask);
+        if(rc)
+            specific_binding_mask = create_specific_binding_mask(normalized_pet,thr);
+            remove_nonspecific_binding_from_rois(roi_masks,specific_binding_mask);
+        end
         
         input = get_ref_tac(normalized_pet,ref_mask);
         input_qc(subject,input,frames);
-        brainmask = create_brainmask(subject,brainmask,specific_binding_mask);
+        brainmask = create_brainmask(subject,brainmask);
         tacs = calculate_roi_tacs(normalized_pet,roi_masks);
         normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
         smooth_img(normalized_parametric_images,fwhm);
