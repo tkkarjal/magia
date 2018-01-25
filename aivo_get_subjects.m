@@ -48,7 +48,7 @@ if((~mod(nargin,2)))
         field = varargin{i+l};
         value = varargin{i+l+1};
         l=l+1;
-        if(ismember(field,{'age','dose','study_date','injection_time','height','weight','use_mri'})) %value
+        if(ismember(field,{'age','dose','study_date','injection_time','height','weight'})) %value
             if(ischar(value)) %only one value
                 if(ismember('~',value))  %exclude spesific value
                     where_statement = [where_statement,' NOT ','pet.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
