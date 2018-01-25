@@ -105,6 +105,8 @@ switch lower(model)
                 plot([start_time start_time],[0 mroi],'r--');
                 plot([end_time end_time],[0 mroi],'r--');
             end
+            xlabel('Time (min)'); ylabel('Radioactivity concentration');
+            title(roi_info.labels{i});
             add_to_qc_pic(subject,fig);
             img_name = sprintf('%s/%s.png',fit_dir,roi_info.labels{i});
             print('-noui',img_name,'-dpng');
