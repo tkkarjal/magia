@@ -65,7 +65,7 @@ for i = 1:M
         field = lower(Q{i}{j,1});
         value = Q{i}{j,2};
         switch field
-            case {'project' 'tracer' 'gender' 'scanner' 'mri' 'injection_time' 'group_name' 'description' 'type' 'source' 'notes' 'error' 'roi_set' 'model'}
+            case {'project' 'tracer' 'gender' 'scanner' 'mri' 'injection_time' 'group_name' 'description' 'type' 'source' 'notes' 'error' 'githash' 'roi_set' 'model'}
                 if(j == 1)
                     if(~strcmp('~',value(1)))
                         where_statement = sprintf('%s %s.%s = ''%s''',where_statement,tb,field,value);

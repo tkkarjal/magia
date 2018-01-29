@@ -69,7 +69,7 @@ if((~mod(nargin,2)))
                 where_statement = [where_statement,' AND '];
             end
         end
-        if(ismember(field,{'gender','study_code','tracer','frames','scanner','mri','project','description','group_name','patient_id','source','type','ac'})) %char
+        if(ismember(field,{'gender','study_code','tracer','frames','scanner','mri','project','description','group_name','patient_id','source','type','ac' 'githash'})) %char
             if(ismember('~',value)) %user excludes spesified values
                 where_statement = [where_statement,' NOT ','pet.',lower(field),'=',char(39),value(2:length(value)),char(39)];
                 if(i~=nargin/2)
