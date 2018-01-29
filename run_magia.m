@@ -396,6 +396,7 @@ try
     
     archive_results_new(subject);
     aivo_set_info(subject,'analyzed',1);
+    aivo_set_info(subject,'githash',githash);
     magia_clean_files(subject);
     
 catch ME
