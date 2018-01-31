@@ -5,11 +5,16 @@ sub_dir = sprintf('%s/%s',fs_dir,mri_code);
 if(~exist(sub_dir,'dir'))
     freesurfed = 0;
 else
-    ready_file = sprintf('%s/scripts/recon-all.done',sub_dir);
-    if(exist(ready_file,'file'))
-        freesurfed = 1;
-    else
+    error_file = sprintf('%s/scripts/recon-all.error',sub_dir);
+    if(exist(error_file,'file'))
         freesurfed = 0;
+    else
+        done_file = sprintf('%s/scripts/recon-all.done',sub_dir);
+        if(exist(done_file,'file'))
+            freesurfed = 1;
+        else
+            freesurfed = 0;
+        end
     end
 end
 
