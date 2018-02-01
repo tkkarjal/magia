@@ -46,6 +46,12 @@ try
     end
     
     mri = aivo_get_info(subject,'use_mri');
+    if(iscell(mri))
+        mri = mri{1};
+    end
+    if(isnan(mri))
+        mri = 0;
+    end
     if(mri)
         mri_code = aivo_get_info(subject,'mri');
         if(~isempty(mri_code))
