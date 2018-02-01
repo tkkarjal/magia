@@ -114,6 +114,10 @@ try
     modeling_options = aivo_read_modeling_options(subject);
     model = modeling_options.model;
     roi_set = modeling_options.roi_set;
+    if(mri)
+        roi_set = 'tracer_default';
+        modeling_options.roi_set = roi_set;
+    end
     if(strcmp(roi_set,'tracer_default') && ~mri)
         roi_set = 'atlas';
         modeling_options.roi_set = roi_set;
