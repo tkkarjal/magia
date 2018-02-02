@@ -3,7 +3,6 @@ function run_magia(subject)
 megapet_dir = getenv('MEGAPET_HOME');
 data_path = getenv('DATA_DIR');
 D = sprintf('%s/%s',data_path,subject);
-mask_dir = sprintf('%s/masks',megapet_dir);
 template_dir = sprintf('%s/templates',megapet_dir);
 brainmask = '/scratch/shared/templates/brainmask.nii';
 
@@ -18,134 +17,33 @@ try
         error('Could not proceed with %s because some input data were missing.',subject);
     end
     
+    magia_clean_files(subject);
     githash = magia_get_githash();
     magia_write_githash(subject,githash);
     
-    magia_clean_files(subject);
-    
     % Read info
+    [I, modeling_options] = magia_metadata_from_aivo(subject);
+    [I, modeling_options] = magia_check_metadata(subject, I, modeling_options);
+    tracer = I.tracer;
+    frames = I.frames;
+    use_mri = I.use_mri;
+    mri_code = I.mri;
+    plasma = I.plasma;
+    rc = I.rc;
+    dyn = I.dynamic;
+    dc = I.dc;
+    fwhm = I.fwhm;
     
-    tracer = aivo_get_info(subject,'tracer');
-    if(~isempty(tracer))
-        tracer = tracer{1};
-    else
-        error('Tracer has not been specified for %s in AIVO.',subject);
-    end
-    
-    fs = aivo_get_info(subject,'frames');
-    if(~isempty(fs))
-        fs = fs{1};
-        frames = parse_frames_string(fs);
-        if(frames(1,2) - frames(1,1) >= 30)
-            frames = frames/60;
-            fs = get_frame_string(frames);
-            aivo_set_info(subject,'frames',fs);
-        end
-    else
-        error('Frames have not been specified for %s in AIVO.',subject);
-    end
-    
-    mri = aivo_get_info(subject,'use_mri');
-    if(iscell(mri))
-        mri = mri{1};
-    end
-    if(isnan(mri))
-        mri = 0;
-    end
-    if(mri)
-        mri_code = aivo_get_info(subject,'mri');
-        if(~isempty(mri_code))
-            mri_code = mri_code{1};
-        end
-        if(strcmp(mri_code,'0'))
-            mri = 0;
-        end
-    end
-    
-    if(mri)
-        mri_found = magia_check_mri_found(mri_code);
-        if(~mri_found)
-            error('Cannot magia PET study %s because the MRI (%s) that was specified was not found.',subject,mri_code);
-        end
-    end
-    
-    if(mri)
-        freesurfed = magia_check_freesurfed(mri_code);
-        aivo_set_info(subject,'freesurfed',freesurfed);
-    end
-    
-    plasma = aivo_get_info(subject,'plasma');
-    if(iscell(plasma))
-        plasma = plasma{1};
-    end
-    if(plasma)
-        plasma_found = magia_check_plasma_found(subject);
-        if(~plasma_found)
-            error('Cannot magia the PET study %s because the plasma file could not be found.',subject);
-        end
-    end
-    
-    rc = aivo_get_info(subject,'rc');
-    if(iscell(rc))
-        rc = rc{1};
-    end
-    if(isnan(rc))
-        rc = 1;
-        aivo_set_info(subject,'rc',1);
-    end
-    if(rc==-1)
-        rc = 1;
-    end
-    
-    dyn = aivo_get_info(subject,'dynamic');
-    if(iscell(dyn))
-        dyn = dyn{1};
-    end
-    
-    if(isnan(dyn))
-        if(size(frames,1) > 1)
-            dyn = 1;
-        else
-            dyn = 0;
-        end
-        aivo_set_info(subject,'dynamic',dyn);
-    end
-    
-    modeling_options = aivo_read_modeling_options(subject);
     model = modeling_options.model;
     roi_set = modeling_options.roi_set;
-    if(mri)
-        roi_set = 'tracer_default';
-        modeling_options.roi_set = roi_set;
-    end
-    if(strcmp(roi_set,'tracer_default') && ~mri)
-        roi_set = 'atlas';
-        modeling_options.roi_set = roi_set;
-    end
     magia_write_modeling_options2(subject,modeling_options);
     
-    if(strcmpi(roi_set,'tracer_default'))
-        roi_info = get_tracer_default_roi_set(tracer);
-    elseif(strcmpi(roi_set,'atlas'))
-        roi_info = get_atlas_rois(mask_dir);
-    elseif(strcmpi(roi_set,'[18f]fdg_atlas'))
-        mask_dir = sprintf('%s/fdg_rois',megapet_dir);
-        roi_info = get_atlas_rois(mask_dir);
-    else
-        roi_info = read_roi_info(roi_set);
-    end
+    roi_info = magia_get_roi_info(roi_set,tracer);
     
-    if(strcmpi(model,'srtm') || strcmpi(model,'suvr_dyn') || strcmpi(model,'suvr_static') || strcmpi(model,'patlak_ref'))
-        switch tracer
-            case {'[11c]carfentanil' '[18f]dopa'}
-                ref_region.label = 'OC';
-                ref_region.codes = [1011 2011];
-            case {'[11c]raclopride','[11c]madam','[18f]spa-rq','[11c]pib','[11c]pbr28','[18f]cft'}
-                ref_region.label = 'CER';
-                ref_region.codes = [8 47];
-        end
+    if(~plasma)
+        ref_region = magia_get_ref_region(tracer);
     end
-    
+
     fprintf('Starting processing of %s...\n',subject);
     
     pet_file = magia_get_pet_file(subject);
@@ -163,26 +61,9 @@ try
     elseif(~dyn && no_frames > 1)
         error('Cannot magia %s. Reason: Multiple frames specified for a static image.',subject);
     end
-    
-    dc = aivo_get_info(subject,'dc');
-    if(iscell(dc))
-        dc = dc{1};
-    end
-    if(isnan(dc) || dc == -1)
-        error('Cannot magia %s because it was not specified if the data have already been decay-corrected or not.',subject);
-    end
-        
+ 
     if(~dc)
         decay_correct_to_injection_time(pet_file,frames,tracer);
-    end
-    
-    fwhm = aivo_get_info(subject,'fwhm');
-    if(iscell(fwhm))
-        fwhm = fwhm{1};
-    end
-    if(isnan(fwhm))
-        fwhm = 8;
-        aivo_set_info(subject,'fwhm',fwhm);
     end
     
     results_dir = sprintf('%s/results',D);
@@ -194,7 +75,7 @@ try
     
     center_image2(pet_file,tracer); % the pet image should always be centered
     
-    if(dyn && mri && plasma)
+    if(dyn && use_mri && plasma)
         
         % (1) process dynamic images with mri and plasma data
         
@@ -222,7 +103,7 @@ try
         normalized_images = normalize_using_mri(mri_file,parametric_images,deformation_field);
         smooth_img(normalized_images(2:end),fwhm);
         
-    elseif(dyn && mri && ~plasma)
+    elseif(dyn && use_mri && ~plasma)
         
         % (2) process dynamic images with mri but without plasma data
         
@@ -259,7 +140,7 @@ try
         normalized_images = normalize_using_mri(mri_file,parametric_images,deformation_field);
         smooth_img(normalized_images(2:end),fwhm);
         
-    elseif(dyn && ~mri && plasma)
+    elseif(dyn && ~use_mri && plasma)
         
         % (3) process dynamic images without mri but with plasma data
         
@@ -268,14 +149,14 @@ try
         [motion_corrected_pet,meanpet_file] = motion_correction(pet_file);
         motion_parameter_qc(subject);
         [~,normalized_pet] = normalize_using_template(meanpet_file,template_dir,tracer,motion_corrected_pet);
-        roi_masks = get_roi_masks(mask_dir);
+        roi_masks = get_roi_masks(roi_info.mask_dir);
         tacs = calculate_roi_tacs(normalized_pet,roi_masks);
         input = read_plasma(subject);
         magia_input_qc(subject,input,plasma);
         normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
         smooth_img(normalized_parametric_images,fwhm);
         
-    elseif(~dyn && mri && plasma)
+    elseif(~dyn && use_mri && plasma)
         
         % (4) process static images with mri and plasma data
         
@@ -301,7 +182,7 @@ try
         normalized_images = normalize_using_mri(mri_file,parametric_images,deformation_field);
         smooth_img(normalized_images(2:end,fwhm));
         
-    elseif(dyn && ~mri && ~plasma)
+    elseif(dyn && ~use_mri && ~plasma)
         
         % (5) process dynamic images without mri or plasma data
         
@@ -310,7 +191,7 @@ try
         [motion_corrected_pet,meanpet_file] = motion_correction(pet_file);
         motion_parameter_qc(subject);
         [normalized_meanpet,normalized_pet] = normalize_using_template(meanpet_file,template_dir,tracer,motion_corrected_pet);
-        [roi_masks,ref_mask] = get_roi_masks(mask_dir,ref_region.label);
+        [roi_masks,ref_mask] = get_roi_masks(roi_info.mask_dir,ref_region.label);
         
         sub_mask_dir = sprintf('%s/%s/masks',data_path,subject);
         [ref_mask,thr] = data_driven_reference_region_correction_fwhm(ref_mask,normalized_meanpet,sub_mask_dir);
@@ -325,7 +206,7 @@ try
         normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
         smooth_img(normalized_parametric_images,fwhm);
         
-    elseif(~dyn && ~mri && plasma)
+    elseif(~dyn && ~use_mri && plasma)
         
         % (6) process static images without mri but with plasma data
         
@@ -336,10 +217,10 @@ try
         magia_input_qc(subject,input,plasma);
         normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
         smooth_img(normalized_parametric_images,fwhm);
-        roi_masks = get_roi_masks(mask_dir);
+        roi_masks = get_roi_masks(roi_info.mask_dir);
         tacs = calculate_roi_tacs(normalized_pet,roi_masks);
         
-    elseif(~dyn && mri && ~plasma)
+    elseif(~dyn && use_mri && ~plasma)
         
         % (7) process static images with mri but without plasma data
         
@@ -375,7 +256,7 @@ try
         
         fprintf('%s: Static image, no MRI, reference tissue input\n',subject);
         
-        [roi_masks,ref_mask] = get_roi_masks(mask_dir,ref_region.label);
+        [roi_masks,ref_mask] = get_roi_masks(roi_info.mask_dir,ref_region.label);
         normalized_pet = normalize_using_template(pet_file,template_dir,tracer);
         
         sub_mask_dir = sprintf('%s/%s/masks',data_path,subject);
