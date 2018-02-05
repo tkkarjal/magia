@@ -7,7 +7,7 @@ if(~exist(sub_dir,'dir'))
 else
     error_file = sprintf('%s/scripts/recon-all.error',sub_dir);
     if(exist(error_file,'file'))
-        freesurfed = 0;
+        freesurfed = -1;
     else
         done_file = sprintf('%s/scripts/recon-all.done',sub_dir);
         if(exist(done_file,'file'))
