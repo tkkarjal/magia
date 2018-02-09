@@ -81,7 +81,7 @@ for i = 1:M
                         where_statement = sprintf('%s NOT AND %s.%s = ''%s''',where_statement,tb,field,value);
                     end
                 end
-            case {'dc' 'freesurfed' 'found' 'analyzed' 'validated' 'dynamic' 'aivo_project' 'queried' 'rc' 'use_mri'}
+            case {'dc' 'freesurfed' 'found' 'analyzed' 'validated' 'dynamic' 'aivo_project' 'queried' 'nii' 'rc' 'use_mri'}
                 if(j == 1)
                     if(~strcmp('~',value(1)))
                         where_statement = sprintf('%s %s.%s = %d',where_statement,tb,field,value);
