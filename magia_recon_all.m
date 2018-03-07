@@ -59,6 +59,8 @@ else
     system(cmd);
     cmd = sprintf('gzip -r %s',sub_mri_dir);
     system(cmd);
+    cmd = sprintf('rm -rf %s',final_freesurfer_sub_dir);
+    system(cmd);
     cmd = sprintf('cp -r %s %s',temp_freesurfer_sub_dir,final_freesurfer_dir);
     system(cmd);
     freesurfed = magia_check_freesurfed(mri_code);
