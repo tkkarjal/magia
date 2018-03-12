@@ -6,6 +6,13 @@ N = size(tacs,1);
 idx = regexp(results_dir,'/');
 subject = results_dir(idx(end-1)+1:idx(end)-1);
 
+% Remove tacs with nans
+
+tacsum = sum(tacs,2);
+nanidx = isnan(tacsum);
+tacs = tacs(~nanidx,:);
+roi_info.labels = roi_info.labels(~nanidx);
+
 switch lower(model)
     case 'srtm'
         fit_dir = sprintf('%s/fits',results_dir);

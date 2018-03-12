@@ -4,9 +4,7 @@ data_path = getenv('DATA_DIR');
 
 mp_file = sprintf('%s/%s/PET/rp_pet_%s.txt',data_path,subject,subject);
 X = load(mp_file);
-fs = aivo_get_info(subject,'frames');
-frames = parse_frames_string(fs{1});
-t = mean(frames,2);
+t = 1:size(X,1);
 
 tra_thr = 1;
 rot_thr = 0.05;
@@ -18,7 +16,7 @@ for i = 1:6
     lb = min(y);
     ub = max(y);
     subplot(6,1,i);
-    plot(t,y,'ko-','LineWidth',1); xlim([0 t(end)]);
+    plot(t,y,'ko-','LineWidth',1);
     hold on;
     if(i<4)
         plot(t,tra_thr*ones(size(t)),'r--');
@@ -57,7 +55,7 @@ for i = 1:6
             set(gca,'xticklabel',[]);
         case 6
             ylab = 'z (rad)';
-            xlabel('Time (min)');
+            xlabel('Frame (#)');
     end
     ylabel(ylab); box off;
 end

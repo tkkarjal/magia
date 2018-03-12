@@ -26,13 +26,9 @@ if(~exist(nii_pet_file,'file'))
         dcm_dir = sprintf('%s/dcm',pet_dir);
         ecat_dir = sprintf('%s/ecat',pet_dir);
         if(exist(dcm_dir,'dir'))
-            scanner = aivo_get_info(subject,'scanner');
-            if(~isempty(scanner))
-                scanner = scanner{1};
-            end
-            convert_to_nifti(dcm_dir,nii_dir,nii_pet_file,scanner);
+            magia_convert_to_nifti(dcm_dir,nii_dir,nii_pet_file);
         elseif(exist(ecat_dir,'dir'))
-            convert_to_nifti(ecat_dir,nii_dir,nii_pet_file);
+            magia_convert_to_nifti(ecat_dir,nii_dir,nii_pet_file);
         else
             error('Could not find image files for %s.',subject);
         end

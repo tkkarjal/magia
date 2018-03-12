@@ -1,4 +1,4 @@
-function run_magia(subject,varargin)
+function run_magia_dev(subject,varargin)
 %% An interface between magia_processor and metadata specifications
 %
 % MAGIA processes a brain PET study with standardized methods. The
