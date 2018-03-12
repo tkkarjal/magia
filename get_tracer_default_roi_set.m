@@ -19,7 +19,7 @@ switch lower(tracer)
             [9 10 48 49] % tha
             };
     case {'[11c]raclopride','[18f]cft','[18f]dopa'}
-        roi_info.labels = {'amy' 'cau' 'hip' 'nacc' 'parhip' 'pal' 'put' 'tha'};
+        roi_info.labels = {'amy' 'cau' 'hip' 'nacc' 'pal' 'parhip' 'put' 'tha'};
         roi_info.codes = {
         [18 54] % amy
         [11 50] % cau

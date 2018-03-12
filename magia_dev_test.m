@@ -21,6 +21,7 @@ subjects = {
     % Static late-scan [18F]FDG (FUR) with MRI
     'p100526' % Static late-scan [18F]FDG (FUR) without MRI
     'ia381' % Dynamic FDOPA scan with MRI
+    'rb70' % Dynamic MADAM scan with MRI
     'dk12354' % Imaginary study code
     };
 N = length(subjects);
