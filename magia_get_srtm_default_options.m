@@ -44,6 +44,19 @@ switch tracer
             case 'nbases'
                 value = 300;
         end
+    case '[11c]flb' % Based on https://www.ncbi.nlm.nih.gov/pubmed/11606887
+        switch var
+            case 'lb'
+                value = [0 0 0];
+            case 'ub'
+                value = [3 1 15];
+            case 'theta3_lb'
+                value = 0.011;
+            case 'theta3_ub'
+                value = 0.12;
+            case 'nbases'
+                value = 300;
+        end
     otherwise
         error('Default SRTM options have not been specified for %s.',tracer);
         

@@ -7,7 +7,7 @@ if(iscell(tracer))
     tracer = tracer{1};
 end
 switch tracer
-    case {'[11c]carfentanil','[11c]raclopride','[11c]madam','[18f]cft'}
+    case {'[11c]carfentanil','[11c]raclopride','[11c]madam','[18f]cft','[11c]flb'}
         model = 'srtm';
     case '[18f]fdg'
         dyn = aivo_get_info(subject_id,'dynamic');
