@@ -94,5 +94,7 @@ if(~exist(seg_file,'file'))
         final_freesurfer_sub_dir,seg_file);
     system(cmd);
 end
-
+bs_fs_file = sprintf('%s/mri/brainstemSsLabels.v10.FSvoxelSpace.mgz',final_freesurfer_sub_dir);
+if(exist(bs_fs_file,'file'))
+    magia_combine_seg_and_bs(seg_file,bs_fs_file);
 end
