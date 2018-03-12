@@ -1,17 +1,15 @@
-function magia_input_qc(subject,input,plasma)
+function magia_input_qc(subject,input,plasma,dose,weight,tracer,frames)
 
-dose = aivo_get_info(subject,'dose');
 if(isnan(dose) || dose <= 0)
     fprintf('Could not create input QC figure because the dose has not been specified for %s.\n',subject);
     return;
 end
-weight = aivo_get_info(subject,'weight');
+
 if(isnan(weight) || weight <= 0)
     fprintf('Could not create input QC figure because the weight has not been specified for %s.\n',subject);
     return;
 end
 
-tracer = aivo_get_info(subject,'tracer');
 if(iscell(tracer))
     tracer = tracer{1};
 end
@@ -24,11 +22,6 @@ if(plasma)
     t = input(:,1);
     input = input(:,2);
 else
-    fs = aivo_get_info(subject,'frames');
-    if(iscell(fs))
-        fs = fs{1};
-    end
-    frames = parse_frames_string(fs);
     t = mean(frames,2);
 end
 

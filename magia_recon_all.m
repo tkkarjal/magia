@@ -1,7 +1,6 @@
 function [seg_file,full_file,bet_file] = magia_recon_all(subject,mri_code)
 
 freesurfed = magia_check_freesurfed(mri_code);
-aivo_set_info(subject,'freesurfed',freesurfed);
 
 main_mri_dir = getenv('MRI_DIR');
 main_data_dir = getenv('DATA_DIR');
@@ -62,7 +61,6 @@ else
     cmd = sprintf('cp -r %s %s',temp_freesurfer_sub_dir,final_freesurfer_dir);
     system(cmd);
     freesurfed = magia_check_freesurfed(mri_code);
-    aivo_set_info(subject,'freesurfed',freesurfed);
     if(freesurfed)
         cmd = sprintf('rm -r %s',temp_freesurfer_sub_dir);
         system(cmd);

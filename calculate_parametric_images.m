@@ -49,7 +49,6 @@ switch lower(model)
             case '[18f]fmpep-d2'
                 msg = sprintf('%s Logan instead.',msg);
                 warning(msg);
-                
             otherwise
                 
         end

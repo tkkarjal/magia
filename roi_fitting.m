@@ -14,6 +14,13 @@ if(min(size(input))==1)
     roi_info.labels = roi_info.labels(idx);
 end
 
+% Remove tacs with nans
+
+tacsum = sum(tacs,2);
+nanidx = isnan(tacsum);
+tacs = tacs(~nanidx,:);
+roi_info.labels = roi_info.labels(~nanidx);
+
 N = size(tacs,1);
 
 switch model

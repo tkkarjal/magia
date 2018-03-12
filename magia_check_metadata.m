@@ -13,7 +13,7 @@ end
 
 frames = I.frames;
 if(isempty(frames) || strcmp(frames,'unknown'))
-    error('Frames have not been specified for %s in AIVO.',image_id);
+    error('Frames have not been specified for %s.',image_id);
 end
 frames = parse_frames_string(frames);
 
@@ -27,7 +27,6 @@ I.frames = frames;
 fwhm = I.fwhm;
 if(isnan(fwhm))
     fwhm = 8;
-    aivo_set_info(image_id,'fwhm',fwhm);
     I.fwhm = fwhm;
 end
 
@@ -63,6 +62,9 @@ end
 %% PLASMA
 
 plasma = I.plasma;
+if(isnan(plasma))
+    plasma = 0;
+end
 if(plasma)
     plasma_found = magia_check_plasma_found(image_id);
     if(~plasma_found)
@@ -76,7 +78,6 @@ I.plasma = plasma;
 rc = I.rc;
 if(isnan(rc) || rc == -1)
     rc = 1;
-    aivo_set_info(image_id,'rc',1);
     I.rc = rc;
 end
 
@@ -85,7 +86,6 @@ end
 dyn = I.dynamic;
 if(isnan(dyn))
     num_frames = size(frames,1);
-    aivo_set_info(image_id,'num_frames',num_frames);
     if(num_frames > 1)
         dyn = 1;
     else

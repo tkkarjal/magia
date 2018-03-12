@@ -12,7 +12,7 @@ if(exist(nii_file,'file'))
         test_dyn = 0;
     end
 else
-    error('Cannot magia %s because the file %s was not found.',subject,nii_file);
+    error('Cannot check if %s is a dynamic study because the file %s was not found.',subject,nii_file);
 end
 
 end
