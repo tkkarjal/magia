@@ -2,13 +2,14 @@ function roi_info = get_tracer_default_roi_set(tracer)
 
 switch lower(tracer)
     case {'[11c]carfentanil','[11c]pbr28'}
-        roi_info.labels = {'amy' 'cau' 'dacc' 'inftemp' 'ins' 'nacc' 'ofc' 'parsop' 'pcc' 'put' 'racc' 'tha'};
+        roi_info.labels = {'amy' 'cau' 'dacc' 'inftemp' 'ins' 'midtemp' 'nacc' 'ofc' 'parsop' 'pcc' 'put' 'racc' 'tha'};
         roi_info.codes = {
             [18 54] % amy
             [11 50] % cau
             [1002 2002] % dacc
             [1009 2009] % inftemp
             [1035 2035] % ins
+            [1015 2015] % midtemp
             [26 58] % nacc
             [1012 1014 2012 2014] % ofc
             [1018 2018] % parsop
