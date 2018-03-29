@@ -24,7 +24,7 @@ if(any(k))
     W.pinfo = [Inf Inf Inf]';
     spm_write_vol(W,fur_img);
 else
-    error('Could not calculate FUR image for %s because all frames start after the parameter start_time %d min.',name,start_time);
+    error('Could not calculate FUR image for %s because none of the frames start after the parameter start_time %d min.',name,start_time);
 end
         
 end
