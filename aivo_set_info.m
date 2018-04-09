@@ -16,7 +16,7 @@ conn = aivo_connect();
 % end
 
 switch field
-    case {'ac' 'study_code' 'study_date' 'project' 'tracer' 'dose' 'gender' 'scanner' 'frames' 'mri' 'weight' 'height' 'age' 'injection_time' 'group_name' 'description' 'plasma' 'dc' 'found' 'analyzed' 'validated' 'type' 'source' 'dynamic' 'error' 'notes' 'num_frames' 'start_time' 'githash' 'nii' 'doi'}
+    case {'ac' 'study_code' 'study_date' 'project' 'tracer' 'dose' 'gender' 'scanner' 'frames' 'mri' 'weight' 'height' 'age' 'injection_time' 'group_name' 'description' 'plasma' 'dc' 'found' 'mri_found' 'analyzed' 'validated' 'type' 'source' 'dynamic' 'error' 'notes' 'num_frames' 'start_time' 'githash' 'nii' 'doi'}
         table_name = '"megabase"."aivo".pet';
         cols = columns(conn,'megapet','aivo','pet');
     case {'model' 'roi_set' 'rc' 'fwhm' 'use_mri'}

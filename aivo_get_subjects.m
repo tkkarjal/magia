@@ -82,7 +82,7 @@ if((~mod(nargin,2)))
                 end
             end
         end
-        if(ismember(field,{'validated','analyzed','found','freesurfed','rc','dc','plasma' 'dynamic' 'nii'})) %integer or char
+        if(ismember(field,{'validated','analyzed','found','mri_found','freesurfed','rc','dc','plasma' 'dynamic' 'nii'})) %integer or char
             if(ismember('~',value)) %user excludes spesified values, value is char
                 where_statement = [where_statement,' NOT ','pet.',lower(field),'=',char(39),value(2:length(value)),char(39)];
                 if(i~=nargin/2)
