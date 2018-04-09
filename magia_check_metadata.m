@@ -32,8 +32,6 @@ end
 
 %% USE_MRI & MRI
 
-%% USE_MRI & MRI
-
 use_mri = I.use_mri;
 mri = I.mri;
 
