@@ -32,17 +32,19 @@ end
 
 %% USE_MRI & MRI
 
+%% USE_MRI & MRI
+
 use_mri = I.use_mri;
 mri = I.mri;
+
 if(isnan(use_mri))
-    use_mri = 0;
-end
-if(use_mri)
-    mri = I.mri;
-    if(strcmp(mri,'0'))
+    if(strcmp(mri,'null') || strcmp(mri,'0'))
         use_mri = 0;
+    else
+        use_mri = 1;
     end
 end
+
 if(use_mri)
     mri_found = magia_check_mri_found(mri);
     if(~mri_found)
