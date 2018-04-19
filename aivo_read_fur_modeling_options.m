@@ -6,7 +6,7 @@ if(isempty(conn))
 end
 
 cols = columns(conn,'megapet','aivo','fur');
-cols = setdiff(cols,'tracer','stable');
+[cols,idx] = setdiff(cols,'tracer','stable');
 M = length(cols);
 select_statement = 'SELECT * FROM "megabase"."aivo".fur';
 where_statement = sprintf('WHERE fur.image_id = %s%s%s',char(39),lower(subject_id),char(39));
@@ -17,6 +17,7 @@ curs = exec(conn,q);
 curs = fetch(curs);
 close(curs);
 value = curs.Data;
+value = value(idx);
 close(conn);
 
 modeling_options.model = 'fur';
@@ -33,6 +34,11 @@ for i = 2:M
             if(isnan(start_time))
                 start_time = magia_get_fur_default_options(tracer,var);
             end
+        case 'end_time'
+            end_time = value{1,i};
+            if(isnan(end_time))
+                end_time = magia_get_fur_default_options(tracer,var);
+            end
         case 'ic'
             ic = value{1,i};
             if(isnan(ic))
@@ -43,6 +49,7 @@ end
 
 modeling_options.start_time = start_time;
 modeling_options.ic = ic;
+modeling_options.end_time = end_time;
 
 aivo_set_modeling_options(subject_id,modeling_options);
 
