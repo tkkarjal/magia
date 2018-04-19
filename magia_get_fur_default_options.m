@@ -11,8 +11,11 @@ switch tracer
                 value = 15;
             case 'ic'
                 value = 0;
+            case 'end_time'
+                value = 0;
         end
     otherwise
-        error('Default FUR options have not been specified for %s.',tracer);
-        
+        error('Default FUR options have not been specified for %s.',tracer); 
+end
+
 end
