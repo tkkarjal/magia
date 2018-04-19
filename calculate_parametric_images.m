@@ -32,6 +32,7 @@ switch lower(model)
     case 'fur'
         start_time = modeling_options.start_time;
         ic = modeling_options.ic;
+        end_time = modeling_options.end_time;
         parametric_images = {magia_calculate_fur_image(input,frames,start_time,ic,pet_filename,brainmask,outputdir)};
     case 'suvr_dyn'
         startTime = modeling_options.start_time;
