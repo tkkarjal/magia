@@ -277,7 +277,7 @@ else
     
 end
 
-parametric_image_qc(subject,model);
+parametric_image_qc(subject,model,dyn);
 fprintf('%s: Starting ROI level visualization and fitting\n ',subject);
 
 visualize_tacs(tacs,input,frames,roi_info,results_dir);

@@ -1,4 +1,4 @@
-function parametric_image_qc(subject,model)
+function parametric_image_qc(subject,model,dyn)
 
 data_path = getenv('DATA_DIR');
 d = sprintf('%s/%s/results',data_path,subject);
@@ -6,8 +6,12 @@ switch model
     case 'srtm'
         f = sprintf('%s/swrpet_%s_bfsrtm_BP.nii',d,subject);
         msg = sprintf('BPnd QC: %s',subject);
-    case 'suvr_dyn'
-        f = sprintf('%s/swrpet_%s_suvr_dyn.nii',d,subject);
+    case 'suvr'
+        if(dyn)
+            f = sprintf('%s/swrpet_%s_suvr.nii',d,subject);
+        else
+            f = sprintf('%s/swpet_%s_suvr.nii',d,subject);
+        end
         msg = sprintf('SUVR QC: %s',subject);
     otherwise
         f = '';

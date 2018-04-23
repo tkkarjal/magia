@@ -34,7 +34,7 @@ switch lower(modeling_options.model)
         print('-noui',img_name,'-dpng');
         add_to_qc_pic(subject,fig);
         close(fig);
-    case {'suvr_dyn','suvr_static'}
+    case 'suvr'
         fig = figure('Visible','Off'); bar(table2array(T(:,1))); box off;
         xlabel('Region of interest'); ylabel('SUVR');
         set(gca,'xtick',1:length(T.Properties.RowNames));

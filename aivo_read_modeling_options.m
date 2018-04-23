@@ -20,10 +20,12 @@ switch model
         modeling_options = aivo_read_2tcm_modeling_options(subject_id);
     case 'fur'
         modeling_options = aivo_read_fur_modeling_options(subject_id);
-    case 'suvr_dyn'
-        modeling_options = aivo_read_suvr_dyn_modeling_options(subject_id);
-    case 'suvr_static'
-        % There are no modeling options for static suv ratio analysis
+    case 'suvr'
+        dyn = aivo_get_info(subject_id,'dynamic');
+        if(iscell(dyn))
+            dyn = dyn{1};
+        end
+        modeling_options = aivo_read_suvr_modeling_options(subject_id,dyn);
     otherwise
         error('Unknown model %s',model);
 end

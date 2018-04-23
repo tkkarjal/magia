@@ -20,15 +20,7 @@ switch tracer
             model = 'fur';
         end
     case '[11c]pib'
-        dyn = aivo_get_info(subject_id,'dynamic');
-        if(iscell(dyn))
-            dyn = dyn{1};
-        end
-        if(dyn)
-            model = 'suvr_dyn';
-        else
-            model = 'suvr_static';
-        end
+        model = 'suvr';
     case '[18f]dopa'
         model = 'patlak_ref';
     case '[18f]fmpep-d2'

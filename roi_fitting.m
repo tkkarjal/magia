@@ -36,38 +36,35 @@ switch model
         T = array2table(X,'VariableNames',{'R1','k2','BPnd'},'RowNames',roi_info.labels);
     case 'patlak'
         X = zeros(N,2);
-        startTime = modeling_options.start_time;
+        start_time = modeling_options.start_time;
         cutFrame = modeling_options.end_frame;
         if(cutFrame==0)
             cutFrame = size(frames,1);
         end
         for i = 1:N
             fprintf('Patlak: Fitting ROI %.0f/%.0f...\n',i,N);
-            [X(i,1),X(i,2)] = metpet_fit_patlak(input,tacs(i,:),frames,startTime,cutFrame);
+            [X(i,1),X(i,2)] = metpet_fit_patlak(input,tacs(i,:),frames,start_time,cutFrame);
         end
         T = array2table(X,'VariableNames',{'Ki','V0'},'RowNames',roi_info.labels);
     case 'patlak_ref'
         X = zeros(N,2);
-        startTime = modeling_options.start_time;
+        start_time = modeling_options.start_time;
         cutTime = modeling_options.cut_time;
         if(~cutTime)
             cutTime = frames(end,2);
         end
         for i = 1:N
             fprintf('Patlak_ref: Fitting ROI %.0f/%.0f...\n',i,N);
-            [X(i,1),X(i,2)] = magia_fit_patlak_ref(input,tacs(i,:),frames,startTime,cutTime);
+            [X(i,1),X(i,2)] = magia_fit_patlak_ref(input,tacs(i,:),frames,start_time,cutTime);
         end
         T = array2table(X,'VariableNames',{'Ki','V0'},'RowNames',roi_info.labels);
     case 'fur'
         X = calculate_fur(input,tacs,frames);
         T = array2table(X,'VariableNames',{'FUR'},'RowNames',roi_info.labels);
-    case 'suvr_dyn'
-        startTime = modeling_options.start_time;
-        endTime = modeling_options.end_time;
-        X = magia_suvr_dyn(input,tacs,frames,startTime,endTime);
-        T = array2table(X,'VariableNames',{'SUVR'},'RowNames',roi_info.labels);
-    case 'static_ratio'
-        X = calculate_static_ratio(input,tacs);
+    case 'suvr'
+        start_time = modeling_options.start_time;
+        end_time = modeling_options.end_time;
+        X = magia_suvr(input,tacs,frames,start_time,end_time);
         T = array2table(X,'VariableNames',{'SUVR'},'RowNames',roi_info.labels);
     case '2tcm'
         X = zeros(N,6);

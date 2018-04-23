@@ -21,25 +21,22 @@ switch lower(model)
         end
         parametric_images = Gunn1997_nifti_mask(theta3_lb,theta3_ub,nbases,decaytime,input,frames,pet_filename,brainmask,outputdir);
     case 'patlak'
-        startTime = modeling_options.start_time;
+        start_time = modeling_options.start_time;
         cutFrame = modeling_options.end_frame;
-        parametric_images = PatlakPlasma_nifti(input,startTime,cutFrame,frames,pet_filename,brainmask,outputdir);
+        parametric_images = PatlakPlasma_nifti(input,start_time,cutFrame,frames,pet_filename,brainmask,outputdir);
     case 'patlak_ref'
-        startTime = modeling_options.start_time;
+        start_time = modeling_options.start_time;
         cutTime = modeling_options.cut_time;
         filter_size = modeling_options.filter_size;
-        parametric_images = PatlakRef_nifti(input,startTime,cutTime,frames,pet_filename,filter_size,brainmask,outputdir);
+        parametric_images = PatlakRef_nifti(input,start_time,cutTime,frames,pet_filename,filter_size,brainmask,outputdir);
     case 'fur'
         start_time = modeling_options.start_time;
         ic = modeling_options.ic;
-        end_time = modeling_options.end_time;
         parametric_images = {magia_calculate_fur_image(input,frames,start_time,ic,pet_filename,brainmask,outputdir)};
-    case 'suvr_dyn'
-        startTime = modeling_options.start_time;
-        endTime = modeling_options.end_time;
-        parametric_images = {magia_suvr_dyn_image(startTime,endTime,input,frames,pet_filename,brainmask,outputdir)};
-    case 'suvr_static'
-        parametric_images = {magia_suvr_static_image(input,pet_filename,brainmask,outputdir)};
+    case 'suvr'
+        start_time = modeling_options.start_time;
+        end_time = modeling_options.end_time;
+        parametric_images = {magia_suvr_image(start_time,end_time,input,frames,pet_filename,brainmask,outputdir)};
 %     case 'logan'
 %         startTime = modeling_options.logan_modeling_options.startTime;
 %         endTime = modeling_options.logan_modeling_options.endTime;

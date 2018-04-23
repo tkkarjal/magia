@@ -1,6 +1,6 @@
-function suvr = magia_suvr_dyn(input,tacs,frames,startTime,endTime)
+function suvr = magia_suvr_dyn(input,tacs,frames,start_time,end_time)
 
-idx = startTime <= frames(:,1) & endTime >= frames(:,2);
+idx = start_time <= frames(:,1) & end_time >= frames(:,2);
 if(any(idx))
     t = mean(frames,2);
     t = t(idx);
