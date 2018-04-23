@@ -26,7 +26,8 @@ switch tracer
     case '[18f]fmpep-d2'
         model = '2tcm';
     otherwise
-        model = 'unknown';
+        warning('Unrecognized tracer %s. Processing with SUVR.',tracer);
+        model = 'suvr';
 end
 
 close(conn);
