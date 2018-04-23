@@ -2,6 +2,9 @@ function suvr = magia_suvr(input,tacs,frames,start_time,end_time)
 
 num_frames = size(frames,1);
 if(num_frames > 1)
+    if(end_time == 0)
+        end_time = frames(end);
+    end
     k = frames(:,1) >= start_time & frames(:,2) <= end_time;
     if(any(k))
         frames = frames(k,:);

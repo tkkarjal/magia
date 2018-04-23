@@ -13,6 +13,12 @@ switch tracer
                 value = 90;
         end
     otherwise
-        error('Default SUVR options have not been specified for %s.',tracer);
-        
+        switch var
+            case 'start_time'
+                value = 0;
+            case 'end_time'
+                value = 0;
+        end
+end
+
 end
