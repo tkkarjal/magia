@@ -45,6 +45,18 @@ if(exist(D,'dir'))
         delete(qc_file);
     end
     
+    % Delete the modeling options file
+    mo_file = sprintf('%s/modeling_options_%s.txt',D,subject);
+    if(exist(mo_file,'file'))
+        delete(mo_file);
+    end
+    
+    % Delete the githash file
+    gh_file = sprintf('%s/githash_%s.txt',D,subject);
+    if(exist(gh_file,'file'))
+        delete(gh_file);
+    end
+    
 else
     aivo_set_info(subjects,'found',0);
     error('Could not find subject directory for %s.',subject);
