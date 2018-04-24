@@ -22,7 +22,13 @@ if(nargin == 1) % Read MAGIA processing options and modeling options from AIVO
     aivo = 1;
     found = aivo_check_found(subject);
     if(found)
-        [I, modeling_options] = magia_metadata_from_aivo(subject);
+        try
+            [I, modeling_options] = magia_metadata_from_aivo(subject);
+        catch ME
+            error_message = aivo_parse_me(ME);
+            aivo_set_info(subject,'error',error_message);
+            rethrow(ME);
+        end
     else
         error('Could not magia %s because the image_id does not exist in AIVO.',subject);
     end
