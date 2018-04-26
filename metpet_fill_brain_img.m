@@ -7,5 +7,6 @@ end
 for x = 1:size(old_img,1)
     new_img(x,:,:) = metpet_fill_slice(new_img(x,:,:),'sagittal');
 end
+new_img = magia_medfilter(new_img);
 
 end
