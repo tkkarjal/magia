@@ -20,10 +20,13 @@ function value = aivo_get_info(subject_id,field)
 conn = aivo_connect();
 
 pet_cols = columns(conn,'megapet','aivo','pet');
+patient_cols = columns(conn,'megapet','aivo','patient');
 model_cols = columns(conn,'megapet','aivo','model');
 blood_cols = columns(conn,'megapet','aivo','blood');
 if(ismember(field,pet_cols))
     tab = 'pet';
+elseif(ismember(field,patient_cols))
+    tab = 'patient';
 elseif(ismember(field,model_cols))
     tab = 'model';
 elseif(ismember(field,blood_cols))
