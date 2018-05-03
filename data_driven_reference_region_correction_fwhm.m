@@ -11,7 +11,7 @@ if(ischar(mean_pet_image))
 end
 
 v = mean_pet_image(uncorrected_reference_region);
-v = v(logical(v>1));
+v = v(logical(v>prctile(v,1)));
 n_bins = floor(length(v)/18);
 N = hist(v,n_bins);
 [f,xi] = ksdensity(v);
