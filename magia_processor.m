@@ -265,7 +265,7 @@ else
     [ref_mask,thr] = data_driven_reference_region_correction_fwhm(ref_mask,normalized_pet,sub_mask_dir);
     if(rc)
         specific_binding_mask = create_specific_binding_mask(normalized_pet,thr);
-        remove_nonspecific_binding_from_rois(roi_masks,specific_binding_mask);
+        remove_nonspecific_binding_from_rois(roi_masks,specific_binding_mask,sub_mask_dir);
     end
     
     input = get_ref_tac(normalized_pet,ref_mask);
