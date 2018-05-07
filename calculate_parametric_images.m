@@ -31,8 +31,9 @@ switch lower(model)
         parametric_images = PatlakRef_nifti(input,start_time,cutTime,frames,pet_filename,filter_size,brainmask,outputdir);
     case 'fur'
         start_time = modeling_options.start_time;
+        end_time = modeling_options.end_time;
         ic = modeling_options.ic;
-        parametric_images = {magia_calculate_fur_image(input,frames,start_time,ic,pet_filename,brainmask,outputdir)};
+        parametric_images = {magia_calculate_fur_image(input,frames,start_time,end_time,ic,pet_filename,brainmask,outputdir)};
     case 'suvr'
         start_time = modeling_options.start_time;
         end_time = modeling_options.end_time;
