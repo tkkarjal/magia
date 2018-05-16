@@ -1,7 +1,8 @@
-function aivo_set_info(subject_id,field,value)
+function aivo_set_info_dev(subject_id,field,value)
 % It is possible to add the same value for every subject_id. Name the fields as in the columns in aivo.pet.
 % Do not enter many fields.
 
+% Edited: 2018-05-15, Jonatan Ropponen
 
 conn = aivo_connect();
 
@@ -16,22 +17,31 @@ conn = aivo_connect();
 % end
 
 switch field
-    case {'ac' 'study_code' 'study_date' 'project' 'tracer' 'dose' 'gender' 'scanner' 'frames' 'mri' 'weight' 'height' 'age' 'injection_time' 'group_name' 'description' 'plasma' 'dc' 'found' 'mri_found' 'analyzed' 'validated' 'type' 'source' 'dynamic' 'error' 'notes' 'num_frames' 'start_time' 'githash' 'nii' 'doi' 'freesurfed' 'magia_time'}
+    case {'ac' 'study_code' 'study_date' 'project' 'tracer' 'dose' 'gender' 'scanner' 'frames' 'mri' 'weight' 'height' 'age' 'injection_time' 'group_name' 'description' 'plasma' 'dc' 'type' 'source' 'dynamic' 'notes' 'num_frames' 'start_time' 'doi'}
         table_name = '"megabase"."aivo".pet';
         cols = columns(conn,'megapet','aivo','pet');
+        field_edits_allowed = 0;
+    case {'analyzed' 'found' 'nii' 'mri_found' 'freesurfed' 'githash' 'error' 'magia_time' 'validated'}
+        table_name = '"megabase"."aivo".pet';
+        cols = columns(conn,'megapet','aivo','pet');
+        field_edits_allowed = 1;
     case {'model' 'roi_set' 'rc' 'fwhm' 'use_mri'}
         table_name = '"megabase"."aivo".model';
         cols = columns(conn,'megapet','aivo','model');
+        field_edits_allowed = 0;
     case {'ap' 'ab' 'vp' 'vb' 'hct'}
         table_name = '"megabase"."aivo".blood';
         cols = columns(conn,'megapet','aivo','blood');
+        field_edits_allowed = 1;
     case 'patient_id'
         table_name = '"megabase"."aivo".patient';
         cols = columns(conn,'megapet','aivo','patient');
+        field_edits_allowed = 1;
 %      case 'freesurfed'
 %          table_name = 'megabase."aivo".mri';
 %          cols = columns(conn,'megapet','aivo','mri');
 %          subject_id = aivo_get_info(subject_id,'mri');
+%          field_edits_allowed = 1;
     otherwise
         error('Unknown field %s.',field);
 end
@@ -51,7 +61,7 @@ if(~ischar(subject_id)) %many subjects
     if(length(subject_id) == length(value)) %different value for every subject
         for i=1:length(subject_id)
             validated = aivo_get_info(subject_id{i},'validated');
-            if(validated ~= 1)
+            if(validated ~= 1 || field_edits_allowed)
                 whereclause = sprintf('WHERE image_id = %s%s%s',char(39),subject_id{i},char(39));
                 update(conn,table_name,field,value(i),whereclause)
             else
@@ -73,19 +83,21 @@ for i=1:length(invalid_id)
     warning('Image_id %s does not exist! Use aivo_create_subject.m to create new subjects.',invalid_id{i})
 end
 
-current_validated = aivo_get_subjects('validated',1);
-current_unvalidated = setdiff(current_subjects,current_validated);
-if(~isempty(current_unvalidated)) %exclude validated subjects
-    validated = intersect(subject_id,current_validated);
-    subject_id = intersect(subject_id,current_unvalidated);
-    for i=1:length(validated)
-        warning('Subject_id %s is validated and cannot be updated!',validated{i});
+if ~field_edits_allowed
+    current_validated = aivo_get_subjects('validated',1);
+    current_unvalidated = setdiff(current_subjects,current_validated);
+    if(~isempty(current_unvalidated)) %exclude validated subjects
+        validated = intersect(subject_id,current_validated);
+        subject_id = intersect(subject_id,current_unvalidated);
+        for i=1:length(validated)
+            warning('Subject_id %s is validated and cannot be updated!',validated{i});
+        end
+    end
+    if(isempty(subject_id)) %end if no subjects
+        return
     end
 end
-if(isempty(subject_id)) %end if no subjects
-    return
-end
-
+    
 if(length(subject_id)>1) %many subjects 
     if(length(subject_id) == length(value)) %different value for every subject (not working at the moment!)
         %for i=1:length(subject_id)
