@@ -36,7 +36,7 @@ thr = mode - 3*dd;
 fig = figure('Visible','Off'); hist(v,n_bins); hold on; plot(xi,max(N)/max(f)*f,'r');
 plot([ll ll],[0 max(N)],'k--','LineWidth',1.5);
 plot([ul ul],[0 max(N)],'k--','LineWidth',1.5);
-plot(xi,f_thr.*ones(size(xi)),'k--','LineWidth',1.5);
+plot(xi,max(N)/max(f)*f_thr.*ones(size(xi)),'k--','LineWidth',1.5);
 
 corrected_reference_region = uint8(mean_pet_image>ll) .* uint8(mean_pet_image<ul) .* uint8(uncorrected_reference_region);
 n = [n '_dc'];
