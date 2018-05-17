@@ -59,7 +59,10 @@ switch model
         end
         T = array2table(X,'VariableNames',{'Ki','V0'},'RowNames',roi_info.labels);
     case 'fur'
-        X = calculate_fur(input,tacs,frames);
+        start_time = modeling_options.start_time;
+        end_time = modeling_options.end_time;
+        ic = modeling_options.ic;
+        X = magia_calculate_fur(input,tacs,frames,start_time,end_time,ic);
         T = array2table(X,'VariableNames',{'FUR'},'RowNames',roi_info.labels);
     case 'suvr'
         start_time = modeling_options.start_time;
