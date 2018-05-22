@@ -96,7 +96,8 @@ if(dyn && use_mri && plasma)
     
     roi_masks = create_roi_masks2(resampled_seg_file,roi_info);
     tacs = calculate_roi_tacs(motion_corrected_pet,roi_masks);
-    input = read_plasma(subject);
+    bq = magia_get_pet_units(motion_corrected_pet);
+    input = magia_read_plasma(subject,bq);
     magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
     brainmask = create_brainmask(subject,resampled_bet_file);
     parametric_images = calculate_parametric_images(motion_corrected_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
@@ -153,7 +154,8 @@ elseif(dyn && ~use_mri && plasma)
     [~,normalized_pet] = normalize_using_template(meanpet_file,template_dir,tracer,motion_corrected_pet);
     roi_masks = get_roi_masks(roi_info.mask_dir);
     tacs = calculate_roi_tacs(normalized_pet,roi_masks);
-    input = read_plasma(subject);
+    bq = magia_get_pet_units(normalized_pet);
+    input = magia_read_plasma(subject,bq);
     magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
     normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
     smooth_img(normalized_parametric_images,fwhm);
@@ -175,7 +177,8 @@ elseif(~dyn && use_mri && plasma)
     
     roi_masks = create_roi_masks2(resampled_seg_file,roi_info);
     tacs = calculate_roi_tacs(pet_file,roi_masks);
-    input = read_plasma(subject);
+    bq = magia_get_pet_units(pet_file);
+    input = magia_read_plasma(subject,bq);
     magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
     brainmask = create_brainmask(subject,resampled_bet_file);
     parametric_images = calculate_parametric_images(pet_file,input,frames,modeling_options,results_dir,tracer,brainmask);
@@ -215,7 +218,8 @@ elseif(~dyn && ~use_mri && plasma)
     fprintf('%s: Static image, no MRI, plasma input\n',subject);
     
     normalized_pet = normalize_using_template(pet_file,template_dir,tracer);
-    input = read_plasma(subject);
+    bq = magia_get_pet_units(normalized_pet);
+    input = magia_read_plasma(subject,bq);
     magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
     normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
     smooth_img(normalized_parametric_images,fwhm);
