@@ -2,7 +2,7 @@ function roi_info = get_tracer_default_roi_set(tracer)
 
 switch lower(tracer)
     case {'[11c]carfentanil','[11c]pbr28'}
-        roi_info.labels = {'amy' 'cau' 'dacc' 'inftemp' 'ins' 'midtemp' 'nacc' 'ofc' 'parsop' 'pcc' 'put' 'racc' 'supfront' 'tha' 'tempol'};
+        roi_info.labels = {'amy' 'cau' 'dacc' 'inftemp' 'ins' 'midtemp' 'nacc' 'ofc' 'parsop' 'pcc' 'put' 'racc' 'supfront' 'tempol' 'tha'};
         roi_info.codes = {
             [18 54] % amy
             [11 50] % cau
@@ -17,8 +17,8 @@ switch lower(tracer)
             [12 102 51 111] % put
             [1026 2026] % racc
             [1028 2028] % supfront
-            [9 10 48 49] % tha
             [1033 2033] % tempol
+            [9 10 48 49] % tha
             };
     case {'[11c]raclopride','[18f]cft','[18f]dopa'}
         roi_info.labels = {'amy' 'cau' 'hip' 'nacc' 'pal' 'parhip' 'put' 'tha'};
@@ -71,18 +71,18 @@ switch lower(tracer)
             [9 10 48 49] % tha
             };
     case '[11c]pib'
-        roi_info.labels = {'PIB1PFCALL' 'PARCALL' 'LTC' 'LOC' 'PREC' 'CGA' 'CGP' 'MTC' 'STR' 'PIBcomp'};
+        roi_info.labels = {'CGA' 'CGP' 'LOC' 'LTC' 'MTC' 'PARCALL' 'PIB1PFCALL' 'PIBcomp' 'PREC' 'STR'};
         roi_info.codes = {
-            [1003 2003 1012 2012 1014 2014 1018 2018 1019 2019 1020 2020 1027 2027 1028 2028 1032 2032] % prefrontal cortex
-            [1008 2008 1029 2029 1031 2031] % parietal cortex
-            [1009 2009 1015 2015 1030 2030 1033 2033 1034 2034] % lateral temporal cortex
-            [1011 2011] % lateral occipital cortex
-            [1025 2025] % precuneus
             [1002 2002 1026 2026] % anterior cingulate
             [1010 2010 1023 2023] % posterior cingulate
+            [1011 2011] % lateral occipital cortex
+            [1009 2009 1015 2015 1030 2030 1033 2033 1034 2034] % lateral temporal cortex
             [17 53 18 54 1006 2006] % medial temporal cortex
+            [1008 2008 1029 2029 1031 2031] % parietal cortex
+            [1003 2003 1012 2012 1014 2014 1018 2018 1019 2019 1020 2020 1027 2027 1028 2028 1032 2032] % prefrontal cortex
+            [1003 2003 1012 2012 1014 2014 1018 2018 1019 2019 1020 2020 1027 2027 1028 2028 1032 2032 1009 2009 1015 2015 1030 2030 1033 2033 1034 2034 1008 2008 1029 2029 1031 2031 1025 2025 1002 2002 1026 2026 1010 2010 		 1023 2023] % pibcomp
+            [1025 2025] % precuneus
             [11 50 12 51] % striatum
-            [1003 2003 1012 2012 1014 2014 1018 2018 1019 2019 1020 2020 1027 2027 1028 2028 1032 2032 1009 2009 1015 2015 1030 2030 1033 2033 1034 2034 1008 2008 1029 2029 1031 2031 1025 2025 1002 2002 1026 2026 1010 2010 1023 2023]
             };
     case '[11c]flb'
         roi_info.labels = {'amy' 'cau' 'dacc' 'hip' 'ins' 'nacc' 'oc' 'ofc' 'pal' 'parhip' 'pcc' 'put' 'racc' 'tha'};
