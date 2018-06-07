@@ -31,7 +31,7 @@ du = ul - mode;
 dd = min([dl du]);
 ll = mode - dd;
 ul = mode + dd;
-thr = 0.75*ll;
+thr = ll;
 
 fig = figure('Visible','Off'); hist(v,n_bins); hold on; plot(xi,max(N)/max(f)*f,'r');
 plot([ll ll],[0 max(N)],'k--','LineWidth',1.5);
