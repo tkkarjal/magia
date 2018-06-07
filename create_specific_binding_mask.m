@@ -1,9 +1,6 @@
 function specific_binding_mask = create_specific_binding_mask(meanpet_file,thr)
 
-smooth_img(meanpet_file,6);
-smoothed_meanpet_file = add_prefix(meanpet_file,'s');
-
-V = spm_vol(smoothed_meanpet_file);
+V = spm_vol(meanpet_file);
 meanpet_image = spm_read_vols(V);
 mask = uint8(meanpet_image >= thr);
 
