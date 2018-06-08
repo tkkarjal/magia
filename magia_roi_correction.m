@@ -1,4 +1,9 @@
 function corrected_mask = magia_roi_correction(original_mask,meanpet_image)
+% Anatomical correction of the ROI mask. The correction makes the radioactivity concentration within the ROI more homogenous.
+% The correction is performed by clustering the radioactivity signal within the ROI into three clusters. The voxels in the
+% cluster whose mean radioactivity concentration is lowest are excluded from the mask. This is very useful when the ROI mask
+% extends outside brain tissue, as happens often when using automated methods (e.g. atlases of FreeSurfer). In these cases,
+% the excluded voxels are typically the ones outside brain tissue (e.g. inside ventricles).
 
 if(ischar(original_mask))
     V = spm_vol(original_mask);
