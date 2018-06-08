@@ -90,7 +90,7 @@ if(dyn && use_mri && plasma)
     fprintf('%s: Coregistering MRI files to mean PET image...\n',subject);
     other_images = {seg_file;bet_file};
     spm_coregister_estimate(meanpet_file,mri_file,other_images);
-    resampled_bet_file = spm_coregister_reslice(meanpet_file,bet_file,4);
+    resampled_bet_file = spm_coregister_reslice(meanpet_file,bet_file,1);
     resampled_seg_file = spm_coregister_reslice(meanpet_file,seg_file,0);
     coreg_qc(subject,meanpet_file,resampled_bet_file);
     
@@ -119,7 +119,7 @@ elseif(dyn && use_mri && ~plasma)
     fprintf('%s: Coregistering MRI files to mean PET image...\n',subject);
     other_images = {seg_file;bet_file};
     spm_coregister_estimate(meanpet_file,mri_file,other_images);
-    resampled_bet_file = spm_coregister_reslice(meanpet_file,bet_file,4);
+    resampled_bet_file = spm_coregister_reslice(meanpet_file,bet_file,1);
     resampled_seg_file = spm_coregister_reslice(meanpet_file,seg_file,0);
     coreg_qc(subject,meanpet_file,resampled_bet_file);
     
@@ -171,7 +171,7 @@ elseif(~dyn && use_mri && plasma)
     fprintf('%s: Coregistering MRI files to mean PET image...\n',subject);
     other_images = {seg_file;bet_file};
     spm_coregister_estimate(pet_file,mri_file,other_images);
-    resampled_bet_file = spm_coregister_reslice(pet_file,bet_file,4);
+    resampled_bet_file = spm_coregister_reslice(pet_file,bet_file,1);
     resampled_seg_file = spm_coregister_reslice(pet_file,seg_file,0);
     coreg_qc(subject,pet_file,resampled_bet_file);
     
@@ -237,7 +237,7 @@ elseif(~dyn && use_mri && ~plasma)
     fprintf('%s: Coregistering MRI files to mean PET image...\n',subject);
     other_images = {seg_file;bet_file};
     spm_coregister_estimate(pet_file,mri_file,other_images);
-    resampled_bet_file = spm_coregister_reslice(pet_file,bet_file,4);
+    resampled_bet_file = spm_coregister_reslice(pet_file,bet_file,1);
     resampled_seg_file = spm_coregister_reslice(pet_file,seg_file,0);
     coreg_qc(subject,pet_file,resampled_bet_file);
     
