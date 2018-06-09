@@ -90,11 +90,14 @@ if(dyn && use_mri && plasma)
     fprintf('%s: Coregistering MRI files to mean PET image...\n',subject);
     other_images = {seg_file;bet_file};
     spm_coregister_estimate(meanpet_file,mri_file,other_images);
-    resampled_bet_file = spm_coregister_reslice(meanpet_file,bet_file,1);
+    resampled_bet_file = spm_coregister_reslice(meanpet_file,bet_file,4);
     resampled_seg_file = spm_coregister_reslice(meanpet_file,seg_file,0);
     coreg_qc(subject,meanpet_file,resampled_bet_file);
     
     roi_masks = create_roi_masks2(resampled_seg_file,roi_info);
+    if(rc)
+        magia_correct_rois(roi_masks,meanpet_file);
+    end
     tacs = calculate_roi_tacs(motion_corrected_pet,roi_masks);
     bq = magia_get_pet_units(motion_corrected_pet);
     input = magia_read_plasma(subject,bq);
@@ -119,18 +122,17 @@ elseif(dyn && use_mri && ~plasma)
     fprintf('%s: Coregistering MRI files to mean PET image...\n',subject);
     other_images = {seg_file;bet_file};
     spm_coregister_estimate(meanpet_file,mri_file,other_images);
-    resampled_bet_file = spm_coregister_reslice(meanpet_file,bet_file,1);
+    resampled_bet_file = spm_coregister_reslice(meanpet_file,bet_file,4);
     resampled_seg_file = spm_coregister_reslice(meanpet_file,seg_file,0);
     coreg_qc(subject,meanpet_file,resampled_bet_file);
     
     [roi_masks,ref_mask] = create_roi_masks2(resampled_seg_file,roi_info,ref_region);
     ref_mask = anatomical_reference_region_correction2(ref_mask,tracer,resampled_seg_file);
     % check_roi_normality(ref_mask,meanpet_file)
-    [ref_mask,thr] = data_driven_reference_region_correction_fwhm(ref_mask,meanpet_file);
+    ref_mask = data_driven_reference_region_correction_fwhm(ref_mask,meanpet_file);
     
     if(rc)
-        specific_binding_mask = create_specific_binding_mask(meanpet_file,thr);
-        remove_nonspecific_binding_from_rois(roi_masks,specific_binding_mask);
+        magia_correct_rois(roi_masks,meanpet_file);
     end
     
     tacs = calculate_roi_tacs(motion_corrected_pet,roi_masks);
@@ -153,6 +155,9 @@ elseif(dyn && ~use_mri && plasma)
     motion_parameter_qc(subject);
     [~,normalized_pet] = normalize_using_template(meanpet_file,template_dir,tracer,motion_corrected_pet);
     roi_masks = get_roi_masks(roi_info.mask_dir);
+    if(rc)
+        magia_correct_rois(roi_masks,meanpet_file);
+    end
     tacs = calculate_roi_tacs(normalized_pet,roi_masks);
     bq = magia_get_pet_units(normalized_pet);
     input = magia_read_plasma(subject,bq);
@@ -171,11 +176,14 @@ elseif(~dyn && use_mri && plasma)
     fprintf('%s: Coregistering MRI files to mean PET image...\n',subject);
     other_images = {seg_file;bet_file};
     spm_coregister_estimate(pet_file,mri_file,other_images);
-    resampled_bet_file = spm_coregister_reslice(pet_file,bet_file,1);
+    resampled_bet_file = spm_coregister_reslice(pet_file,bet_file,4);
     resampled_seg_file = spm_coregister_reslice(pet_file,seg_file,0);
     coreg_qc(subject,pet_file,resampled_bet_file);
     
     roi_masks = create_roi_masks2(resampled_seg_file,roi_info);
+    if(rc)
+        magia_correct_rois(roi_masks,pet_file);
+    end
     tacs = calculate_roi_tacs(pet_file,roi_masks);
     bq = magia_get_pet_units(pet_file);
     input = magia_read_plasma(subject,bq);
@@ -199,10 +207,9 @@ elseif(dyn && ~use_mri && ~plasma)
     [roi_masks,ref_mask] = get_roi_masks(roi_info.mask_dir,ref_region.label);
     
     sub_mask_dir = sprintf('%s/%s/masks',data_path,subject);
-    [ref_mask,thr] = data_driven_reference_region_correction_fwhm(ref_mask,normalized_meanpet,sub_mask_dir);
+    ref_mask = data_driven_reference_region_correction_fwhm(ref_mask,normalized_meanpet,sub_mask_dir);
     if(rc)
-        specific_binding_mask = create_specific_binding_mask(normalized_meanpet,thr);
-        remove_nonspecific_binding_from_rois(roi_masks,specific_binding_mask,sub_mask_dir);
+        magia_correct_rois(roi_masks,meanpet_file);
     end
     tacs = calculate_roi_tacs(normalized_pet,roi_masks);
     input = get_ref_tac(normalized_pet,ref_mask);
@@ -224,6 +231,9 @@ elseif(~dyn && ~use_mri && plasma)
     normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
     smooth_img(normalized_parametric_images,fwhm);
     roi_masks = get_roi_masks(roi_info.mask_dir);
+    if(rc)
+        magia_correct_rois(roi_masks,normalized_pet);
+    end
     tacs = calculate_roi_tacs(normalized_pet,roi_masks);
     
 elseif(~dyn && use_mri && ~plasma)
@@ -237,19 +247,21 @@ elseif(~dyn && use_mri && ~plasma)
     fprintf('%s: Coregistering MRI files to mean PET image...\n',subject);
     other_images = {seg_file;bet_file};
     spm_coregister_estimate(pet_file,mri_file,other_images);
-    resampled_bet_file = spm_coregister_reslice(pet_file,bet_file,1);
+    resampled_bet_file = spm_coregister_reslice(pet_file,bet_file,4);
     resampled_seg_file = spm_coregister_reslice(pet_file,seg_file,0);
     coreg_qc(subject,pet_file,resampled_bet_file);
     
     [roi_masks,ref_mask] = create_roi_masks2(resampled_seg_file,roi_info,ref_region);
-    [ref_mask,thr] = data_driven_reference_region_correction_fwhm(ref_mask,pet_file);
+    ref_mask = data_driven_reference_region_correction_fwhm(ref_mask,pet_file);
     
-    specific_binding_mask = create_specific_binding_mask(pet_file,thr);
-    remove_nonspecific_binding_from_rois(roi_masks,specific_binding_mask);
+    if(rc)
+        magia_correct_rois(roi_masks,pet_file);
+    end
+
     tacs = calculate_roi_tacs(pet_file,roi_masks);
     input = get_ref_tac(pet_file,ref_mask);
     magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
-    brainmask = create_brainmask(subject,resampled_bet_file,specific_binding_mask);
+    brainmask = create_brainmask(subject,resampled_bet_file);
     parametric_images = calculate_parametric_images(pet_file,input,frames,modeling_options,results_dir,tracer,brainmask);
     deformation_field = spm_segment(mri_file);
     mri_histogram_qc(subject,mri_file);
@@ -266,10 +278,9 @@ else
     normalized_pet = normalize_using_template(pet_file,template_dir,tracer);
     
     sub_mask_dir = sprintf('%s/%s/masks',data_path,subject);
-    [ref_mask,thr] = data_driven_reference_region_correction_fwhm(ref_mask,normalized_pet,sub_mask_dir);
+    ref_mask = data_driven_reference_region_correction_fwhm(ref_mask,normalized_pet,sub_mask_dir);
     if(rc)
-        specific_binding_mask = create_specific_binding_mask(normalized_pet,thr);
-        remove_nonspecific_binding_from_rois(roi_masks,specific_binding_mask,sub_mask_dir);
+        magia_correct_rois(roi_masks,normalized_pet);
     end
     
     input = get_ref_tac(normalized_pet,ref_mask);
