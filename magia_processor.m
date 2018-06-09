@@ -153,10 +153,10 @@ elseif(dyn && ~use_mri && plasma)
     
     [motion_corrected_pet,meanpet_file] = motion_correction(pet_file);
     motion_parameter_qc(subject);
-    [~,normalized_pet] = normalize_using_template(meanpet_file,template_dir,tracer,motion_corrected_pet);
-    roi_masks = get_roi_masks(roi_info.mask_dir);
+    [normalized_meanpet,normalized_pet] = normalize_using_template(meanpet_file,template_dir,tracer,motion_corrected_pet);
+    roi_masks = get_roi_masks(roi_info.mask_dir,subject);
     if(rc)
-        magia_correct_rois(roi_masks,meanpet_file);
+        magia_correct_rois(roi_masks,normalized_meanpet);
     end
     tacs = calculate_roi_tacs(normalized_pet,roi_masks);
     bq = magia_get_pet_units(normalized_pet);
@@ -204,12 +204,12 @@ elseif(dyn && ~use_mri && ~plasma)
     [motion_corrected_pet,meanpet_file] = motion_correction(pet_file);
     motion_parameter_qc(subject);
     [normalized_meanpet,normalized_pet] = normalize_using_template(meanpet_file,template_dir,tracer,motion_corrected_pet);
-    [roi_masks,ref_mask] = get_roi_masks(roi_info.mask_dir,ref_region.label);
+    [roi_masks,ref_mask] = get_roi_masks(roi_info.mask_dir,subject,ref_region.label);
     
     sub_mask_dir = sprintf('%s/%s/masks',data_path,subject);
     ref_mask = data_driven_reference_region_correction_fwhm(ref_mask,normalized_meanpet,sub_mask_dir);
     if(rc)
-        magia_correct_rois(roi_masks,meanpet_file);
+        magia_correct_rois(roi_masks,normalized_meanpet);
     end
     tacs = calculate_roi_tacs(normalized_pet,roi_masks);
     input = get_ref_tac(normalized_pet,ref_mask);
@@ -230,7 +230,7 @@ elseif(~dyn && ~use_mri && plasma)
     magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
     normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
     smooth_img(normalized_parametric_images,fwhm);
-    roi_masks = get_roi_masks(roi_info.mask_dir);
+    roi_masks = get_roi_masks(roi_info.mask_dir,subject);
     if(rc)
         magia_correct_rois(roi_masks,normalized_pet);
     end
@@ -274,7 +274,7 @@ else
     
     fprintf('%s: Static image, no MRI, reference tissue input\n',subject);
     
-    [roi_masks,ref_mask] = get_roi_masks(roi_info.mask_dir,ref_region.label);
+    [roi_masks,ref_mask] = get_roi_masks(roi_info.mask_dir,subject,ref_region.label);
     normalized_pet = normalize_using_template(pet_file,template_dir,tracer);
     
     sub_mask_dir = sprintf('%s/%s/masks',data_path,subject);
