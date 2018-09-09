@@ -27,24 +27,22 @@ end
 
 lab = [4 43]; % left and right lateral ventricles
 cor_mask = zeros(size(ref_mask));
-l_idx_min = 10000; r_idx_max = 0; l_slice = 0; r_slice = 0;
+min_xc = Inf;
+max_xc = -Inf;
 for slice = 1:size(img,3)
-    [xc,~,~] = ind2sub(size(img),find(img(:,:,slice) == lab(1)));
-    left_idx = min(xc);
-    if(left_idx<l_idx_min)
-        l_idx_min = left_idx;
-        l_slice = slice;
+    img_slice = img(:,:,slice);
+    [xc,~] = find(img_slice == lab(1) | img_slice == lab(2));
+    if(~isempty(xc))
+        if(min(xc) < min_xc)
+            min_xc = min(xc);
+        end
+        if(max(xc) > max_xc)
+            max_xc = max(xc);
+        end
     end
-    [xc,~,~] = ind2sub(size(img),find(img(:,:,slice) == lab(2)));
-    right_idx = max(xc);
-    if(right_idx>r_idx_max)
-        r_idx_max = right_idx;
-        r_slice = slice;
-    end
-    cor_mask(left_idx:right_idx,:,slice) = 1;
 end
 
-cor_mask(l_idx_min:r_idx_max,:,1:max([r_slice,l_slice])) = 1;
+cor_mask(min_xc:max_xc,:,:) = 1;
 new_ref_mask = double(ref_mask).*cor_mask;
 
 %% Add parts of the cuneus
