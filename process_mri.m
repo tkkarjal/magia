@@ -12,7 +12,8 @@ end
 
 %% Rigid transformation to MNI space
 
-mni_template = '/scratch/shared/toolbox/spm12/canonical/avg305T1.nii';
+spm_path = getenv('SPM_DIR');
+mni_template = sprintf('%s/canonical/avg305T1.nii', spm_path);
 
 other_images = {
     seg_file
