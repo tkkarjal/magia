@@ -1,6 +1,6 @@
 function freesurfed = magia_check_freesurfed(mri_code)
 
-fs_dir = '~/vsshp.net/Research/Neurotiede/aivo/FreeSurfer';
+fs_dir = getenv('FS_FINAL_DIR');
 sub_dir = sprintf('%s/%s',fs_dir,mri_code);
 if(~exist(sub_dir,'dir'))
     freesurfed = 0;
