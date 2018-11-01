@@ -9,7 +9,7 @@ switch tracer
         switch var
             case 'start_time'
                 value = 15;
-            case 'cut_time'
+            case 'end_time'
                 value = 0;
             case 'filter_size'
                 value = 0;

@@ -30,10 +30,10 @@ for i = 2:M
             if(isnan(start_time))
                 start_time = magia_get_patlak_ref_default_options(tracer,var);
             end
-        case 'cut_time'
-            cut_time = value{1,i};
-            if(isnan(cut_time))
-                cut_time = magia_get_patlak_ref_default_options(tracer,var);
+        case 'end_time'
+            end_time = value{1,i};
+            if(isnan(end_time))
+                end_time = magia_get_patlak_ref_default_options(tracer,var);
             end
         case 'filter_size'
             filter_size = value{1,i};
@@ -44,7 +44,7 @@ for i = 2:M
 end
 
 modeling_options.start_time = start_time;
-modeling_options.cut_time = cut_time;
+modeling_options.end_time = end_time;
 modeling_options.filter_size = filter_size;
 
 aivo_set_modeling_options(subject_id,modeling_options);

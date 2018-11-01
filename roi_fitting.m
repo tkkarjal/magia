@@ -49,13 +49,13 @@ switch model
     case 'patlak_ref'
         X = zeros(N,2);
         start_time = modeling_options.start_time;
-        cutTime = modeling_options.cut_time;
-        if(~cutTime)
-            cutTime = frames(end,2);
+        end_time = modeling_options.end_time;
+        if(~end_time)
+            end_time = frames(end,2);
         end
         for i = 1:N
             fprintf('Patlak_ref: Fitting ROI %.0f/%.0f...\n',i,N);
-            [X(i,1),X(i,2)] = magia_fit_patlak_ref(input,tacs(i,:),frames,start_time,cutTime);
+            [X(i,1),X(i,2)] = magia_fit_patlak_ref(input,tacs(i,:),frames,start_time,end_time);
         end
         T = array2table(X,'VariableNames',{'Ki','V0'},'RowNames',roi_info.labels);
     case 'fur'
