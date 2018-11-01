@@ -26,9 +26,9 @@ switch lower(model)
         parametric_images = PatlakPlasma_nifti(input,start_time,cutFrame,frames,pet_filename,brainmask,outputdir);
     case 'patlak_ref'
         start_time = modeling_options.start_time;
-        cutTime = modeling_options.cut_time;
+        end_time = modeling_options.end_time;
         filter_size = modeling_options.filter_size;
-        parametric_images = PatlakRef_nifti(input,start_time,cutTime,frames,pet_filename,filter_size,brainmask,outputdir);
+        parametric_images = PatlakRef_nifti(input,start_time,end_time,frames,pet_filename,filter_size,brainmask,outputdir);
     case 'fur'
         start_time = modeling_options.start_time;
         end_time = modeling_options.end_time;
