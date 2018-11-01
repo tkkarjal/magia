@@ -36,7 +36,7 @@ dose = I.dose;
 
 model = modeling_options.model;
 roi_set = modeling_options.roi_set;
-end_time = modeling_options.end_time;
+cut_time = modeling_options.cut_time;
 magia_write_modeling_options2(subject,modeling_options);
 
 roi_info = magia_get_roi_info(roi_set,tracer);
@@ -76,8 +76,8 @@ if(~exist(results_dir,'dir'))
     mkdir(results_dir);
 end
 
-if(end_time)
-    frame_idx = frames(:,2) <= end_time;
+if(cut_time)
+    frame_idx = frames(:,2) <= cut_time;
     frames = frames(frame_idx,:);
     num_frames = sum(frame_idx);
     pet_file = magia_select_frames(pet_file,num_frames);
