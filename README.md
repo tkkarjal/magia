@@ -22,7 +22,6 @@ setenv('FS_FINAL_DIR', '/dir/magia_data/FreeSurfer') %% path to save FS files
 
 setenv('ARCHIVE_DIR', '/dir/magia_data/archive') %% as above
 
-Added list of needed environment variables to README for when using pipeline on local files.
 setenv('SPM_DIR', '/dir/SPM') %% local SPM directory
 
 A possible directory structure, and note specific format of file names:
