@@ -36,6 +36,7 @@ dose = I.dose;
 
 model = modeling_options.model;
 roi_set = modeling_options.roi_set;
+cut_time = modeling_options.cut_time;
 
 roi_info = magia_get_roi_info(roi_set,tracer);
 
@@ -61,10 +62,10 @@ if(dyn)
     end
 end
 
-no_frames = size(frames,1);
-if(dyn && no_frames == 1)
+num_frames = size(frames,1);
+if(dyn && num_frames == 1)
     error('Cannot magia %s. Reason: Only one frame specified for a dynamic image.',subject);
-elseif(~dyn && no_frames > 1)
+elseif(~dyn && num_frames > 1)
     error('Cannot magia %s. Reason: Multiple frames specified for a static image.',subject);
 end
 
@@ -75,6 +76,13 @@ end
 results_dir = sprintf('%s/results',D);
 if(~exist(results_dir,'dir'))
     mkdir(results_dir);
+end
+
+if(cut_time)
+    frame_idx = frames(:,2) <= cut_time;
+    frames = frames(frame_idx,:);
+    num_frames = sum(frame_idx);
+    pet_file = magia_select_frames(pet_file,num_frames);
 end
 
 center_image2(pet_file,tracer); % the pet image should always be centered
