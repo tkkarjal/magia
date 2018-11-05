@@ -55,7 +55,7 @@ value = curs.Data;
 close(conn);
 
 switch field
-    case {'age' 'dose' 'weight' 'height' 'freesurfed' 'validated' 'analyzed' 'found' 'mri_found' 'plasma' 'dc' 'rc' 'ap' 'ab' 'vp' 'vb' 'hct' 'use_mri' 'num_frames' 'start_time' 'nii'}
+    case {'age' 'dose' 'weight' 'height' 'freesurfed' 'validated' 'analyzed' 'found' 'mri_found' 'plasma' 'dc' 'rc' 'ap' 'ab' 'vp' 'vb' 'hct' 'use_mri' 'num_frames' 'start_time' 'nii' 'cut_time'}
         value = cell2mat(value);
 end
 
