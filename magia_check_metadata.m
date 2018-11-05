@@ -117,4 +117,14 @@ if(~use_mri && strcmp(roi_set,'tracer_default'))
 end
 modeling_options.roi_set = roi_set;
 
+%% END_TIME
+
+cut_time = modeling_options.cut_time;
+if(iscell(cut_time))
+    cut_time = cut_time{1};
+end
+if(isnan(cut_time))
+    modeling_options.cut_time = 0;
+end
+
 end
