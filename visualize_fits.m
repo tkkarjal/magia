@@ -71,12 +71,12 @@ switch lower(model)
             mkdir(fit_dir);
         end
         startTime = modeling_options.start_time;
-        cutTime = modeling_options.cut_time;
-        if(~cutTime)
-            cutTime = frames(end,2);
+        end_time = modeling_options.end_time;
+        if(~end_time)
+            end_time = frames(end,2);
         end
         for i = 1:N
-            [Ki,V0,x,y,k,yy] = magia_fit_patlak_ref(input,tacs(i,:),frames,startTime,cutTime);
+            [Ki,V0,x,y,k,yy] = magia_fit_patlak_ref(input,tacs(i,:),frames,startTime,end_time);
             fig = figure('Visible','Off','Position',[100 100 700 400]);
             plot(x,y,'ko'); hold on; plot(x(k),y(k),'ro'); plot(x,yy,'k');
             img_name = sprintf('%s/%s.png',fit_dir,roi_info.labels{i});
