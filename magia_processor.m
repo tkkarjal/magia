@@ -37,7 +37,6 @@ dose = I.dose;
 model = modeling_options.model;
 roi_set = modeling_options.roi_set;
 cut_time = modeling_options.cut_time;
-magia_write_modeling_options2(subject,modeling_options);
 
 roi_info = magia_get_roi_info(roi_set,tracer);
 
@@ -46,6 +45,9 @@ if(~plasma)
 end
 
 magia_clean_files(subject);
+
+magia_write_modeling_options2(subject,modeling_options);
+
 githash = magia_get_githash();
 magia_write_githash(subject,githash);
 
