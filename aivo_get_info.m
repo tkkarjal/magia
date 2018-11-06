@@ -35,6 +35,14 @@ else
     error('Unrecognized field name: %s',field);
 end
 
+%% Pre-sort list and compute indeces for unsorting
+
+unsorted_list=subject_id;
+
+[subject_id,~]=sort(unsorted_list);
+
+[~,unsorting_idx]=sort(sorting_idx);
+
 select_statement = sprintf('SELECT %s.%s FROM "megabase"."aivo".%s',tab,lower(field),tab);
 if(ischar(subject_id))
     where_statement = sprintf('WHERE %s.image_id = %s%s%s',tab,char(39),lower(subject_id),char(39));
@@ -62,6 +70,27 @@ end
 if(~ischar(subject_id))
     if(length(value) ~= N)
         warning('The number of values obtained differs from the number of subject_ids.');
+        %Resorting with the original order and performing running main function in loop
+        subject_id=unsorted_list;
+        for i=1:length(subject_id)
+
+        try
+        
+        disp(['Proceeding with ' num2str(i) ' out of ' num2str(length(subject_id))])    
+            
+        value(i) = aivo_get_info(subject_id{i},field);
+        
+        catch
+        
+        warning(['Error with ' subject_id{i}])
+        res(i) = [NaN];
+        
+        end
+
+    else
+    
+        value=value(unsorting_idx);
+
     end
 end
 
