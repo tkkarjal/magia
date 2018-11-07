@@ -53,7 +53,7 @@ switch lower(tracer)
             [1026 2026] % racc
             [9 10 48 49] % tha
             };
-    case '[18f]fdg'
+    case {'[18f]fdg','[18f]ftha'}
         roi_info.labels = {'amy' 'cau' 'dacc' 'hip' 'ins' 'nacc' 'ofc' 'parhip' 'pcc' 'pcun' 'put' 'racc' 'tha'};
         roi_info.codes = {
             [18 54] % amy
