@@ -41,14 +41,14 @@ conn = aivo_connect();
 
 if((~mod(nargin,2)))
     
-    select_statement = 'SELECT pet.image_id FROM "megabase"."aivo".pet ';
-    where_statement = 'WHERE ';
+    select_statement = 'SELECT pet.image_id FROM "megabase"."aivo".pet, "megabase"."aivo".patient ';
+    where_statement = 'WHERE "aivo".pet.image_id = "aivo".patient.image_id AND ';
     l=0;
     for i=1:nargin/2
         field = varargin{i+l};
         value = varargin{i+l+1};
         l=l+1;
-        if(ismember(field,{'age','dose','study_date','injection_time','height','weight'})) %value
+        if(ismember(field,{'age','dose','study_date','injection_time'})) %value
             if(ischar(value)) %only one value
                 if(ismember('~',value))  %exclude spesific value
                     where_statement = [where_statement,' NOT ','pet.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
@@ -69,6 +69,23 @@ if((~mod(nargin,2)))
                 where_statement = [where_statement,' AND '];
             end
         end
+        if(ismember(field,{'height','weight'})) %value
+            if(ischar(value)) %only one value
+                if(ismember('~',value))  %exclude spesific value
+                    where_statement = [where_statement,' NOT ','patient.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
+                else
+                    where_statement = [where_statement,'patient.',lower(field),' = ',char(39),value,char(39)];
+                end
+            else
+                lb = value{1}; % lower bound
+                ub = value{2}; % upper bound
+                value = [num2str(lb),' AND ',num2str(ub)];
+                where_statement = [where_statement,'patient.',lower(field),' BETWEEN ',value];
+            end
+            if(i~=nargin/2)
+                where_statement = [where_statement,' AND '];
+            end
+        end       
         if(ismember(field,{'gender','study_code','tracer','frames','scanner','mri','project','description','group_name','patient_id','source','type','ac' 'githash'})) %char
             if(ismember('~',value)) %user excludes spesified values
                 where_statement = [where_statement,' NOT ','pet.',lower(field),'=',char(39),value(2:length(value)),char(39)];
