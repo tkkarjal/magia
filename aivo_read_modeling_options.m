@@ -9,6 +9,11 @@ if(strcmp(model,'null'))
     model = magia_get_default_model(subject_id);
 end
 
+cut_time = aivo_get_info(subject_id,'cut_time');
+if(iscell(cut_time))
+    cut_time = cut_time{1};
+end
+
 switch model
     case 'srtm'
         modeling_options = aivo_read_srtm_modeling_options(subject_id);
@@ -40,5 +45,6 @@ if(iscell(roi_set))
 end
 
 modeling_options.roi_set = roi_set;
+modeling_options.cut_time = cut_time;
 
 end

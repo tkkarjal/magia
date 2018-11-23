@@ -8,8 +8,13 @@ end
 
 f = get_filenames(d,'*.');
 if(~isempty(f))
+    [~,~,ext] = fileparts(f{1});
+    if strcmp(ext,'.png')
+    f = f{2};
+    [~,~,ext] = fileparts(f)
+    else
     f = f{1};
-    [~,~,ext] = fileparts(f);
+    end
     if(strcmpi(ext,'.kbq'))
         k = 1;
     elseif(strcmpi(ext,'.bq'))

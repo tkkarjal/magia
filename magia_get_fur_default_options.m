@@ -14,6 +14,15 @@ switch tracer
             case 'end_time'
                 value = 0;
         end
+    case '[18f]ftha'
+        switch var
+            case 'start_time'
+                value = 10;
+            case 'ic'
+                value = 0;
+            case 'end_time'
+                value = 20;
+        end
     otherwise
         error('Default FUR options have not been specified for %s.',tracer); 
 end

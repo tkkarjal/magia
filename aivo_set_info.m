@@ -17,7 +17,7 @@ conn = aivo_connect();
 % end
 
 switch field
-    case {'ac' 'study_code' 'study_date' 'project' 'tracer' 'dose' 'gender' 'scanner' 'frames' 'mri' 'weight' 'height' 'age' 'injection_time' 'group_name' 'description' 'plasma' 'dc' 'type' 'source' 'dynamic' 'notes' 'num_frames' 'start_time' 'doi'}
+    case {'ac' 'study_code' 'study_date' 'project' 'tracer' 'dose' 'gender' 'scanner' 'frames' 'mri' 'injection_time' 'group_name' 'description' 'plasma' 'dc' 'type' 'source' 'dynamic' 'notes' 'num_frames' 'start_time' 'doi'}
         table_name = '"megabase"."aivo".pet';
         cols = columns(conn,'megapet','aivo','pet');
         field_edits_allowed = 0;
@@ -33,7 +33,7 @@ switch field
         table_name = '"megabase"."aivo".blood';
         cols = columns(conn,'megapet','aivo','blood');
         field_edits_allowed = 1;
-    case 'patient_id'
+    case {'patient_id' 'weight' 'height' 'age'}
         table_name = '"megabase"."aivo".patient';
         cols = columns(conn,'megapet','aivo','patient');
         field_edits_allowed = 1;

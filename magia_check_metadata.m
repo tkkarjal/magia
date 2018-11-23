@@ -103,11 +103,11 @@ end
 
 %% ROI_SET
 
-if(use_mri)
-    roi_set = 'tracer_default';
-else
+%if(use_mri)
+%    roi_set = 'tracer_default';
+%else
     roi_set = modeling_options.roi_set;
-end
+%end
 if(~use_mri && strcmp(roi_set,'tracer_default'))
     if(strcmp(tracer,'[18f]fdg'))
         roi_set = '[18f]fdg_atlas';
@@ -116,5 +116,15 @@ if(~use_mri && strcmp(roi_set,'tracer_default'))
     end
 end
 modeling_options.roi_set = roi_set;
+
+%% END_TIME
+
+cut_time = modeling_options.cut_time;
+if(iscell(cut_time))
+    cut_time = cut_time{1};
+end
+if(isnan(cut_time))
+    modeling_options.cut_time = 0;
+end
 
 end
