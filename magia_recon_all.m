@@ -8,8 +8,8 @@ main_data_dir = getenv('DATA_DIR');
 sub_mri_dir = sprintf('%s/%s/T1',main_mri_dir,mri_code);
 processed_mri_dir = sprintf('%s/%s/MRI',main_data_dir,subject);
 
-temp_freesurfer_dir = '/scratch/shared/megapet/FreeSurfer_temp';
-final_freesurfer_dir = '~/vsshp.net/Research/Neurotiede/aivo/FreeSurfer';
+temp_freesurfer_dir = getenv('FS_TEMP_DIR');
+final_freesurfer_dir = getenv('FS_FINAL_DIR');
 
 temp_freesurfer_sub_dir = sprintf('%s/%s',temp_freesurfer_dir,mri_code);
 final_freesurfer_sub_dir = sprintf('%s/%s',final_freesurfer_dir,mri_code);
