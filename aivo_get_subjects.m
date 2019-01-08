@@ -117,7 +117,7 @@ if((~mod(nargin,2)))
         end 
     end
     if(nargin==0)
-        q = select_statement;
+        q = 'SELECT pet.image_id FROM "megabase"."aivo".pet';
     else
         q = [select_statement,where_statement,'ORDER BY image_id ASC;'];
     end
