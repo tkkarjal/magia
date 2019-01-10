@@ -1,6 +1,6 @@
 function fig = magia_calculate_input_boundaries(tracer,plasma)
 
-archive_dir = getenv('ARCHIVE_DIR');
+archive_dir = getenv('MAGIA_ARCHIVE');
 if(plasma)
     subjects = aivo_get_subjects('tracer',tracer,'analyzed',1,'plasma',1,'dose',{100 1000},'weight',{40 200});
 else

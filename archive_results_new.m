@@ -3,7 +3,7 @@ function archive_results_new(subject)
 fprintf('Archiving results of %s...',subject);
 
 data_dir = getenv('DATA_DIR');
-archive_dir = getenv('ARCHIVE_DIR');
+archive_dir = getenv('MAGIA_ARCHIVE');
 source_dir = sprintf('%s/%s',data_dir,subject);
 target_dir = sprintf('%s/%s',archive_dir,subject);
 if(~exist(target_dir,'dir'))
