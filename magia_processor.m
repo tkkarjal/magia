@@ -42,6 +42,8 @@ roi_info = magia_get_roi_info(roi_set,tracer);
 
 if(~plasma)
     ref_region = magia_get_ref_region(tracer);
+    ref_idx = ismember(roi_info.labels,ref_region.label);
+    roi_info.labels(ref_idx) = [];
 end
 
 magia_clean_files(subject);
