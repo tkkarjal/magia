@@ -1,6 +1,6 @@
 function fig = calculate_input_boundaries(tracer)
 
-archive_dir = getenv('ARCHIVE_DIR');
+archive_dir = getenv('MAGIA_ARCHIVE');
 subjects = aivo_get_subjects('tracer',tracer,'analyzed',1,'mri','~0','dose',{100 1000},'weight',{40 200});
 N = length(subjects);
 
