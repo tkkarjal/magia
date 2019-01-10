@@ -25,6 +25,8 @@ switch model
         modeling_options = aivo_read_2tcm_modeling_options(subject_id);
     case 'fur'
         modeling_options = aivo_read_fur_modeling_options(subject_id);
+    case 'suv'
+        modeling_options.model = 'suv';
     case 'suvr'
         dyn = aivo_get_info(subject_id,'dynamic');
         if(iscell(dyn))
