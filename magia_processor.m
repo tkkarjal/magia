@@ -111,15 +111,17 @@ if(dyn && use_mri && plasma)
         magia_correct_rois(roi_masks,meanpet_file);
     end
     tacs = calculate_roi_tacs(motion_corrected_pet,roi_masks);
-    bq = magia_get_pet_units(motion_corrected_pet);
-    input = magia_read_plasma(subject,bq);
-    magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
-    brainmask = create_brainmask(subject,resampled_bet_file);
-    parametric_images = calculate_parametric_images(motion_corrected_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
-    deformation_field = spm_segment(mri_file);
-    mri_histogram_qc(subject,mri_file);
-    normalized_images = normalize_using_mri(mri_file,parametric_images,deformation_field);
-    smooth_img(normalized_images(2:end),fwhm);
+    if(~strcmp(model,'suv'))
+        bq = magia_get_pet_units(motion_corrected_pet);
+        input = magia_read_plasma(subject,bq);
+        magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
+        brainmask = create_brainmask(subject,resampled_bet_file);
+        parametric_images = calculate_parametric_images(motion_corrected_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
+        deformation_field = spm_segment(mri_file);
+        mri_histogram_qc(subject,mri_file);
+        normalized_images = normalize_using_mri(mri_file,parametric_images,deformation_field);
+        smooth_img(normalized_images(2:end),fwhm);
+    end
     
 elseif(dyn && use_mri && ~plasma)
     
@@ -148,14 +150,17 @@ elseif(dyn && use_mri && ~plasma)
     end
     
     tacs = calculate_roi_tacs(motion_corrected_pet,roi_masks);
-    input = get_ref_tac(motion_corrected_pet,ref_mask);
-    magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
-    brainmask = create_brainmask(subject,resampled_bet_file);
-    parametric_images = calculate_parametric_images(motion_corrected_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
-    deformation_field = spm_segment(mri_file);
-    mri_histogram_qc(subject,mri_file);
-    normalized_images = normalize_using_mri(mri_file,parametric_images,deformation_field);
-    smooth_img(normalized_images(2:end),fwhm);
+    
+    if(~strcmp(model,'suv'))
+        input = get_ref_tac(motion_corrected_pet,ref_mask);
+        magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
+        brainmask = create_brainmask(subject,resampled_bet_file);
+        parametric_images = calculate_parametric_images(motion_corrected_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
+        deformation_field = spm_segment(mri_file);
+        mri_histogram_qc(subject,mri_file);
+        normalized_images = normalize_using_mri(mri_file,parametric_images,deformation_field);
+        smooth_img(normalized_images(2:end),fwhm);
+    end
     
 elseif(dyn && ~use_mri && plasma)
     
@@ -170,12 +175,16 @@ elseif(dyn && ~use_mri && plasma)
     if(rc)
         magia_correct_rois(roi_masks,normalized_meanpet);
     end
+    
     tacs = calculate_roi_tacs(normalized_pet,roi_masks);
-    bq = magia_get_pet_units(normalized_pet);
-    input = magia_read_plasma(subject,bq);
-    magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
-    normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
-    smooth_img(normalized_parametric_images,fwhm);
+    
+    if(~strcmp(model,'suv'))
+        bq = magia_get_pet_units(normalized_pet);
+        input = magia_read_plasma(subject,bq);
+        magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
+        normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
+        smooth_img(normalized_parametric_images,fwhm);
+    end
     
 elseif(~dyn && use_mri && plasma)
     
@@ -197,15 +206,17 @@ elseif(~dyn && use_mri && plasma)
         magia_correct_rois(roi_masks,pet_file);
     end
     tacs = calculate_roi_tacs(pet_file,roi_masks);
-    bq = magia_get_pet_units(pet_file);
-    input = magia_read_plasma(subject,bq);
-    magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
-    brainmask = create_brainmask(subject,resampled_bet_file);
-    parametric_images = calculate_parametric_images(pet_file,input,frames,modeling_options,results_dir,tracer,brainmask);
-    deformation_field = spm_segment(mri_file);
-    mri_histogram_qc(subject,mri_file);
-    normalized_images = normalize_using_mri(mri_file,parametric_images,deformation_field);
-    smooth_img(normalized_images(2:end,fwhm));
+    if(~strcmp(model,'suv'))
+        bq = magia_get_pet_units(pet_file);
+        input = magia_read_plasma(subject,bq);
+        magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
+        brainmask = create_brainmask(subject,resampled_bet_file);
+        parametric_images = calculate_parametric_images(pet_file,input,frames,modeling_options,results_dir,tracer,brainmask);
+        deformation_field = spm_segment(mri_file);
+        mri_histogram_qc(subject,mri_file);
+        normalized_images = normalize_using_mri(mri_file,parametric_images,deformation_field);
+        smooth_img(normalized_images(2:end,fwhm));
+    end
     
 elseif(dyn && ~use_mri && ~plasma)
     
@@ -223,12 +234,16 @@ elseif(dyn && ~use_mri && ~plasma)
     if(rc)
         magia_correct_rois(roi_masks,normalized_meanpet);
     end
+    
     tacs = calculate_roi_tacs(normalized_pet,roi_masks);
-    input = get_ref_tac(normalized_pet,ref_mask);
-    magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
-    brainmask = create_brainmask(subject,brainmask);
-    normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
-    smooth_img(normalized_parametric_images,fwhm);
+    
+    if(~strcmp(model,'suv'))
+        input = get_ref_tac(normalized_pet,ref_mask);
+        magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
+        brainmask = create_brainmask(subject,brainmask);
+        normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
+        smooth_img(normalized_parametric_images,fwhm);
+    end
     
 elseif(~dyn && ~use_mri && plasma)
     
@@ -269,16 +284,19 @@ elseif(~dyn && use_mri && ~plasma)
     if(rc)
         magia_correct_rois(roi_masks,pet_file);
     end
-
+    
     tacs = calculate_roi_tacs(pet_file,roi_masks);
-    input = get_ref_tac(pet_file,ref_mask);
-    magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
-    brainmask = create_brainmask(subject,resampled_bet_file);
-    parametric_images = calculate_parametric_images(pet_file,input,frames,modeling_options,results_dir,tracer,brainmask);
-    deformation_field = spm_segment(mri_file);
-    mri_histogram_qc(subject,mri_file);
-    normalized_images = normalize_using_mri(mri_file,parametric_images,deformation_field);
-    smooth_img(normalized_images(2:end),fwhm);
+    
+    if(~strcmp(model,'suv'))
+        input = get_ref_tac(pet_file,ref_mask);
+        magia_input_qc(subject,input,plasma,dose,weight,tracer,frames);
+        brainmask = create_brainmask(subject,resampled_bet_file);
+        parametric_images = calculate_parametric_images(pet_file,input,frames,modeling_options,results_dir,tracer,brainmask);
+        deformation_field = spm_segment(mri_file);
+        mri_histogram_qc(subject,mri_file);
+        normalized_images = normalize_using_mri(mri_file,parametric_images,deformation_field);
+        smooth_img(normalized_images(2:end),fwhm);
+    end
     
 else
     
@@ -295,21 +313,29 @@ else
         magia_correct_rois(roi_masks,normalized_pet);
     end
     
-    input = get_ref_tac(normalized_pet,ref_mask);
-    input_qc(subject,input,frames);
-    brainmask = create_brainmask(subject,brainmask);
     tacs = calculate_roi_tacs(normalized_pet,roi_masks);
-    normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
-    smooth_img(normalized_parametric_images,fwhm);
+    
+    if(~strcmp(model,'suv'))
+        input = get_ref_tac(normalized_pet,ref_mask);
+        input_qc(subject,input,frames);
+        brainmask = create_brainmask(subject,brainmask);
+        normalized_parametric_images = calculate_parametric_images(normalized_pet,input,frames,modeling_options,results_dir,tracer,brainmask);
+        smooth_img(normalized_parametric_images,fwhm);
+    end
     
 end
 
-parametric_image_qc(subject,model,dyn);
-fprintf('%s: Starting ROI level visualization and fitting\n ',subject);
-
-visualize_tacs(tacs,input,frames,roi_info,results_dir);
-T = roi_fitting(tacs,input,frames,modeling_options,roi_info,results_dir);
-visualize_fits(T,tacs,input,frames,modeling_options,roi_info,results_dir);
-roi_bars(T,modeling_options,results_dir);
+if(~strcmp(model,'suv'))
+    parametric_image_qc(subject,model,dyn);
+    fprintf('%s: Starting ROI level visualization and fitting\n ',subject);
+    
+    visualize_tacs(tacs,input,frames,roi_info,results_dir);
+    T = roi_fitting(tacs,input,frames,modeling_options,roi_info,results_dir);
+    visualize_fits(T,tacs,input,frames,modeling_options,roi_info,results_dir);
+    roi_bars(T,modeling_options,results_dir);
+else
+    suvs = tacs./(dose/weight);
+    visualize_suvs(suvs,frames,roi_info,results_dir);
+end
 
 end

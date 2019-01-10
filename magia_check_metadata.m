@@ -61,17 +61,19 @@ end
 
 %% PLASMA
 
-plasma = I.plasma;
-if(isnan(plasma))
-    plasma = 0;
-end
-if(plasma)
-    plasma_found = magia_check_plasma_found(image_id);
-    if(~plasma_found)
-        error('Cannot magia the PET study %s because the plasma file could not be found.',image_id);
+if(~strcmp(modeling_options.model,'suv'))
+    plasma = I.plasma;
+    if(isnan(plasma))
+        plasma = 0;
     end
+    if(plasma)
+        plasma_found = magia_check_plasma_found(image_id);
+        if(~plasma_found)
+            error('Cannot magia the PET study %s because the plasma file could not be found.',image_id);
+        end
+    end
+    I.plasma = plasma;
 end
-I.plasma = plasma;
 
 %% RC
 
@@ -127,4 +129,14 @@ if(isnan(cut_time))
     modeling_options.cut_time = 0;
 end
 
+%% SUV
+
+if(strcmp(modeling_options.model,'suv'))
+    dose = I.dose;
+    weight = I.weight;
+    if(isnan(weight) || weight <= 0)
+        error('Could not calculate SUVs for %s because the weight of the subject has not been specified.',image_id);
+    elseif(isnan(dose) || dose <= 0)
+        error('Could not calculate SUVs for %s because the injected dose has not been specified.',image_id);
+    end
 end
