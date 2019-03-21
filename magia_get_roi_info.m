@@ -11,7 +11,7 @@ elseif(strcmpi(roi_set,'[18f]fdg_atlas'))
     roi_info = get_atlas_rois(mask_dir);
     roi_info.mask_dir = mask_dir;
 elseif(strcmpi(roi_set,'bug_12_roi'))
-    mask_dir = '/scratch/shared/megapet/bug_12_roi';
+    mask_dir = '/scratch/shared/megapet/masks/bug_12_roi';
     roi_info = get_atlas_rois(mask_dir);
     roi_info.mask_dir = mask_dir;
 elseif(strcmpi(roi_set,'[11c]raclopride_atlas'))
