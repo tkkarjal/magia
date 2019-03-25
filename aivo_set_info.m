@@ -25,10 +25,10 @@ switch field
         table_name = '"megabase"."aivo".pet';
         cols = columns(conn,'megapet','aivo','pet');
         field_edits_allowed = 1;
-    case {'model' 'roi_set' 'rc' 'fwhm' 'use_mri'}
+    case {'model' 'roi_set' 'rc' 'fwhm' 'use_mri' 'cut_time'}
         table_name = '"megabase"."aivo".model';
         cols = columns(conn,'megapet','aivo','model');
-        field_edits_allowed = 0;
+        field_edits_allowed = 1;
     case {'ap' 'ab' 'vp' 'vb' 'hct'}
         table_name = '"megabase"."aivo".blood';
         cols = columns(conn,'megapet','aivo','blood');
