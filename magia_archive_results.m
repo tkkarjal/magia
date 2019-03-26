@@ -70,7 +70,7 @@ for i = 1:length(f)
     copyfile(f{i},target_pet_dir,'f');
 end
 
-cmd = sprintf('chmod -R 777 %s',target_dir);
+cmd = sprintf('chmod -R a+rwX %s',target_dir);
 system(cmd);
 
 end
