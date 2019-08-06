@@ -10,7 +10,7 @@ Vo = spm_file_split(V, odir);
 switch tracer
     case {'[11c]carfentanil','[11c]raclopride','[11c]pib'}
         half_life = 20.4; % minutes
-    case {'[18f]fdg','[18f]spa-rq'}
+    case {'[18f]fdg','[18f]spa-rq','[18f]fmpep-d2'}
         half_life = 109.8; % minutes
     otherwise
         error;

@@ -22,6 +22,30 @@ switch lower(tracer)
             [1033 2033] % tempol
             [9 10 48 49] % tha
             };
+    case '[18f]fmpep-d2'
+        roi_info.labels = {'amy' 'cau' 'cer' 'dacc' 'inftemp' 'ins' 'medul' 'midbr' 'midtemp' 'nacc' 'ofc' 'parsop' 'pcc' 'pons' 'put' 'racc' 'supfront' 'suptemp' 'tempol' 'tha'};
+        roi_info.codes = {
+            [18 54] % amy
+            [11 50] % cau
+            [8 47] % cer
+            [1002 2002] % dacc
+            [1009 2009] % inftemp
+            [1035 2035] % ins
+            [175] % medul
+            [173] % midbr
+            [1015 2015] % midtemp
+            [26 58] % nacc
+            [1012 1014 2012 2014] % ofc
+            [1018 2018] % parsop
+            [1023 2023] % pcc
+            [174] % pons
+            [12 102 51 111] % put
+            [1026 2026] % racc
+            [1028 2028] % supfront
+            [1030 2030] % suptemp
+            [1033 2033] % tempol
+            [9 10 48 49] % tha
+            };
     case {'[11c]raclopride','[18f]cft','[18f]dopa'}
         roi_info.labels = {'amy' 'cau' 'hip' 'nacc' 'pal' 'parhip' 'put' 'tha'};
         roi_info.codes = {
@@ -55,7 +79,7 @@ switch lower(tracer)
             [1026 2026] % racc
             [9 10 48 49] % tha
             };
-    case {'[18f]fdg','[18f]ftha','[18f]fmpep-d2'}
+    case {'[18f]fdg','[18f]ftha'}
         roi_info.labels = {'amy' 'cau' 'dacc' 'hip' 'ins' 'nacc' 'ofc' 'parhip' 'pcc' 'pcun' 'put' 'racc' 'tha'};
         roi_info.codes = {
             [18 54] % amy
@@ -72,7 +96,7 @@ switch lower(tracer)
             [1026 2026] % racc
             [9 10 48 49] % tha
             };
-    case '[11c]pib'
+    case {'[11c]pib','[11c]pk11195'}
         roi_info.labels = {'CGA' 'CGP' 'LOC' 'LTC' 'MTC' 'PARCALL' 'PIB1PFCALL' 'PIBcomp' 'PREC' 'STR'};
         roi_info.codes = {
             [1002 2002 1026 2026] % anterior cingulate

@@ -40,7 +40,7 @@ cut_time = modeling_options.cut_time;
 
 roi_info = magia_get_roi_info(roi_set,tracer);
 
-if(~plasma)
+if(~plasma && ~strcmp(model,'suv'))
     ref_region = magia_get_ref_region(tracer);
     ref_idx = ismember(roi_info.labels,ref_region.label);
     roi_info.labels(ref_idx) = [];
@@ -129,7 +129,7 @@ elseif(dyn && use_mri && ~plasma)
     
     fprintf('%s: Dynamic images, MRI, reference tissue input\n',subject);
     
-    [motion_corrected_pet,meanpet_file] = motion_correction(pet_file);
+    [motion_corrected_pet,meanpet_file] = motion_correction(pet_file); % MUOKKAA PK11
     motion_parameter_qc(subject);
     [mri_file,seg_file,bet_file] = process_mri(subject,mri_code);
     
@@ -160,6 +160,8 @@ elseif(dyn && use_mri && ~plasma)
         mri_histogram_qc(subject,mri_file);
         normalized_images = normalize_using_mri(mri_file,parametric_images,deformation_field);
         smooth_img(normalized_images(2:end),fwhm);
+    elseif(strcmp(model,'SCA'))
+        % MUOKKAA PK11
     end
     
 elseif(dyn && ~use_mri && plasma)
