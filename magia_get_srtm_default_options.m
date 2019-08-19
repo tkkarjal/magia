@@ -57,6 +57,19 @@ switch tracer
             case 'nbases'
                 value = 300;
         end
+    case {'[11c]pk11195','[11c]tmsx'}
+        switch var
+            case 'lb'
+                value = [0 0 0];
+            case 'ub'
+                value = [3 1 8];
+            case 'theta3_lb'
+                value = 0.06;
+            case 'theta3_ub'
+                value = 0.8;
+            case 'nbases'
+                value = 300;
+        end
     otherwise
         error('Default SRTM options have not been specified for %s.',tracer);
         
