@@ -97,9 +97,10 @@ switch lower(tracer)
             [9 10 48 49] % tha
             };
     case {'[11c]pib','[11c]pk11195'}
-        roi_info.labels = {'CGA' 'CGP' 'LOC' 'LTC' 'MTC' 'PARCALL' 'PIB1PFCALL' 'PIBcomp' 'PREC' 'STR'};
+        roi_info.labels = {'CGA' 'CAU' 'CGP' 'LOC' 'LTC' 'MTC' 'PARCALL' 'PIB1PFCALL' 'PIBcomp' 'PREC' 'STR'};
         roi_info.codes = {
             [1002 2002 1026 2026] % anterior cingulate
+            [11 50] % caudate
             [1010 2010 1023 2023] % posterior cingulate
             [1011 2011] % lateral occipital cortex
             [1009 2009 1015 2015 1030 2030 1033 2033 1034 2034] % lateral temporal cortex
