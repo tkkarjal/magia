@@ -88,6 +88,10 @@ if(~exist(full_file,'file'))
     system(cmd);
 end
 % Segmentation labels
+seg_mgz = sprintf('%s/mri/aparc+aseg.mgz',final_freesurfer_sub_dir);
+if(~exist(seg_mgz,'file'))
+    error('Could not find the file %s. FreeSurfing has not been finished.',seg_mgz);
+end
 seg_file = sprintf('%s/seg_%s.nii',processed_mri_dir,subject);
 if(~exist(seg_file,'file'))
     cmd = sprintf('mri_convert --out_orientation RAS -rt nearest %s/mri/aparc+aseg.mgz %s',...
