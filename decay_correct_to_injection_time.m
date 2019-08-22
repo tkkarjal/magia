@@ -2,6 +2,10 @@ function decay_correct_to_injection_time(uncorrected_pet_image,frames,tracer)
 %
 % frames contains times since injection
 
+if(~ismatrix(frames))
+    error('Could not decay-correct the image %s because the frames-variable was poorly specified. The frames-variable should be a matrix.\n',uncorrected_pet_image);
+end
+
 odir = fileparts(uncorrected_pet_image);
 V = spm_vol(uncorrected_pet_image);
 N = size(V,1);
