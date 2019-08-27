@@ -23,12 +23,13 @@ switch lower(tracer)
             [9 10 48 49] % tha
             };
     case '[18f]fmpep-d2'
-        roi_info.labels = {'amy' 'cau' 'cer' 'dacc' 'inftemp' 'ins' 'medul' 'midbr' 'midtemp' 'nacc' 'ofc' 'parsop' 'pcc' 'pons' 'put' 'racc' 'supfront' 'suptemp' 'tempol' 'tha'};
+        roi_info.labels = {'amy' 'cau' 'cer' 'dacc' 'hip' 'inftemp' 'ins' 'medul' 'midbr' 'midtemp' 'nacc' 'ofc' 'parsop' 'pcc' 'pons' 'put' 'racc' 'supfront' 'suptemp' 'tempol' 'tha'};
         roi_info.codes = {
             [18 54] % amy
             [11 50] % cau
             [8 47] % cer
             [1002 2002] % dacc
+            [17 53] % hip
             [1009 2009] % inftemp
             [1035 2035] % ins
             [175] % medul
