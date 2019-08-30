@@ -81,6 +81,11 @@ switch model
             X(i,6) = vt;
         end
         T = array2table(X,'VariableNames',{'K1','K1/k2','k3','k3/k4','vb','vt'},'RowNames',roi_info.labels);
+    case 'logan'
+        start_time = modeling_options.start_time;
+        end_time = modeling_options.end_time;
+        [Vt,intercept] = magia_fit_logan(tacs,input,frames,start_time,end_time);
+        T = array2table([Vt intercept],'VariableNames',{'Vt','intercept'},'RowNames',roi_info.labels);
     otherwise
         error('ROI fitting has not been implemented for %s.',model);
 end
