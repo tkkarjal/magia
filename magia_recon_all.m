@@ -14,7 +14,7 @@ final_freesurfer_dir = getenv('FS_FINAL_DIR');
 temp_freesurfer_sub_dir = sprintf('%s/%s',temp_freesurfer_dir,mri_code);
 final_freesurfer_sub_dir = sprintf('%s/%s',final_freesurfer_dir,mri_code);
 
-if(freesurfed)
+if(freesurfed == 1)
     fprintf('recon-all already run for %s, no need to run the process again.\n',subject);
 else
     cmd = sprintf('gunzip -r %s',sub_mri_dir);
