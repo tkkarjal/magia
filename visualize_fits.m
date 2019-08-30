@@ -92,6 +92,36 @@ switch lower(model)
         end
     case {'fur','suvr'}
         % Fit visualization not really applicable to these "models"
+    case 'logan'
+        fit_dir = sprintf('%s/fits',results_dir);
+        if(~exist(fit_dir,'dir'))
+            mkdir(fit_dir);
+        end
+        start_time = modeling_options.start_time;
+        end_time = modeling_options.end_time;
+        if(end_time == 0)
+            end_time = frames(end,2);
+        end
+        [Vt,intercept,X,Y,k] = magia_fit_logan(tacs,input,frames,start_time,end_time);
+        for i = 1:N
+            x = X(:,i);
+            y = Y(:,i);
+            yy = intercept(i) + Vt(i)*x;
+            fig = figure('Visible','Off','Position',[100 100 700 400]);
+            plot(x,y,'ko'); hold on;
+            plot(x(k),y(k),'ro');
+            plot(x(k),yy(k),'r');
+            img_name = sprintf('%s/%s.png',fit_dir,roi_info.labels{i});
+            xlabel('\int_0^t C_p(\tau) d\tau / C_t(t) (min)');
+            ylabel('\int_0^t C_t(\tau) d\tau / C_t(t) (min)');
+            title(roi_info.labels{i});
+            a = annotation('textbox', [0.6 0.13 0.1 0.1], 'String',...
+                sprintf('Vt = %.4f; intercept = %.2f',round(Vt(i),4),round(intercept(i),2)));
+            set(a,'Color','k','LineStyle','none','FontSize',12);
+            print('-noui',img_name,'-dpng');
+            add_to_qc_pic(subject,fig);
+            close(fig);
+        end
     otherwise
         warning('Fit visualization has not been implemented for %s.',model);
 end

@@ -38,18 +38,21 @@ switch lower(model)
         start_time = modeling_options.start_time;
         end_time = modeling_options.end_time;
         parametric_images = {magia_suvr_image(start_time,end_time,input,frames,pet_filename,brainmask,outputdir)};
-%     case 'logan'
-%         startTime = modeling_options.logan_modeling_options.startTime;
-%         endTime = modeling_options.logan_modeling_options.endTime;
-%         parametric_images = {logan_image(startTime,endTime,input,frames,pet_filename,brainmask,outputdir)};
+    case 'logan'
+        start_time = modeling_options.start_time;
+        end_time = modeling_options.end_time;
+        parametric_images = magia_logan_image(pet_filename,input,frames,brainmask,start_time,end_time,outputdir);
     case 'two_tcm'
         msg = 'Voxelwise fitting with 2-tissue compartment model is too sensitive to noise... Using';
         switch tracer
             case '[18f]fmpep-d2'
                 msg = sprintf('%s Logan instead.',msg);
                 warning(msg);
+                start_time = magia_get_logan_default_options(tracer,'start_time');
+                end_time = magia_get_logan_default_options(tracer,'end_time');
+                parametric_images = {magia_logan_image(pet_filename,input,frames,brainmask,start_time,end_time,outputdir)};
             otherwise
-                
+                error('Refused to model voxel-level data with 2-tissue compartment model.\n');
         end
     otherwise
         error('Voxelwise modeling with %s has not been implemented.',model);
