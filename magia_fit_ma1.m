@@ -1,4 +1,8 @@
-function [Vt,intercept,X,Y,k] = magia_fit_logan(pet_tacs,input,frames,start_time,end_time)
+function [Vt,intercept,k,b1,b2,auc_input_interp,auc_pet] = magia_fit_ma1(pet_tacs,input,frames,start_time,end_time)
+% Follows the strategy introduced in Ichise et al. 2002 JCBFM
+% https://www.ncbi.nlm.nih.gov/pubmed/12368666
+%
+% Implemented by Tomi Karjalainen, August 30th 2019
 
 % Calculate AUC of input and PET TAC
 t_input = input(:,1);
@@ -17,10 +21,6 @@ auc_pet = cumtrapz(t_pet,pet_tacs);
 % Interpolate input AUC to PET sampling times
 auc_input_interp = pchip(t_input,auc_input,t_pet);
 
-% Logan: Divide the input and PET AUCs with PET radioactivities
-X = repmat(auc_input_interp,[1 size(pet_tacs,2)])./pet_tacs;
-Y = auc_pet./pet_tacs;
-
 % Select indices that are used in fitting the line
 if(end_time==0)
     end_time = frames(end,2);
@@ -28,14 +28,16 @@ end
 k = frames(:,1) >= start_time & frames(:,2) <= end_time;
 
 % Fit line
-Vt = zeros(size(pet_tacs,2),1);
-intercept = Vt;
-I = ones(sum(k),1);
+b1 = zeros(size(pet_tacs,2),1);
+b2 = b1;
 for i = 1:size(pet_tacs,2)
-    M = [X(k,i) I];
-    p = M \ Y(k,i);
-    Vt(i) = p(1);
-    intercept(i) = p(2);
+    M = [auc_input_interp(k) auc_pet(k,i)];
+    p = M \ pet_tacs(k,i);
+    b1(i) = p(1);
+    b2(i) = p(2);
 end
+
+Vt = -b1./b2;
+intercept = 1./b2;
 
 end

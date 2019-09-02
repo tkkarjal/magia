@@ -44,7 +44,7 @@ switch lower(modeling_options.model)
         print('-noui',img_name,'-dpng');
         add_to_qc_pic(subject,fig);
         close(fig);
-    case 'logan'
+    case {'logan','ma1'}
         fig = figure('Visible','Off'); bar(table2array(T(:,1))); box off;
         xlabel('Region of interest'); ylabel('V_T');
         set(gca,'xtick',1:length(T.Properties.RowNames));

@@ -42,6 +42,10 @@ switch lower(model)
         start_time = modeling_options.start_time;
         end_time = modeling_options.end_time;
         parametric_images = magia_logan_image(pet_filename,input,frames,brainmask,start_time,end_time,outputdir);
+    case 'ma1'
+        start_time = modeling_options.start_time;
+        end_time = modeling_options.end_time;
+        parametric_images = magia_ma1_image(pet_filename,input,frames,brainmask,start_time,end_time,outputdir);
     case 'two_tcm'
         msg = 'Voxelwise fitting with 2-tissue compartment model is too sensitive to noise... Using';
         switch tracer
