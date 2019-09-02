@@ -1,14 +1,5 @@
 function [Vt,intercept,X,Y,k] = magia_fit_logan(pet_tacs,input,frames,start_time,end_time)
 
-% Make sure the PET and plasma radioactivities have the same units
-max_cr = max(pet_tacs(:));
-max_input = max(input(:,2));
-if(max_cr < 500 && max_input > 500)
-    input(:,2) = 0.001.*input(:,2);
-elseif(max_cr > 500 && max_input < 500)
-    input(:,2) = 1000.*input(:,2);
-end
-
 % Calculate AUC of input and PET TAC
 t_input = input(:,1);
 Cp = input(:,2);

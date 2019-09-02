@@ -14,6 +14,7 @@ tacs = tacs(~nanidx,:);
 roi_info.labels = roi_info.labels(~nanidx);
 
 switch lower(model)
+    
     case 'srtm'
         fit_dir = sprintf('%s/fits',results_dir);
         if(~exist(fit_dir,'dir'))
@@ -40,6 +41,7 @@ switch lower(model)
             add_to_qc_pic(subject,fig);
             close(fig);
         end
+        
     case 'patlak'
         fit_dir = sprintf('%s/fits',results_dir);
         if(~exist(fit_dir,'dir'))
@@ -65,6 +67,7 @@ switch lower(model)
             add_to_qc_pic(subject,fig);
             close(fig);
         end
+        
     case 'patlak_ref'
         fit_dir = sprintf('%s/fits',results_dir);
         if(~exist(fit_dir,'dir'))
@@ -90,8 +93,10 @@ switch lower(model)
             add_to_qc_pic(subject,fig);
             close(fig);
         end
+        
     case {'fur','suvr'}
         % Fit visualization not really applicable to these "models"
+        
     case 'logan'
         fit_dir = sprintf('%s/fits',results_dir);
         if(~exist(fit_dir,'dir'))
@@ -122,6 +127,38 @@ switch lower(model)
             add_to_qc_pic(subject,fig);
             close(fig);
         end
+        
+        case 'ma1'
+        fit_dir = sprintf('%s/fits',results_dir);
+        if(~exist(fit_dir,'dir'))
+            mkdir(fit_dir);
+        end
+        start_time = modeling_options.start_time;
+        end_time = modeling_options.end_time;
+        if(end_time == 0)
+            end_time = frames(end,2);
+        end
+        [Vt,intercept,k,b1,b2,auc_input,auc_pet] = magia_fit_ma1(tacs,input,frames,start_time,end_time);
+        t = mean(frames,2);
+        for i = 1:N
+            y = tacs(i,:);
+            fig = figure('Visible','Off','Position',[100 100 700 400]);
+            plot(t,y,'ko'); hold on;
+            plot(t(k),y(k),'ro');
+            yy = b1(i)*auc_input + b2(i)*auc_pet(:,i);
+            plot(t,yy,'r');
+            img_name = sprintf('%s/%s.png',fit_dir,roi_info.labels{i});
+            xlabel('Time (min)');
+            ylabel('Radioactivity concentration');
+            title(roi_info.labels{i});
+            a = annotation('textbox', [0.6 0.13 0.1 0.1], 'String',...
+                sprintf('Vt = %.4f; intercept = %.2f',round(Vt(i),4),round(intercept(i),2)));
+            set(a,'Color','k','LineStyle','none','FontSize',12);
+            print('-noui',img_name,'-dpng');
+            add_to_qc_pic(subject,fig);
+            close(fig);
+        end
+        
     otherwise
         warning('Fit visualization has not been implemented for %s.',model);
 end

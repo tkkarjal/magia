@@ -35,6 +35,8 @@ switch model
         modeling_options = aivo_read_suvr_modeling_options(subject_id,dyn);
     case 'logan'
         modeling_options = aivo_read_logan_modeling_options(subject_id);
+    case 'ma1'
+        modeling_options = aivo_read_ma1_modeling_options(subject_id);
     otherwise
         error('Unknown model %s',model);
 end

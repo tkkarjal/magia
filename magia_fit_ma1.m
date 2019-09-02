@@ -1,17 +1,8 @@
-function [Vt,intercept,k] = magia_fit_ma1(pet_tacs,input,frames,start_time,end_time)
+function [Vt,intercept,k,b1,b2,auc_input_interp,auc_pet] = magia_fit_ma1(pet_tacs,input,frames,start_time,end_time)
 % Follows the strategy introduced in Ichise et al. 2002 JCBFM
 % https://www.ncbi.nlm.nih.gov/pubmed/12368666
 %
 % Implemented by Tomi Karjalainen, August 30th 2019
-
-% Make sure the PET and plasma radioactivities have the same units
-max_cr = max(pet_tacs(:));
-max_input = max(input(:,2));
-if(max_cr < 500 && max_input > 500)
-    input(:,2) = 0.001.*input(:,2);
-elseif(max_cr > 500 && max_input < 500)
-    input(:,2) = 1000.*input(:,2);
-end
 
 % Calculate AUC of input and PET TAC
 t_input = input(:,1);
@@ -29,7 +20,6 @@ auc_pet = cumtrapz(t_pet,pet_tacs);
 
 % Interpolate input AUC to PET sampling times
 auc_input_interp = pchip(t_input,auc_input,t_pet);
-
 
 % Select indices that are used in fitting the line
 if(end_time==0)

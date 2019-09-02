@@ -24,7 +24,7 @@ parametric_images = cell(2,1);
 
 [~,filename] = fileparts(pet_filename);
 
-V.dt = [spm_type('int16') 0];
+V.dt = [spm_type('float32') 0];
 V.pinfo = [inf inf inf]';
 
 niftiname = fullfile(outputdir,[filename '_MA1_Vt_' int2str(start_time) '_' int2str(end_time) '.nii']);
