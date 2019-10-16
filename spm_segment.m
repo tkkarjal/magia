@@ -1,6 +1,6 @@
-function deformation_field = spm_segment(image)
+function [sub2mni,mni2sub] = spm_segment(image)
 
-spm_path = getenv('SPM_DIR')
+spm_path = getenv('SPM_DIR');
 
 matlabbatch{1}.spm.spatial.preproc.channel.vols = {image};
 matlabbatch{1}.spm.spatial.preproc.channel.biasreg = 0.001;
@@ -45,6 +45,7 @@ p = fileparts(image);
 matlabbatch_filename = sprintf('%s/matlabbatch_segment.mat',p);
 save(matlabbatch_filename,'matlabbatch');
 
-deformation_field = add_prefix(image,'y_');
+sub2mni = add_prefix(image,'y_');
+mni2sub = add_prefix(image,'iy_');
 
 end

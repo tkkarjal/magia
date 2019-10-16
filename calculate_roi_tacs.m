@@ -1,4 +1,4 @@
-function [tacs,sd] = calculate_roi_tacs(pet_image,roi_masks)
+function [tacs,num_voxels] = magia_calculate_roi_tacs(pet_image,roi_masks)
 
 if(ischar(pet_image))
     V = spm_vol(pet_image);
@@ -24,16 +24,15 @@ end
 N = size(roi_masks,4);
 M = size(pet_image,4);
 tacs = zeros(N,M);
-sd = tacs;
+num_voxels = zeros(N,1);
 
 for r = 1:N
     mask = logical(squeeze(roi_masks(:,:,:,r)));
     for i = 1:M
         img = squeeze(pet_image(:,:,:,i));
-        img = img(mask); 
-        tacs(r,i) = mean(img(~isnan(img)));
-        sd(r,i) = std(img(~isnan(img)));
+        tacs(r,i) = mean(img(mask),'omitnan');
     end
+    num_voxels(r) = sum(mask(:));
 end
 
 end

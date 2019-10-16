@@ -20,6 +20,10 @@ other_images = {
     bet_file
     };
 
-spm_coregister_estimate(mni_template,full_file,other_images)
+if(exist(mni_template,'file'))
+    spm_coregister_estimate(mni_template,full_file,other_images)
+else
+    warning('%s: Could not find the MNI template file %s. Skipping coregistration of the MRI data to the template.\n',subject,mni_template);
+end
 
 end

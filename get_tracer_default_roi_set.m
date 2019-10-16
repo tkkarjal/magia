@@ -1,137 +1,22 @@
-function roi_info = get_tracer_default_roi_set(tracer)
+function roi_set = get_tracer_default_roi_set(tracer)
 
 switch lower(tracer)
     case {'[11c]carfentanil','[11c]pbr28'}
-        roi_info.labels = {'amy' 'cau' 'cer' 'dacc' 'inftemp' 'ins' 'midtemp' 'nacc' 'ofc' 'parsop' 'pcc' 'put' 'racc' 'supfront' 'suptemp' 'tempol' 'tha'};
-        roi_info.codes = {
-            [18 54] % amy
-            [11 50] % cau
-            [8 47] % cer
-            [1002 2002] % dacc
-            [1009 2009] % inftemp
-            [1035 2035] % ins
-            [1015 2015] % midtemp
-            [26 58] % nacc
-            [1012 1014 2012 2014] % ofc
-            [1018 2018] % parsop
-            [1023 2023] % pcc
-            [12 102 51 111] % put
-            [1026 2026] % racc
-            [1028 2028] % supfront
-            [1030 2030] % suptemp
-            [1033 2033] % tempol
-            [9 10 48 49] % tha
-            };
+        roi_set = 'rs1';
     case '[18f]fmpep-d2'
-        roi_info.labels = {'amy' 'cau' 'cer' 'dacc' 'hip' 'inftemp' 'ins' 'medul' 'midbr' 'midtemp' 'nacc' 'ofc' 'parsop' 'pcc' 'pons' 'put' 'racc' 'supfront' 'suptemp' 'tempol' 'tha'};
-        roi_info.codes = {
-            [18 54] % amy
-            [11 50] % cau
-            [8 47] % cer
-            [1002 2002] % dacc
-            [17 53] % hip
-            [1009 2009] % inftemp
-            [1035 2035] % ins
-            [175] % medul
-            [173] % midbr
-            [1015 2015] % midtemp
-            [26 58] % nacc
-            [1012 1014 2012 2014] % ofc
-            [1018 2018] % parsop
-            [1023 2023] % pcc
-            [174] % pons
-            [12 102 51 111] % put
-            [1026 2026] % racc
-            [1028 2028] % supfront
-            [1030 2030] % suptemp
-            [1033 2033] % tempol
-            [9 10 48 49] % tha
-            };
+        roi_set = 'rs2';
     case {'[11c]raclopride','[18f]cft','[18f]dopa'}
-        roi_info.labels = {'amy' 'cau' 'hip' 'nacc' 'pal' 'parhip' 'put' 'tha'};
-        roi_info.codes = {
-        [18 54] % amy
-        [11 50] % cau
-        [17 53] % hip
-        [26 58] % nacc
-        [13 52] % pal
-        [1016 2016] % parhip
-        [12 102 51 111] % put
-        [9 10 48 49] % tha
-        };
+        roi_set = 'rs3';
     case '[11c]madam'
-        roi_info.labels = {'amy' 'cau' 'dacc' 'hip' 'ins' 'medul' 'midbr' 'nacc' 'oc' 'ofc' 'pal' 'parhip' 'pcc' 'pons' 'put' 'racc' 'tha'};
-        roi_info.codes = {
-            [18 54] % amy
-            [11 50] % cau
-            [1002 2002] % dacc
-            [17 53] % hip
-            [1035 2035] % ins
-            [175] % medul
-            [173] % midbr
-            [26 58] % nacc
-            [1011 2011] % oc
-            [1012 1014 2012 2014] % ofc
-            [13 52] % pal
-            [1016 2016] % parhip
-            [1023 2023] % pcc
-            [174] % pons
-            [12 102 51 111] % put
-            [1026 2026] % racc
-            [9 10 48 49] % tha
-            };
+        roi_set = 'rs4';
     case {'[18f]fdg','[18f]ftha'}
-        roi_info.labels = {'amy' 'cau' 'dacc' 'hip' 'ins' 'nacc' 'ofc' 'parhip' 'pcc' 'pcun' 'put' 'racc' 'tha'};
-        roi_info.codes = {
-            [18 54] % amy
-            [11 50] % cau
-            [1002 2002] % dacc
-            [1035 2035] % ins
-            [17 53] % hip
-            [26 58] % nacc
-            [1012 1014 2012 2014] % ofc
-            [1016 2016] % parhip
-            [1023 2023] % pcc
-            [1025 2025] % pcun
-            [12 102 51 111] % put
-            [1026 2026] % racc
-            [9 10 48 49] % tha
-            };
+        roi_set = 'rs5';
     case {'[11c]pib','[11c]pk11195'}
-        roi_info.labels = {'CGA' 'CAU' 'CGP' 'LOC' 'LTC' 'MTC' 'PARCALL' 'PIB1PFCALL' 'PIBcomp' 'PREC' 'STR'};
-        roi_info.codes = {
-            [1002 2002 1026 2026] % anterior cingulate
-            [11 50] % caudate
-            [1010 2010 1023 2023] % posterior cingulate
-            [1011 2011] % lateral occipital cortex
-            [1009 2009 1015 2015 1030 2030 1033 2033 1034 2034] % lateral temporal cortex
-            [17 53 18 54 1006 2006] % medial temporal cortex
-            [1008 2008 1029 2029 1031 2031] % parietal cortex
-            [1003 2003 1012 2012 1014 2014 1018 2018 1019 2019 1020 2020 1027 2027 1028 2028 1032 2032] % prefrontal cortex
-            [1003 2003 1012 2012 1014 2014 1018 2018 1019 2019 1020 2020 1027 2027 1028 2028 1032 2032 1009 2009 1015 2015 1030 2030 1033 2033 1034 2034 1008 2008 1029 2029 1031 2031 1025 2025 1002 2002 1026 2026 1010 2010 		 1023 2023] % pibcomp
-            [1025 2025] % precuneus
-            [11 50 12 51] % striatum
-            };
+        roi_set = 'rs6';
     case '[11c]flb'
-        roi_info.labels = {'amy' 'cau' 'dacc' 'hip' 'ins' 'nacc' 'oc' 'ofc' 'pal' 'parhip' 'pcc' 'put' 'racc' 'tha'};
-                roi_info.codes = {
-            [18 54] % amy
-            [11 50] % cau
-            [1002 2002] % dacc
-            [17 53] % hip
-            [1035 2035] % ins
-            [26 58] % nacc
-            [1012 1014 2012 2014] % ofc
-            [1011 2011] % oc
-            [13 52] % pal
-            [1016 2016] % parhip
-            [1023 2023] % pcc
-            [12 102 51 111] % put
-            [1026 2026] % racc
-            [9 10 48 49] % tha
-            };
+        roi_set = 'rs7';
     otherwise
-        error('No default roi set defined for %s.\n',tracer);
+        error('No default roi_set has been defined for %s.\n',tracer);
 end
 
 end

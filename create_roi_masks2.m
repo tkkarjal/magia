@@ -33,6 +33,9 @@ for i = 1:N
     V.fname = [mask_dir filesep roi_info.labels{i} '.nii'];
     roi_masks{i} = V.fname;
     spm_write_vol(V,mask);
+    if(sum(mask(:)) == 0)
+        warning('%s: Empty ROI mask file %s\n',subject,V.fname);
+    end
 end
 
 if(nargin==3)

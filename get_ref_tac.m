@@ -15,10 +15,8 @@ ref_mask = logical(ref_mask);
 M = size(pet_image,4);
 ref_tac = zeros(M,1);
 for i = 1:M
-    img = squeeze(pet_image(:,:,:,i));
-    ref_values = img(ref_mask);
-    ref_values = ref_values(~isnan(ref_values));   
-    ref_tac(i) = mean(ref_values);
+    img = squeeze(pet_image(:,:,:,i));  
+    ref_tac(i) = mean(img(ref_mask),'omitnan');
 end
 
 end

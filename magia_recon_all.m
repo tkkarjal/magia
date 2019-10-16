@@ -17,7 +17,7 @@ final_freesurfer_sub_dir = sprintf('%s/%s',final_freesurfer_dir,mri_code);
 if(freesurfed == 1)
     fprintf('recon-all already run for %s, no need to run the process again.\n',subject);
 else
-    cmd = sprintf('gunzip -r %s',sub_mri_dir);
+    cmd = sprintf('gunzip -rf %s',sub_mri_dir);
     system(cmd);
     setenv('SUBJECTS_DIR',temp_freesurfer_dir);
     cmd = sprintf('source $FREESURFER_HOME/SetUpFreeSurfer.sh');
@@ -90,7 +90,7 @@ end
 % Segmentation labels
 seg_mgz = sprintf('%s/mri/aparc+aseg.mgz',final_freesurfer_sub_dir);
 if(~exist(seg_mgz,'file'))
-    error('Could not find the file %s. FreeSurfing has not been finished.',seg_mgz);
+    error('Could not find the file %s. FreeSurfing has not been finished. Please run magia again for the subject.',seg_mgz);
 end
 seg_file = sprintf('%s/seg_%s.nii',processed_mri_dir,subject);
 if(~exist(seg_file,'file'))

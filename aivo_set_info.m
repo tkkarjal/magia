@@ -33,7 +33,7 @@ switch field
         table_name = '"megabase"."aivo".blood';
         cols = columns(conn,'megapet','aivo','blood');
         field_edits_allowed = 1;
-    case {'patient_id' 'weight' 'height' 'age' 'gender'}
+    case {'patient_id' 'weight' 'height' 'age' 'gender' 'birthday'}
         table_name = '"megabase"."aivo".patient';
         cols = columns(conn,'megapet','aivo','patient');
         field_edits_allowed = 1;
