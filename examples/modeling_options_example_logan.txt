@@ -1,0 +1,5 @@
+model,logan
+start_time,42
+end_time,0
+roi_set,tracer_default
+cut_time,0
