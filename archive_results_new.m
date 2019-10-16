@@ -46,11 +46,21 @@ if(exist(plasma_dir,'dir'))
     copyfile(plasma_dir,target_plasma_dir,'f');
 end
 
+blood_dir = sprintf('%s/blood',source_dir);
+if(exist(blood_dir,'dir'))
+    target_blood_dir = sprintf('%s/blood',target_dir);
+    if(~exist(target_blood_dir,'dir'))
+        mkdir(target_blood_dir);
+    end
+    copyfile(blood_dir,target_blood_dir,'f');
+end
+
 f = {
     sprintf('%s/info_%s.txt',source_dir,subject)
     sprintf('%s/modeling_options_%s.txt',source_dir,subject)
     sprintf('%s/qc_%s.ps',source_dir,subject)
     sprintf('%s/githash_%s.txt',source_dir,subject)
+    sprintf('%s/specs_%s.txt',source_dir,subject)
    };
 
 for i = 1:length(f)

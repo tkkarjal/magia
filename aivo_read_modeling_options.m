@@ -6,12 +6,12 @@ if(iscell(model))
 end
 
 if(strcmp(model,'null'))
-    model = magia_get_default_model(subject_id);
-end
-
-cut_time = aivo_get_info(subject_id,'cut_time');
-if(iscell(cut_time))
-    cut_time = cut_time{1};
+    tracer = aivo_get_info(subject_id,'tracer');
+    if(iscell(tracer))
+        tracer = tracer{1};
+    end
+    model = magia_get_default_model(tracer);
+    aivo_set_info(subject_id,'model',model);
 end
 
 switch model
@@ -35,22 +35,10 @@ switch model
         modeling_options = aivo_read_suvr_modeling_options(subject_id,dyn);
     case 'logan'
         modeling_options = aivo_read_logan_modeling_options(subject_id);
-    case 'ma1'
-        modeling_options = aivo_read_ma1_modeling_options(subject_id);
+    case 'logan_ref'
+        modeling_options = aivo_read_logan_ref_modeling_options(subject_id);
     otherwise
-        error('Unknown model %s',model);
+        error('Could not read modeling options from AIVO because the model %s is not recognized. ',model);
 end
-
-roi_set = aivo_get_info(subject_id,'roi_set');
-if(iscell(roi_set))
-    roi_set = roi_set{1};
-    if(strcmp(roi_set,'null'))
-        roi_set = 'tracer_default';
-        aivo_set_info(subject_id,'roi_set',roi_set);
-    end
-end
-
-modeling_options.roi_set = roi_set;
-modeling_options.cut_time = cut_time;
 
 end

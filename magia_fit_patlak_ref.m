@@ -1,31 +1,34 @@
-function [Ki,V0,x,y,k,yy] = magia_fit_patlak_ref(input,Cr,pet_frames,startTime,cutTime)
+function [Ki_ref,intercept,x,Y,k] = magia_fit_patlak_ref(ref_tac,tacs,frames,start_time,end_time)
 
-if(~cutTime)
-    cutTime = pet_frames(end,2);
+if(~end_time)
+    end_time = frames(end,2);
 end
 
-t = mean(pet_frames,2);
+t = mean(frames,2);
 
-if(size(Cr,1)==1)
-    Cr = Cr';
+if(size(tacs,2) ~= size(frames,1))
+    tacs = tacs';
 end
 
-k1 = find(pet_frames(:,1) >= startTime);
-k2 = find(pet_frames(:,2) <= cutTime);
+k1 = find(frames(:,1) >= start_time);
+k2 = find(frames(:,2) <= end_time);
 k = intersect(k1,k2);
 
-y = Cr./input;
+Y = tacs./repmat(ref_tac',[size(tacs,1) 1]);
 
-X = cumtrapz(t,input);
-x = X./input;
+X = cumtrapz(t,ref_tac);
+x = X./ref_tac;
+xk = x(k);
 
-% y = V0 + Ki*x
+Yk = Y(:,k);
+B = zeros(size(tacs,1),2);
 
-B = polyfit(x(k),y(k),1);
+for i = 1:size(tacs,1)
+    y = Yk(i,:)';
+    B(i,:) = [xk ones(size(xk))] \ y;
+end
 
-Ki = B(1);
-V0 = B(2);
-
-yy = V0 + Ki*x;
+Ki_ref = B(:,1);
+intercept = B(:,2);
 
 end 

@@ -1,5 +1,9 @@
 function parametric_images = magia_logan_image(pet_filename,input,frames,brainmask_filename,start_time,end_time,outputdir)
 
+if(end_time==0)
+    end_time = frames(end,2);
+end
+
 V = spm_vol(pet_filename);
 pet_img = spm_read_vols(V);
 pet_img = reshape(pet_img,[prod(V(1).dim(1:3)) size(V,1)])';

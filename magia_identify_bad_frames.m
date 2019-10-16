@@ -37,7 +37,7 @@ end
 
 fprintf(' Done.\n');
 if(~any(bad_frames))
-    fprintf('No bad frames for detected for %s.\n',n);
+    fprintf('No bad frames detected for %s.\n',n);
 else
     frame_idx = find(bad_frames);
     M = length(frame_idx);

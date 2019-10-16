@@ -1,11 +1,11 @@
-function magia_archive_results(subject)
+function magia_archive_results(subject,magia_specs)
 
 fprintf('Archiving results of %s...',subject);
 
 data_dir = getenv('DATA_DIR');
 archive_dir = getenv('MAGIA_ARCHIVE');
 source_dir = sprintf('%s/%s',data_dir,subject);
-target_dir = sprintf('%s/%s',archive_dir,subject);
+target_dir = sprintf('%s/%s/%s_%s_%s',archive_dir,subject,magia_specs.model,magia_specs.norm_method,magia_specs.roi_type);
 if(~exist(target_dir,'dir'))
     mkdir(target_dir);
 end
@@ -46,11 +46,21 @@ if(exist(plasma_dir,'dir'))
     copyfile(plasma_dir,target_plasma_dir,'f');
 end
 
+blood_dir = sprintf('%s/blood',source_dir);
+if(exist(blood_dir,'dir'))
+    target_blood_dir = sprintf('%s/blood',target_dir);
+    if(~exist(target_blood_dir,'dir'))
+        mkdir(target_blood_dir);
+    end
+    copyfile(blood_dir,target_blood_dir,'f');
+end
+
 f = {
     sprintf('%s/info_%s.txt',source_dir,subject)
     sprintf('%s/modeling_options_%s.txt',source_dir,subject)
     sprintf('%s/qc_%s.ps',source_dir,subject)
     sprintf('%s/githash_%s.txt',source_dir,subject)
+    sprintf('%s/specs_%s.txt',source_dir,subject)
    };
 
 for i = 1:length(f)
@@ -69,5 +79,8 @@ f = get_filenames(pet_dir,'*.');
 for i = 1:length(f)
     copyfile(f{i},target_pet_dir,'f');
 end
+
+cmd = sprintf('chmod -R 777 %s',target_dir);
+system(cmd);
 
 end

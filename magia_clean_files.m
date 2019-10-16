@@ -57,9 +57,14 @@ if(exist(D,'dir'))
         delete(gh_file);
     end
     
+    % Delete the specs file
+    specs_file = sprintf('%s/specs_%s.txt',D,subject);
+    if(exist(specs_file,'file'))
+        delete(specs_file);
+    end
+    
 else
-    aivo_set_info(subjects,'found',0);
-    error('Could not find subject directory for %s.',subject);
+    error('Could not find the subject directory for %s.',subject);
 end
 
 end

@@ -48,7 +48,7 @@ end
 fun = @(x,t) spline(t_plasma,magia_2tcm_3(x,t,ca,cb),t_pet);
 
 n = 25;
-e_min = 1e5;
+e_min = 1e10;
 for i = 1:n
     x0 = unifrnd(lb,ub);
     [x,e] = lsqcurvefit(fun,x0,t_plasma,roi_tac,lb,ub,opts);

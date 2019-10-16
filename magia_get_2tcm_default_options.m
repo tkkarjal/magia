@@ -26,7 +26,7 @@ switch tracer
             case 'k3k4_ub'
                 value = 10;
             case 'vb_ub'
-                value = 0.2;
+                value = 0.4;
         end
     otherwise
         error('Default 2TCM options have not been specified for %s.',tracer);

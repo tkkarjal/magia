@@ -8,7 +8,7 @@ switch tracer
     case '[18f]fmpep-d2'
         switch var
             case 'start_time'
-                value = 42;
+                value = 41.5;
             case 'end_time'
                 value = 0;
         end
