@@ -1,0 +1,22 @@
+tracer: [18f]fmpep-d2
+frames: 0 1;1 2;2 3;3 6;6 9;9 12;12 15;15 18;18 24;24 30;30 36;36 42;42 48;48 54;54 60;92 95;95 98;98 101
+weight: 89
+dose: 181
+scanner: pet-ct
+mri_code: p110339
+model: logan
+dc: 1
+rc: 1
+cut_time: 0
+roi_set: tracer_default
+input_type: plasma
+roi_type: freesurfer
+fwhm_pre: 8
+fwhm_post: 4
+fwhm_roi: 3
+cpi: 1
+norm_method: mri
+mc_excluded_frames: 1
+mc_fwhm: 7
+mc_ref_frame: 0
+mc_rtm: 1
