@@ -1,0 +1,6 @@
+model,srtm
+lb,0,0,0
+ub,3,1,8
+theta3_lb,0.082
+theta3_ub,0.6
+nbases,300
