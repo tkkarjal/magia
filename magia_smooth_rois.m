@@ -21,6 +21,7 @@ else
         img = spm_read_vols(V);
         mask = double(img > thr);
         spm_write_vol(V,mask);
+        delete(roi_masks{i});
     end
 end
 
