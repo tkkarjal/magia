@@ -1,6 +1,13 @@
 function [DVR,intercept,X,Y,k] = magia_fit_logan_ref(tacs,ref_tac,frames,start_time,end_time,refk2)
 
+if(end_time == 0)
+    end_time = frames(end,2);
+end
+
 nFrames = size(frames,1);
+if(size(tacs,1) ~= nFrames && size(tacs,2) == nFrames)
+    tacs = tacs';
+end
 nTACs = size(tacs,2);
 t = mean(frames,2);
 
