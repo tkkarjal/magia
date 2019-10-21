@@ -20,8 +20,8 @@ auc_pet = cumtrapz(t,tacs);
 Y = auc_pet ./ tacs;
 X = (repmat(auc_input,[1 nTACs])./tacs) + (repmat(ref_tac,[1 nTACs])./tacs)/refk2;
 
-DVR = nan([1 nTACs]);
-intercept = nan([1 nTACs]);
+DVR = nan([nTACs 1]);
+intercept = nan([nTACs 1]);
 k = frames(:,1) >= start_time & frames(:,2) <= end_time;
 if(sum(k) >= 2)
     for i = 1:nTACs
