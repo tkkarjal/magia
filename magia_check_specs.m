@@ -124,7 +124,7 @@ if(isfield(specs.magia,'model'))
         msg6 = '''model'' was not specified.';
     else
         specified_model = specs.magia.model;
-        available_models = {'suv' 'suvr' 'srtm' 'two_tcm' 'logan' 'patlak' 'patlak_ref' 'ma1' 'fur'};
+        available_models = {'suv' 'suvr' 'srtm' 'two_tcm' 'logan' 'logan_ref' 'patlak' 'patlak_ref' 'ma1' 'fur'};
         if(ismember(specified_model,available_models))
             msg6 = '';
         else
