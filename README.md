@@ -1,3 +1,5 @@
+![summary](http://emotion.utu.fi/wp-content/uploads/2019/10/summary.png)
+
 # Magia
 
 Magia is an automated processing pipeline for brain PET studies. Magia uses FreeSurfer to parcellate the brain into anatomical regions of interest, and performs kinetic modeling using tools developed over the years at Turku PET Center.
