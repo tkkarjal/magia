@@ -12,6 +12,9 @@ convert_to_nifti(t1_folder,t1_folder,mri_filename);
 mri_file = sprintf('%s/%s',t1_folder,mri_filename);
 
 target_dir = sprintf('%s/%s/MRI',data_dir,pet_code);
+if(~exist(target_dir,'dir'))
+    mkdir(target_dir);
+end
 
 movefile(mri_file,target_dir);
 mri_file = sprintf('%s/mri_%s.nii',target_dir,pet_code);
