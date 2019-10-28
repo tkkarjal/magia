@@ -201,7 +201,6 @@ switch specs.magia.roi_type
             otherwise
                 error('%s: Unknown ''norm_method'' ''%s''. The ''norm_method'' varialbe must be either ''mri'' or ''pet''. ',subject,specs.magia.norm_method);
         end
-        cellfun(@delete,mni_roi_masks);
     case 'freesurfer'
         roi_info = magia_get_freesurfer_roi_info(specs);
         roi_labels = roi_info.labels;
