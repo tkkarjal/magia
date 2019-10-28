@@ -166,7 +166,7 @@ switch specs.magia.roi_type
         switch specs.magia.norm_method
             case 'mri'
                 fprintf('%s: Fetching the MRI file\n',subject);
-                mri_file = process_mri(subject,specs.study.mri_code);
+                mri_file = magia_get_mri_file(subject,I.mri_code);
                 fprintf('%s: Coregistering the MRI to the PET\n',subject);
                 spm_coregister_estimate(meanpet_file,mri_file,'');
                 coreg_qc(subject,meanpet_file,mri_file);
