@@ -10,6 +10,9 @@ switch tracer
     case {'[11c]pk11195' '[11c]tmsx'}
         ref_region.label = 'CAU';
         ref_region.codes = [11 50];
+    case '[18f]fmpep-d2'
+        ref_region.label = 'WM';
+        ref_region.codes = [2 41];
     otherwise
         ref_region = '';
 end

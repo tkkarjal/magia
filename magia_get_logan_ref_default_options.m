@@ -16,6 +16,15 @@ switch tracer
             case 'refk2'
                 value = 0.1237;
         end
+    case '[18f]fmpep-d2'
+        switch var
+            case 'start_time'
+                value = 20;
+            case 'end_time'
+                value = 0;
+            case 'refk2'
+                value = 0.05; % Based on Terry et al. JNM 2010 Supplementary Table 2, white matter
+        end
     otherwise
         error('Default Logan_ref options have not been specified for the tracer %s.',tracer);
         
