@@ -166,7 +166,7 @@ switch specs.magia.roi_type
         switch specs.magia.norm_method
             case 'mri'
                 fprintf('%s: Fetching the MRI file\n',subject);
-                mri_file = process_mri(subject,specs.study.mri_code);
+                mri_file = magia_get_mri_file(subject,specs.study.mri_code);
                 fprintf('%s: Coregistering the MRI to the PET\n',subject);
                 spm_coregister_estimate(meanpet_file,mri_file,'');
                 coreg_qc(subject,meanpet_file,mri_file);
@@ -201,7 +201,6 @@ switch specs.magia.roi_type
             otherwise
                 error('%s: Unknown ''norm_method'' ''%s''. The ''norm_method'' varialbe must be either ''mri'' or ''pet''. ',subject,specs.magia.norm_method);
         end
-        cellfun(@delete,mni_roi_masks);
     case 'freesurfer'
         roi_info = magia_get_freesurfer_roi_info(specs);
         roi_labels = roi_info.labels;
