@@ -1,9 +1,5 @@
 function parametric_images = magia_logan_image(pet_filename,input,frames,brainmask_filename,start_time,end_time,outputdir)
 
-if(end_time==0)
-    end_time = frames(end,2);
-end
-
 V = spm_vol(pet_filename);
 pet_img = spm_read_vols(V);
 pet_img = reshape(pet_img,[prod(V(1).dim(1:3)) size(V,1)])';
@@ -31,14 +27,23 @@ parametric_images = cell(2,1);
 V.dt = [spm_type('int16') 0];
 V.pinfo = [inf inf inf]';
 
-niftiname = fullfile(outputdir,[filename '_Logan_Vt_' int2str(start_time) '_' int2str(end_time) '.nii']);
+if(end_time > 0)
+    niftiname = fullfile(outputdir,[filename '_Logan_Vt_' int2str(start_time) '_' int2str(end_time) '.nii']);
+else
+    niftiname = fullfile(outputdir,[filename '_Logan_Vt_' int2str(start_time) '.nii']);
+    
+end
 V.fname = niftiname;
-V.private.dat.fname = niftiname; 
+V.private.dat.fname = niftiname;
 spm_write_vol(V,Vt_img);
 
 parametric_images{1} = niftiname;
 
-niftiname = fullfile(outputdir,[filename '_Logan_intercept' int2str(start_time) '_' int2str(end_time) '.nii']);
+if(end_time > 0)
+    niftiname = fullfile(outputdir,[filename '_Logan_intercept' int2str(start_time) '_' int2str(end_time) '.nii']);
+else
+    niftiname = fullfile(outputdir,[filename '_Logan_intercept' int2str(start_time) '.nii']);
+end
 V.fname = niftiname;
 V.private.dat.fname = niftiname;  
 spm_write_vol(V,intercept_img);
