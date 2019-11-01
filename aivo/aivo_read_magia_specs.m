@@ -51,9 +51,6 @@ specs.magia.cut_time = aivo_get_info(image_id,'cut_time');
 
 if(specs.magia.cpi)
     specs.magia.norm_method = char(aivo_get_info(image_id,'norm_method'));
-    if(strcmp(specs.magia.norm_method,'null'))
-        error('%s: The field ''magia.norm_method'' has not been specified. Please use either ''mri'' or ''pet''.',image_id);
-    end
 end
 
 if(strcmp(specs.magia.roi_type,'freesurfer'))
