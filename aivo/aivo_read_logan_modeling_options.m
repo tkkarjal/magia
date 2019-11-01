@@ -5,10 +5,10 @@ if(isempty(conn))
     conn = aivo_connect();
 end
 
-cols = columns(conn,'megapet','aivo','logan');
+cols = columns(conn,'megapet','aivo2','logan');
 cols = setdiff(cols,'tracer','stable');
 M = length(cols);
-select_statement = 'SELECT * FROM "megabase"."aivo".logan';
+select_statement = 'SELECT * FROM "megabase"."aivo2".logan';
 where_statement = sprintf('WHERE logan.image_id = %s%s%s',char(39),lower(subject_id),char(39));
 
 q = sprintf('%s %s ORDER BY image_id ASC;',select_statement,where_statement);

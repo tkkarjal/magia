@@ -10,7 +10,7 @@ corrected_specs = specs;
 for i = 1:N
     field_name = magia_specs{i};
     val = specs.magia.(field_name);
-    if(isempty(val) || any(isnan(val)))
+    if(isempty(val) || any(isnan(val)) || strcmp(val,'null'))
         corrected_specs.magia.(field_name) = magia_get_default_specs(field_name,specs.study.tracer);
     end
 end

@@ -1,47 +1,30 @@
-function aivo_set_info_dev(subject_id,field,value)
+function aivo_set_info(subject_id,field,value)
 % It is possible to add the same value for every subject_id. Name the fields as in the columns in aivo.pet.
 % Do not enter many fields.
 
-% Edited: 2018-05-15, Jonatan Ropponen
-
 conn = aivo_connect();
 
-% switch field
-%     case {'ac' 'study_code' 'study_date' 'project' 'tracer' 'dose' 'gender' 'scanner' 'frames' 'mri' 'weight' 'height' 'age' 'injection_time' 'group_name' 'description' 'plasma' 'dc' 'type' 'source' 'dynamic'}
-%         validated_subjects = aivo_get_subjects('validated',1);
-%         [subject_id,val_idx] = setdiff(subject_id,validated_subjects,'stable');
-%         value = value(val_idx);
-%         warning('Refused to update the field %s in aivo.pet for all subjects because at least one of the subjects has already been validated.',field);
-%     otherwise
-%         % we must still be able to modify columns such as freesurfed, found, etc.
-% end
-
 switch field
-    case {'ac' 'study_code' 'study_date' 'project' 'tracer' 'dose' 'scanner' 'frames' 'mri' 'injection_time' 'group_name' 'description' 'plasma' 'dc' 'type' 'source' 'dynamic' 'notes' 'num_frames' 'start_time' 'doi'}
-        table_name = '"megabase"."aivo".pet';
-        cols = columns(conn,'megapet','aivo','pet');
-        field_edits_allowed = 0;
-    case {'analyzed' 'found' 'nii' 'mri_found' 'freesurfed' 'githash' 'error' 'magia_time' 'validated'}
-        table_name = '"megabase"."aivo".pet';
-        cols = columns(conn,'megapet','aivo','pet');
+    case {'study_date' 'tracer' 'scanner' 'mri_code' 'frames' 'dose' 'plasma' 'num_frames' 'scan_start_time' 'injection_time' 'type' 'source' 'dynamic'}
+        table_name = '"megabase"."aivo2".study';
+        cols = columns(conn,'megapet','aivo2','study');
         field_edits_allowed = 1;
-    case {'model' 'roi_set' 'rc' 'fwhm' 'use_mri' 'cut_time'}
-        table_name = '"megabase"."aivo".model';
-        cols = columns(conn,'megapet','aivo','model');
+    case {'model' 'dc' 'rc' 'cpi' 'cut_time' 'roi_type' 'roi_set' 'input_type' 'fwhm_pre' 'fwhm_post' 'norm_method' 'fwhm_roi' 'mc_excluded_frames' 'mc_fwhm' 'mc_rtm' 'mc_ref_frame'}
+        table_name = '"megabase"."aivo2".magia';
+        cols = columns(conn,'megapet','aivo2','magia');
         field_edits_allowed = 1;
-    case {'ap' 'ab' 'vp' 'vb' 'hct'}
-        table_name = '"megabase"."aivo".blood';
-        cols = columns(conn,'megapet','aivo','blood');
+    case {'patient_id' 'weight' 'height' 'age' 'sex' 'birthday' 'handedness' 'smoker'}
+        table_name = '"megabase"."aivo2".patient';
+        cols = columns(conn,'megapet','aivo2','patient');
         field_edits_allowed = 1;
-    case {'patient_id' 'weight' 'height' 'age' 'gender' 'birthday'}
-        table_name = '"megabase"."aivo".patient';
-        cols = columns(conn,'megapet','aivo','patient');
+    case {'error'}
+        table_name = '"megabase"."aivo2".error_log';
+        cols = columns(conn,'megapet','aivo2','error_log');
         field_edits_allowed = 1;
-%      case 'freesurfed'
-%          table_name = 'megabase."aivo".mri';
-%          cols = columns(conn,'megapet','aivo','mri');
-%          subject_id = aivo_get_info(subject_id,'mri');
-%          field_edits_allowed = 1;
+    case {'found' 'freesurfed' 'analyzed' 'magia_time' 'magia_githash'}
+        table_name = '"megabase"."aivo2".inventory';
+        cols = columns(conn,'megapet','aivo2','inventory');
+        field_edits_allowed = 1;
     otherwise
         error('Unknown field %s.',field);
 end
@@ -102,7 +85,7 @@ if(length(subject_id)>1) %many subjects
     if(length(subject_id) == length(value)) %different value for every subject (not working at the moment!)
         %for i=1:length(subject_id)
             %whereclause = sprintf('WHERE image_id = %s%s%s',char(39),subject_id{i},char(39));
-            %update(conn,'"megabase"."aivo".pet',field,value(i),whereclause)
+            %update(conn,'"megabase"."aivo2".pet',field,value(i),whereclause)
         %end
     else
         if(length(value)) %same value for all subjects

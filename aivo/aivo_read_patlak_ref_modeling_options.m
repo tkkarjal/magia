@@ -2,10 +2,10 @@ function modeling_options = aivo_read_patlak_ref_modeling_options(subject_id)
 
 conn = aivo_connect();
 
-cols = columns(conn,'megapet','aivo','patlak_ref');
+cols = columns(conn,'megapet','aivo2','patlak_ref');
 cols = setdiff(cols,'tracer','stable');
 M = length(cols);
-select_statement = 'SELECT * FROM "megabase"."aivo".patlak_ref';
+select_statement = 'SELECT * FROM "megabase"."aivo2".patlak_ref';
 where_statement = sprintf('WHERE patlak_ref.image_id = %s%s%s',char(39),lower(subject_id),char(39));
 
 q = sprintf('%s %s ORDER BY image_id ASC;',select_statement,where_statement);
