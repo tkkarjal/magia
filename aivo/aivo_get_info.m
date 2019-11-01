@@ -9,33 +9,30 @@ function value = aivo_get_info(subject_id,field)
 % Outputs:
 % value = a cell or a numerical array with the obtained values
 %
-% Currently AIVO consists of two main tables: pet and model. In order to
-% see the fields in the pet table, first open up a connection to AIVO using
+% Currently AIVO consists of two main tables: study and magia. In order to
+% see the fields in the study table, first open up a connection to AIVO using
 % conn = aivo_connect, and then
-% pet_cols columns(conn,'megapet','aivo','pet')
-% In order to see the fields in the model table, first open up a connection
+% study_cols columns(conn,'megapet','aivo2','study')
+% In order to see the fields in the magia table, first open up a connection
 % to AIVO and then
-% model_cols = columns(conn,'megapet','aivo','model')
+% magia_cols = columns(conn,'megapet','aivo2','magia')
 
 conn = aivo_connect();
 
-pet_cols = columns(conn,'megapet','aivo','pet');
-patient_cols = columns(conn,'megapet','aivo','patient');
-model_cols = columns(conn,'megapet','aivo','model');
-blood_cols = columns(conn,'megapet','aivo','blood');
-if(ismember(field,pet_cols))
-    tab = 'pet';
+study_cols = columns(conn,'megapet','aivo2','study');
+patient_cols = columns(conn,'megapet','aivo2','patient');
+magia_cols = columns(conn,'megapet','aivo2','magia');
+if(ismember(field,study_cols))
+    tab = 'study';
 elseif(ismember(field,patient_cols))
     tab = 'patient';
-elseif(ismember(field,model_cols))
-    tab = 'model';
-elseif(ismember(field,blood_cols))
-    tab = 'blood';
+elseif(ismember(field,magia_cols))
+    tab = 'magia';
 else
     error('Unrecognized field name: %s',field);
 end
 
-select_statement = sprintf('SELECT %s.%s FROM "megabase"."aivo".%s',tab,lower(field),tab);
+select_statement = sprintf('SELECT %s.%s FROM "megabase"."aivo2".%s',tab,lower(field),tab);
 if(ischar(subject_id))
     where_statement = sprintf('WHERE %s.image_id = %s%s%s',tab,char(39),lower(subject_id),char(39));
 else
@@ -55,7 +52,7 @@ value = curs.Data;
 close(conn);
 
 switch field
-    case {'age' 'dose' 'weight' 'height' 'freesurfed' 'validated' 'analyzed' 'found' 'mri_found' 'plasma' 'dc' 'rc' 'ap' 'ab' 'vp' 'vb' 'hct' 'use_mri' 'num_frames' 'start_time' 'nii' 'cut_time'}
+    case {'age' 'dose' 'weight' 'height' 'freesurfed' 'analyzed' 'found' 'mri_found' 'plasma' 'dc' 'rc' 'hct' 'cut_time' 'fwhm_pre' 'fwhm_post' 'fwhm_roi' 'cpi'}
         value = cell2mat(value);
 end
 

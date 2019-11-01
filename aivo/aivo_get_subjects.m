@@ -25,24 +25,24 @@ function subjects = aivo_get_subjects(varargin)
 %      subjects = aivo_get_subjects('gender','f','tracer','[18f]fdg');
 %
 % E) Find all female subjects between ages 20 and 30
-%      subjects = aivo_get_subjects('gender','f','age',{20,30});
+%      subjects = aivo2_get_subjects('gender','f','age',{20,30});
 %
 % G) Find all subjects between study dates YYYY-MM-DD and YYYY-MM-DD
-%      subjects = aivo_get_subjects('study_dates',{'YYYY-MM-DD','YYYY-MM-DD'};
+%      subjects = aivo2_get_subjects('study_dates',{'YYYY-MM-DD','YYYY-MM-DD'};
 %
 % H) Find all [11c]carfentanil subjects with MRI
-%      subjects = aivo_get_subjects('tracer','[11c]carfentanil','mri','~0');
+%      subjects = aivo2_get_subjects('tracer','[11c]carfentanil','mri','~0');
 %
 % I) Find all freesurfed subjects 
-%      subjects = aivo_get_subjects('freesurfed',1);
+%      subjects = aivo2_get_subjects('freesurfed',1);
 %
 
 conn = aivo_connect();
 
 if((~mod(nargin,2)))
     
-    select_statement = 'SELECT pet.image_id FROM "megabase"."aivo".pet, "megabase"."aivo".patient ';
-    where_statement = 'WHERE "aivo".pet.image_id = "aivo".patient.image_id AND ';
+    select_statement = 'SELECT study.image_id FROM "megabase"."aivo2".study, "megabase"."aivo2".patient ';
+    where_statement = 'WHERE "aivo2".study.image_id = "aivo2".patient.image_id AND ';
     l=0;
     for i=1:nargin/2
         field = varargin{i+l};
@@ -51,9 +51,9 @@ if((~mod(nargin,2)))
         if(ismember(field,{'age','dose','study_date','injection_time'})) %value
             if(ischar(value)) %only one value
                 if(ismember('~',value))  %exclude spesific value
-                    where_statement = [where_statement,' NOT ','pet.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
+                    where_statement = [where_statement,' NOT ','study.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
                 else
-                    where_statement = [where_statement,'pet.',lower(field),' = ',char(39),value,char(39)];
+                    where_statement = [where_statement,'study.',lower(field),' = ',char(39),value,char(39)];
                 end
             else
                 lb = value{1}; % lower bound
@@ -63,7 +63,7 @@ if((~mod(nargin,2)))
                 else
                     value = [num2str(lb),' AND ',num2str(ub)];
                 end
-                where_statement = [where_statement,'pet.',lower(field),' BETWEEN ',value];
+                where_statement = [where_statement,'study.',lower(field),' BETWEEN ',value];
             end
             if(i~=nargin/2)
                 where_statement = [where_statement,' AND '];
@@ -88,12 +88,12 @@ if((~mod(nargin,2)))
         end       
         if(ismember(field,{'gender','study_code','tracer','frames','scanner','mri','project','description','group_name','patient_id','source','type','ac' 'githash'})) %char
             if(ismember('~',value)) %user excludes spesified values
-                where_statement = [where_statement,' NOT ','pet.',lower(field),'=',char(39),value(2:length(value)),char(39)];
+                where_statement = [where_statement,' NOT ','study.',lower(field),'=',char(39),value(2:length(value)),char(39)];
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
             else
-                where_statement = [where_statement,'pet.',lower(field),'=',char(39),value,char(39)];
+                where_statement = [where_statement,'study.',lower(field),'=',char(39),value,char(39)];
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
@@ -101,7 +101,7 @@ if((~mod(nargin,2)))
         end
         if(ismember(field,{'validated','analyzed','found','mri_found','freesurfed','rc','dc','plasma' 'dynamic' 'nii'})) %integer or char
             if(ismember('~',value)) %user excludes spesified values, value is char
-                where_statement = [where_statement,' NOT ','pet.',lower(field),'=',char(39),value(2:length(value)),char(39)];
+                where_statement = [where_statement,' NOT ','study.',lower(field),'=',char(39),value(2:length(value)),char(39)];
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
@@ -109,7 +109,7 @@ if((~mod(nargin,2)))
                 if(isnumeric(value)) % value may be char or numeric
                     value = num2str(value);
                 end
-                where_statement = [where_statement,'pet.',lower(field),'=',char(39),value,char(39)];
+                where_statement = [where_statement,'study.',lower(field),'=',char(39),value,char(39)];
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
@@ -117,7 +117,7 @@ if((~mod(nargin,2)))
         end 
     end
     if(nargin==0)
-        q = 'SELECT pet.image_id FROM "megabase"."aivo".pet';
+        q = 'SELECT study.image_id FROM "megabase"."aivo2".study';
     else
         q = [select_statement,where_statement,'ORDER BY image_id ASC;'];
     end

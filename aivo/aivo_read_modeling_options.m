@@ -28,10 +28,6 @@ switch model
     case 'suv'
         modeling_options.model = 'suv';
     case 'suvr'
-        dyn = aivo_get_info(subject_id,'dynamic');
-        if(iscell(dyn))
-            dyn = dyn{1};
-        end
         modeling_options = aivo_read_suvr_modeling_options(subject_id,dyn);
     case 'logan'
         modeling_options = aivo_read_logan_modeling_options(subject_id);
