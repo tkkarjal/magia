@@ -1,7 +1,7 @@
 function value = magia_get_default_specs(field_name,varargin)
 % Specifies default options for Magia processing. Some of the defaults are
 % tracer-dependent. Not all fields have a default. For example, the fields
-% template and mni_atlas_dir require specification of full paths, which
+% template and mni_roi_atlas_dir require specification of full paths, which
 % makes them site-dependent fields. The field classfile, on the other hand,
 % is dependent on the scanner, again making it site-dependent.
 
