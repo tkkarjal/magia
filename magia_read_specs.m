@@ -16,7 +16,7 @@ while(l ~= -1)
             end
             specs.study.(field_name) = value;
         otherwise
-            if(ismember(field_name,{'cpi','dc','rc','fwhm_pre','fwhm_post','fwhm_roi','cut_time','mc_fwhm','mc_rtm','mc_ref_frame'}))
+            if(ismember(field_name,{'cpi' 'dc' 'rc' 'fwhm_pre' 'fwhm_post' 'fwhm_roi' 'cut_time' 'mc_fwhm' 'mc_rtm' 'mc_ref_frame'}))
                 value = str2double(value);
             end
             specs.magia.(field_name) = value;
