@@ -23,7 +23,7 @@ study_cols = columns(conn,'megapet','aivo2','study');
 patient_cols = columns(conn,'megapet','aivo2','patient');
 magia_cols = columns(conn,'megapet','aivo2','magia');
 lab_cols = columns(conn,'megapet','aivo2','lab');
-inventory_cols = columns(conn,'megapet','aivo2','lab');
+inventory_cols = columns(conn,'megapet','aivo2','inventory');
 
 if(ismember(field,study_cols))
     tab = 'study';
