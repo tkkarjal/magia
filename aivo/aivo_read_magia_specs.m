@@ -15,6 +15,7 @@ specs.study.weight = aivo_get_info(image_id,'weight');
 specs.study.dose = aivo_get_info(image_id,'dose');
 specs.study.scanner = char(aivo_get_info(image_id,'scanner'));
 specs.study.mri_code = char(aivo_get_info(image_id,'mri_code'));
+specs.study.glucose = aivo_get_info(image_id,'glucose');
 
 
 %%% specs.magia
@@ -46,6 +47,7 @@ if(strcmp(specs.magia.cpi,'null'))
 end
 
 specs.magia.cut_time = aivo_get_info(image_id,'cut_time');
+specs.magia.gu = aivo_get_info(image_id,'gu');
 
 % optional
 
