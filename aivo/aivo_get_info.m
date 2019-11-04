@@ -22,12 +22,19 @@ conn = aivo_connect();
 study_cols = columns(conn,'megapet','aivo2','study');
 patient_cols = columns(conn,'megapet','aivo2','patient');
 magia_cols = columns(conn,'megapet','aivo2','magia');
+lab_cols = columns(conn,'megapet','aivo2','lab');
+inventory_cols = columns(conn,'megapet','aivo2','lab');
+
 if(ismember(field,study_cols))
     tab = 'study';
 elseif(ismember(field,patient_cols))
     tab = 'patient';
 elseif(ismember(field,magia_cols))
     tab = 'magia';
+elseif(ismember(field,lab_cols))
+    tab = 'lab';
+elseif(ismember(field,inventory_cols))
+    tab = 'inventory';
 else
     error('Unrecognized field name: %s',field);
 end
@@ -52,7 +59,7 @@ value = curs.Data;
 close(conn);
 
 switch field
-    case {'age' 'dose' 'weight' 'height' 'freesurfed' 'analyzed' 'found' 'mri_found' 'plasma' 'dc' 'rc' 'hct' 'cut_time' 'fwhm_pre' 'fwhm_post' 'fwhm_roi' 'cpi'}
+    case {'age' 'dose' 'weight' 'height' 'freesurfed' 'analyzed' 'found' 'mri_found' 'plasma' 'dc' 'rc' 'hct' 'cut_time' 'fwhm_pre' 'fwhm_post' 'fwhm_roi' 'cpi' 'glucose' 'gu'}
         value = cell2mat(value);
 end
 
