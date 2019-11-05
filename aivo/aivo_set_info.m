@@ -9,7 +9,7 @@ switch field
         table_name = '"megabase"."aivo2".study';
         cols = columns(conn,'megapet','aivo2','study');
         field_edits_allowed = 1;
-    case {'model' 'dc' 'rc' 'cpi' 'cut_time' 'roi_type' 'roi_set' 'mni_roi_atlas_dir' 'input_type' 'fwhm_pre' 'fwhm_post' 'norm_method' 'fwhm_roi' 'mc_excluded_frames' 'mc_fwhm' 'mc_rtm' 'mc_ref_frame'}
+    case {'model' 'dc' 'rc' 'cpi' 'cut_time' 'roi_type' 'roi_set' 'mni_roi_atlas_dir' 'input_type' 'fwhm_pre' 'fwhm_post' 'norm_method' 'fwhm_roi' 'mc_excluded_frames' 'mc_fwhm' 'mc_rtm' 'mc_ref_frame' 'template'}
         table_name = '"megabase"."aivo2".magia';
         cols = columns(conn,'megapet','aivo2','magia');
         field_edits_allowed = 1;
