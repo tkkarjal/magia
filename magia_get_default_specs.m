@@ -63,6 +63,13 @@ switch lower(field_name)
             otherwise
                 value = 2;
         end
+    case 'gu'
+        switch tracer
+            case '[18f]fdg'
+                value = 1;
+            otherwise
+                value = 0;
+        end
     otherwise
         error('No default Magia-specs have been specified for the field %s.',lower(field_name));
 end

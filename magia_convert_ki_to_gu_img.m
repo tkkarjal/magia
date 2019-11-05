@@ -13,8 +13,10 @@ end
 
 [p,n] = fileparts(V.fname);
 
-gu_img_file = sprintf('%s/%s_gu.nii',p,n);
+gu_img_file = sprintf('%s/%s_GU.nii',p,n);
 V.fname = gu_img_file;
+V.dt = [spm_type('int16') spm_platform('bigend')];
+V.pinfo = [Inf Inf Inf]';
 spm_write_vol(V,gu_img);
 
 end

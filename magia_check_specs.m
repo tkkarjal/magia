@@ -40,7 +40,7 @@ end
 
 %% specs.magia: Mandatory fields
 
-mandatory_magia_fields = {'model' 'input_type' 'roi_type' 'dc' 'rc' 'fwhm_pre' 'fwhm_post' 'fwhm_roi' 'cpi' 'cut_time'};
+mandatory_magia_fields = {'model' 'input_type' 'roi_type' 'dc' 'rc' 'fwhm_pre' 'fwhm_post' 'fwhm_roi' 'cpi' 'cut_time' 'gu'};
 empty_magia_fields = cell(length(mandatory_magia_fields),1);
 missing_magia_fields = empty_study_fields;
 
