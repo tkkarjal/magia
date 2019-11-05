@@ -490,18 +490,40 @@ switch specs.magia.model
         end
     case 'fur'
         furs = magia_calculate_fur(cp,tacs,specs.study.frames,modeling_options.start_time,modeling_options.end_time,modeling_options.ic);
-        T = array2table(furs,'VariableNames',{'FUR'},'RowNames',roi_labels);
+        if(specs.magia.gu)
+            GU = magia_convert_ki_to_gu(furs,specs.study.glucose);
+            T = array2table([GU furs],'VariableNames',{'GU' 'FUR'},'RowNames',roi_labels);
+        else
+            T = array2table(furs,'VariableNames',{'FUR'},'RowNames',roi_labels);
+        end
         magia_write_roi_results(T,results_dir);
         if(specs.magia.cpi)
-            parametric_images = {magia_calculate_fur_image(cp,specs.study.frames,modeling_options.start_time,modeling_options.end_time,modeling_options.ic,pet_file,brainmask,results_dir)};
+            fur_image_file = magia_calculate_fur_image(cp,specs.study.frames,modeling_options.start_time,modeling_options.end_time,modeling_options.ic,pet_file,brainmask,results_dir);
+            if(specs.magia.gu)
+                GU_image_file = magia_convert_ki_to_gu_img(fur_image_file,specs.study.glucose);
+                parametric_images = {GU_image_file;fur_image_file};
+            else
+                parametric_images = {fur_image_file};
+            end
         end
     case 'patlak'
         [Ki,intercept,x,Y,k] = magia_fit_patlak(cp,tacs,specs.study.frames,modeling_options.start_time,modeling_options.end_frame);
-        T = array2table([Ki intercept],'VariableNames',{'Ki','intercept'},'RowNames',roi_labels);
+        if(specs.magia.gu)
+            GU = magia_convert_ki_to_gu(Ki,specs.study.glucose);
+            T = array2table([GU Ki intercept],'VariableNames',{'GU' 'Ki','intercept'},'RowNames',roi_labels);
+        else
+            T = array2table([Ki intercept],'VariableNames',{'Ki','intercept'},'RowNames',roi_labels);
+        end
         magia_write_roi_results(T,results_dir);
         magia_visualize_fit_patlak(Ki,intercept,x,Y,k,roi_labels,results_dir);
         if(specs.magia.cpi)
-            parametric_images = magia_patlak_image(pet_file,cp,specs.study.frames,brainmask,modeling_options.start_time,modeling_options.end_frame,results_dir);
+            [Ki_img,Ic_img] = magia_patlak_image(pet_file,cp,specs.study.frames,brainmask,modeling_options.start_time,modeling_options.end_frame,results_dir,specs.study.glucose);
+            if(specs.magia.gu)
+                GU_img = magia_convert_ki_to_gu_img(Ki_img,specs.study.glucose);
+                parametric_images = {GU_img;Ki_img;Ic_img};
+            else
+                parametric_images = {Ki_img;Ic_img};
+            end
         end
     case 'patlak_ref'
         [Ki_ref,intercept,x,Y,k] = magia_fit_patlak_ref(cr,tacs,specs.study.frames,modeling_options.start_time,modeling_options.end_time);
