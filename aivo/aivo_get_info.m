@@ -24,7 +24,6 @@ patient_cols = columns(conn,'megapet','aivo2','patient');
 magia_cols = columns(conn,'megapet','aivo2','magia');
 lab_cols = columns(conn,'megapet','aivo2','lab');
 inventory_cols = columns(conn,'megapet','aivo2','inventory');
-errorlog_cols = columns(conn,'megapet','aivo2','error_log');
 
 if(ismember(field,study_cols))
     tab = 'study';
@@ -36,8 +35,6 @@ elseif(ismember(field,lab_cols))
     tab = 'lab';
 elseif(ismember(field,inventory_cols))
     tab = 'inventory';
-elseif(ismember(field,errorlog_cols))
-    tab = 'error_log';
 else
     error('Unrecognized field name: %s',field);
 end

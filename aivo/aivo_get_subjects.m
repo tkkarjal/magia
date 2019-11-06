@@ -41,8 +41,8 @@ conn = aivo_connect();
 
 if((~mod(nargin,2)))
     
-    select_statement = 'SELECT study.image_id FROM "megabase"."aivo2".study, "megabase"."aivo2".patient ';
-    where_statement = 'WHERE "aivo2".study.image_id = "aivo2".patient.image_id AND ';
+    select_statement = 'SELECT study.image_id FROM "megabase"."aivo2".study, "megabase"."aivo2".patient , "megabase"."aivo2".inventory ';
+    where_statement = 'WHERE "aivo2".study.image_id = "aivo2".patient.image_id AND "aivo2".study.image_id = "aivo2".inventory.image_id AND ';
     l=0;
     for i=1:nargin/2
         field = varargin{i+l};
@@ -86,7 +86,7 @@ if((~mod(nargin,2)))
                 where_statement = [where_statement,' AND '];
             end
         end       
-        if(ismember(field,{'gender','study_code','tracer','frames','scanner','mri','project','description','group_name','patient_id','source','type','ac' 'githash'})) %char
+        if(ismember(field,{'gender','study_code','tracer','frames','scanner','mri','project','description','group_name','patient_id','source','type','ac','githash'})) %char
             if(ismember('~',value)) %user excludes spesified values
                 where_statement = [where_statement,' NOT ','study.',lower(field),'=',char(39),value(2:length(value)),char(39)];
                 if(i~=nargin/2)
@@ -99,7 +99,7 @@ if((~mod(nargin,2)))
                 end
             end
         end
-        if(ismember(field,{'validated','analyzed','found','mri_found','freesurfed','rc','dc','plasma' 'dynamic' 'nii'})) %integer or char
+        if(ismember(field,{'mri_found','rc','dc','plasma' 'dynamic' 'nii'})) %integer or char
             if(ismember('~',value)) %user excludes spesified values, value is char
                 where_statement = [where_statement,' NOT ','study.',lower(field),'=',char(39),value(2:length(value)),char(39)];
                 if(i~=nargin/2)
@@ -115,11 +115,27 @@ if((~mod(nargin,2)))
                 end
             end
         end 
+        if(ismember(field,{'analyzed','found','freesurfed'})) %integer or char
+            if(ismember('~',value)) %user excludes spesified values, value is char
+                where_statement = [where_statement,' NOT ','inventory.',lower(field),' =',char(39),value(2:length(value)),char(39)];
+                if(i~=nargin/2)
+                    where_statement = [where_statement,' AND '];
+                end
+            else
+                if(isnumeric(value)) % value may be char or numeric
+                    value = num2str(value);
+                end
+                where_statement = [where_statement,'inventory.',lower(field),' =',char(39),value,char(39)];
+                if(i~=nargin/2)
+                    where_statement = [where_statement,' AND '];
+                end
+            end
+        end 
     end
     if(nargin==0)
         q = 'SELECT study.image_id FROM "megabase"."aivo2".study';
     else
-        q = [select_statement,where_statement,'ORDER BY image_id ASC;'];
+        q = [select_statement,where_statement,' ORDER BY image_id ASC;'];
     end
     curs = exec(conn,q);
     curs = fetch(curs);
