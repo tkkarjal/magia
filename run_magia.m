@@ -51,7 +51,7 @@ try
     magia_archive_results(subject,specs.magia);
     magia_clean_files(subject);
     if(aivo)
-        aivo_store_magia_info(subject);
+        aivo_store_magia_info(subject,specs);
     end
 catch ME
     if(aivo)

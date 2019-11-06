@@ -196,7 +196,7 @@ switch specs.magia.roi_type
                 roi_masks_temp = normwrite_sn(mni_roi_masks,mni2sub,0);
                 fprintf('%s: Reslicing the ROI masks to match the PET data\n',subject);
                 roi_masks = spm_coregister_reslice(meanpet_file,roi_masks_temp,0);
-                roi_masks = remove_first_characters(roi_masks,1);
+                roi_masks = remove_first_characters(roi_masks,2);
                 cellfun(@delete,roi_masks_temp);
             otherwise
                 error('%s: Unknown ''norm_method'' ''%s''. The ''norm_method'' varialbe must be either ''mri'' or ''pet''. ',subject,specs.magia.norm_method);
