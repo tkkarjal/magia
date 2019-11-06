@@ -1,7 +1,7 @@
 function aivo_set_info(subject_id,field,value)
 % It is possible to add the same value for every subject_id. Only one field
-% is accepted. Note that if many subject_ids are given, they must be given
-% in alphabetical order.
+% is accepted. If many values are passed the value array should be the same
+% length of the subject list
 
 conn = aivo_connect();
 
@@ -50,21 +50,62 @@ end
 n_subs = length(subject_id);
 n_values = length(value);
 
-if(n_values == 1 && n_subs >= 1) % A single value for all subjects
+% If we keep rows only for who has glucose concentration in lab.glucose, we
+% need to insert instead of update and if there is error in inserting
+% (there is already a row) then update
+
+if(n_values == 1 && n_subs >= 1) % A single value for all subjects 
     whereclause = 'WHERE';
     for i = 1:n_subs
         if(i == 1)
             whereclause = sprintf('%s image_id = ''%s''',whereclause,subject_id{i});
+            if ~strcmp(field,'glucose')
+                update(conn,table_name,field,value,whereclause)
+            else
+                fieldr={'image_id','glucose','hct'};
+                hct=aivo_get_info(subject_id{i},'hct'); %Grabs old hct value to update, if not present like for insert set to 0
+                if isnumeric(hct)
+                    valuer={subject_id{i},value{1},hct};
+                else
+                    valuer={subject_id{i},value{1},'0'};
+                end
+                try
+                    datainsert(conn,table_name,fieldr,valuer);
+                catch
+                    update(conn,table_name,field,value,whereclause)   
+                end
+            end
         else
             whereclause = sprintf('%s OR image_id = ''%s''',whereclause,subject_id{i});
+            if ~strcmp(field,'glucose')
+                update(conn,table_name,field,value,whereclause)
+            else
+                error('Trying to assign same glucose value to a list of subjects!') %It should not be allowed
+            end
         end
     end
-    update(conn,table_name,field,value,whereclause)
+
+    
 elseif(n_values > 1 && n_subs > 1) % Subjects have a distinct value
     if(n_values == n_subs)
         for i = 1:n_subs
             whereclause = sprintf('WHERE image_id = ''%s''',subject_id{i});
-            update(conn,table_name,field,value(i),whereclause)
+            if ~strcmp(field,'glucose')
+                update(conn,table_name,field,value(i),whereclause)
+            else
+                fieldr={'image_id','glucose','hct'};
+                hct=aivo_get_info(subject_id{i},'hct'); %Grabs old hct value to update, if not present like for insert set to 0
+                if isnumeric(hct)
+                    valuer={subject_id{i},value{i},hct};
+                else
+                    valuer={subject_id{i},value{i},'0'};
+                end
+                try
+                    datainsert(conn,table_name,fieldr,valuer);
+                catch
+                    update(conn,table_name,field,value,whereclause)   
+                end
+            end
         end
     else
         error('The number of values does not match the number of subjects.');

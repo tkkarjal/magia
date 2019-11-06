@@ -248,6 +248,7 @@ if(isfield(specs.magia,'gu'))
         else
             msg10 = '';
         end
+        msg10 = '';
     end
 else
     msg10 = '''gu'' was not specified.';

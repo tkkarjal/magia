@@ -41,8 +41,14 @@ else
     error('Wrong number of input arguments. Please see help run_magia for more information.');
 end
 
-specs = magia_replace_empty_specs_with_defaults(specs);
-magia_check_specs(specs);
+try % if you don't keep this the errors in the following two lines are not catched and stored in 'error'
+    specs = magia_replace_empty_specs_with_defaults(specs);
+    magia_check_specs(specs);
+catch ME
+    error_message = aivo_parse_me(ME);
+    aivo_set_info(subject,'error',error_message);
+    rethrow(ME);
+end
 
 %% Run MAGIA
 
