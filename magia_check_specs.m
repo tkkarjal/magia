@@ -229,9 +229,33 @@ for i = 1:length(specs_fields)
     end
 end
 
+%% Glucose
+
+if(isfield(specs.magia,'gu'))
+    if(isempty(specs.magia.gu) || isnan(specs.magia.gu))
+        msg10 = '''gu'' was not specified.';
+    else
+        specified_gu = specs.magia.gu;
+        if(specified_gu)
+            if(isfield(specs.study,'glucose'))
+                specified_glucose = specs.study.glucose;
+                if(strcmp(specified_glucose,'No Data'))
+                    msg10 = 'Plasma glucose concentration (the field glucose) was not specified even if gu = 1.';
+                end
+            else
+                msg10 = 'Plasma glucose concentration (the field glucose) was not specified even if gu = 1.';
+            end
+        else
+            msg10 = '';
+        end
+    end
+else
+    msg10 = '''gu'' was not specified.';
+end
+
 %% Print observations
 
-if(isempty(msg1) && isempty(msg2) && isempty(msg3) && isempty(msg4) && isempty(msg5) && isempty(msg6) && isempty(msg7) && isempty(msg8) && isempty(msg9))
+if(isempty(msg1) && isempty(msg2) && isempty(msg3) && isempty(msg4) && isempty(msg5) && isempty(msg6) && isempty(msg7) && isempty(msg8) && isempty(msg9) && isempty(msg10))
     fprintf('No problems found from the specs.\n');
 else
     msg = 'The following problems were observed:';
@@ -261,6 +285,9 @@ else
     end
     if(~isempty(msg9))
         msg = sprintf('%s\n\n%s',msg,msg9);
+    end
+    if(~isempty(msg10))
+        msg = sprintf('%s\n\n%s',msg,msg10);
     end
     error('%s\n\nPlease correct the mistakes and try again.\n',msg);
 end
