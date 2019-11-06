@@ -53,12 +53,15 @@ specs.magia.gu = aivo_get_info(image_id,'gu');
 
 if(specs.magia.cpi)
     specs.magia.norm_method = char(aivo_get_info(image_id,'norm_method'));
+    if(strcmp(specs.magia.norm_method,'pet'))
+        specs.magia.template = char(aivo_get_info(image_id,'template'));
+    end
 end
 
 if(strcmp(specs.magia.roi_type,'freesurfer'))
     specs.magia.roi_set = char(aivo_get_info(image_id,'roi_set'));
 elseif(strcmp(specs.magia.roi_type,'atlas'))
-    specs.magia.mni_roi_atlas_dir = char(aivo_get_info(image_id,'mni_roi_atlas_dir'));
+    specs.magia.mni_roi_mask_dir = char(aivo_get_info(image_id,'mni_roi_mask_dir'));
 end
 
 if(strcmp(specs.magia.input_type,'sca_ref'))

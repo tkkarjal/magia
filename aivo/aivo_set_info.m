@@ -17,11 +17,7 @@ switch field
         table_name = '"megabase"."aivo2".patient';
         cols = columns(conn,'megapet','aivo2','patient');
         field_edits_allowed = 1;
-    case {'error'}
-        table_name = '"megabase"."aivo2".error_log';
-        cols = columns(conn,'megapet','aivo2','error_log');
-        field_edits_allowed = 1;
-    case {'found' 'freesurfed' 'analyzed' 'magia_time' 'magia_githash'}
+    case {'found' 'freesurfed' 'analyzed' 'magia_time' 'magia_githash' 'error'}
         table_name = '"megabase"."aivo2".inventory';
         cols = columns(conn,'megapet','aivo2','inventory');
         field_edits_allowed = 1;
@@ -81,7 +77,7 @@ if ~field_edits_allowed
     end
 end
     
-if(length(subject_id)>1) %many subjects 
+if(length(subject_id)>1) %many subjects
     if(length(subject_id) == length(value)) %different value for every subject (not working at the moment!)
         %for i=1:length(subject_id)
             %whereclause = sprintf('WHERE image_id = %s%s%s',char(39),subject_id{i},char(39));
@@ -104,7 +100,8 @@ if(length(subject_id)>1) %many subjects
     end
 else %one subject
     if(length(value)==1) %one value
-        whereclause = sprintf('WHERE image_id = %s%s%s',char(39),subject_id{1},char(39));
+        table_name_only=strsplit(table_name,'.');
+        whereclause = sprintf('WHERE %s.image_id = %s%s%s',table_name_only{3},char(39),subject_id{1},char(39));
         update(conn,table_name,field,value,whereclause)
     else
         error('You have entered a different number of subject_id:s and values. If you want to add different values for different subject_id:s you must specify one value for every subject_id.');
