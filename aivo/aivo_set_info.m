@@ -3,6 +3,8 @@ function aivo_set_info(subject_id,field,value)
 % is accepted. Note that if many subject_ids are given, they must be given
 % in alphabetical order.
 
+%% Initialize
+
 conn = aivo_connect();
 
 study_cols = columns(conn,'megapet','aivo2','study');
@@ -13,20 +15,22 @@ inventory_cols = columns(conn,'megapet','aivo2','inventory');
 mri_cols = {'freesurfed'};
 
 if(ismember(field,study_cols))
-    table_name = '"megabase"."aivo2".study';
+    table_name = 'study';
 elseif(ismember(field,magia_cols))
-    table_name = '"megabase"."aivo2".magia';
+    table_name = 'magia';
 elseif(ismember(field,patient_cols))
-    table_name = '"megabase"."aivo2".patient';
+    table_name = 'patient';
 elseif(ismember(field,inventory_cols))
-    table_name = '"megabase"."aivo2".inventory';
+    table_name = 'inventory';
 elseif(ismember(field,lab_cols))
-    table_name = '"megabase"."aivo2".lab';
+    table_name = 'lab';
 elseif(ismember(field,mri_cols))
-    table_name = '"megabase"."aivo2".mri';
+    table_name = 'mri';
 else
     error('Could not find the field ''%s'' from AIVO',field);
 end
+
+long_table_name = ['"megabase"."aivo2".' table_name];
 
 if(~iscell(value))
     if(isnumeric(value))
@@ -42,35 +46,58 @@ if(~iscell(subject_id))
     subject_id = {subject_id};
 end
 
-sorted_subject_id = sort(subject_id);
-if(~isequal(sorted_subject_id,subject_id))
-    error('The subject IDs were not given in alphabetical order. Please make sure the subjects are given in alphabetical order, make sure that the inserted values then follow the same order, and try again.');
+%% Discard the subjects that are not listed in the requested table
+
+found = aivo_check_found(subject_id,table_name);
+
+if(~all(found))
+    missing_subjects = subject_id(~found);
+    n_missing = length(missing_subjects);
+    for i = 1:n_missing
+        if(i == 1)
+            msg = sprintf('Could not find the following studies from the table %s:',long_table_name);
+        end
+        msg = sprintf('%s %s',msg,missing_subjects{i});
+        if(i == n_missing)
+            msg = sprintf('%s\n',msg);
+            warning('%sThe information will not be written for the listed studies. Continuing with the remaining %.0f studies\n',msg,sum(found));
+        end
+    end
 end
 
-n_subs = length(subject_id);
 n_values = length(value);
+if(n_values > 1)
+    value = value(found);
+end
 
-if(n_values == 1 && n_subs >= 1) % A single value for all subjects
-    whereclause = 'WHERE';
-    for i = 1:n_subs
-        if(i == 1)
-            whereclause = sprintf('%s image_id = ''%s''',whereclause,subject_id{i});
-        else
-            whereclause = sprintf('%s OR image_id = ''%s''',whereclause,subject_id{i});
-        end
-    end
-    update(conn,table_name,field,value,whereclause)
-elseif(n_values > 1 && n_subs > 1) % Subjects have a distinct value
-    if(n_values == n_subs)
+%% Write the information to the database
+
+subject_id = subject_id(found);
+if(~isempty(subject_id))
+    n_subs = length(subject_id);
+
+    if(n_values == 1 && n_subs >= 1) % A single value for all subjects
+        whereclause = 'WHERE';
         for i = 1:n_subs
-            whereclause = sprintf('WHERE image_id = ''%s''',subject_id{i});
-            update(conn,table_name,field,value(i),whereclause)
+            if(i == 1)
+                whereclause = sprintf('%s image_id = ''%s''',whereclause,subject_id{i});
+            else
+                whereclause = sprintf('%s OR image_id = ''%s''',whereclause,subject_id{i});
+            end
+        end
+        update(conn,long_table_name,field,value,whereclause)
+    elseif(n_values > 1 && n_subs > 1) % Subjects have a distinct value
+        if(n_values == n_subs)
+            for i = 1:n_subs
+                whereclause = sprintf('WHERE image_id = ''%s''',subject_id{i});
+                update(conn,long_table_name,field,value(i),whereclause)
+            end
+        else
+            error('The number of values does not match the number of subjects.');
         end
     else
-        error('The number of values does not match the number of subjects.');
+        error('Inconsistent combination of values and subjects. The function can either use a single value for all subjects, or a distinct value per subject.');
     end
-else
-    error('Inconsistent combination of values and subjects. The function can either use a single value for all subjects, or a distinct value per subject.');
 end
 
 close(conn);
