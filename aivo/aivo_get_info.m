@@ -19,10 +19,18 @@ function value = aivo_get_info(subject_id,field)
 
 %Sort alphabetically the subject list and store indeces
 
-if length(subject_id) > 1 % more than one subject
+if iscell(subject_id) && length(subject_id) > 1 % more than one subject
     
-    subject_id_ori=subject_id;
-    [subject_id]=sort(subject_id);
+    if iscellstr(subject_id)
+        subject_id_ori=subject_id;
+        [subject_id]=sort(subject_id);
+    elseif iscell(subject_id)  % Handles lists copied and pasted from Excel in a cell array not of characters. 
+        subject_id_ori=string(subject_id); % Sort requires a change from string() first
+        [subject_id]=sort(string(subject_id));
+    else
+        help aivo_get_info;
+        error('Input subject list not valid!');
+    end
     
 end
 
@@ -78,8 +86,19 @@ if(~ischar(subject_id))
         warning('The number of values obtained differs from the number of subject_ids. Switching to loop mode');
         %Resorting with the original order
         subject_id=subject_id_ori;
+        
+        if numeric == 1 
+            
+            value = [];
+            
+        else
+            
+            value = {};
+            
+        end
+        
         for i=1:length(subject_id)
-
+            
             try
 
                 disp(['Proceeding with ' num2str(i) ' out of ' num2str(length(subject_id))])    
@@ -90,7 +109,7 @@ if(~ischar(subject_id))
 
                 else
 
-                    value(i) = {aivo_get_info(subject_id{i},field)};
+                    value{i} = {aivo_get_info(subject_id{i},field)};
 
                 end
 
@@ -100,11 +119,7 @@ if(~ischar(subject_id))
 
                 if numeric == 1
 
-                    value(i) = [];
-
-                else
-
-                    value(i) = {};
+                    value(i) = nan;
 
                 end
 
