@@ -1,4 +1,4 @@
-function value = aivo_get_info(subject_id,field)
+function value = aivo_get_info(subjects,field)
 % Read data from AIVO.
 %
 % Inputs:
@@ -39,34 +39,58 @@ else
     error('Unrecognized field name: %s',field);
 end
 
-select_statement = sprintf('SELECT %s.%s FROM "megabase"."aivo2".%s',tab,lower(field),tab);
-if(ischar(subject_id))
-    where_statement = sprintf('WHERE %s.image_id = %s%s%s',tab,char(39),lower(subject_id),char(39));
-else
-    N = length(subject_id);
-    where_statement = sprintf('WHERE %s.image_id = %s%s%s',tab,char(39),lower(subject_id{1}),char(39));
-    for i = 2:N
-        where_statement = sprintf('%s OR %s.image_id = %s%s%s',where_statement,tab,char(39),lower(subject_id{i}),char(39));
-    end
+if(ischar(subjects))
+    subjects = {subjects};
 end
 
-q = sprintf('%s %s ORDER BY image_id ASC;',select_statement,where_statement);
+[sorted_subjects,sort_idx] = sort(subjects);
 
-curs = exec(conn,q);
-curs = fetch(curs);
-close(curs);
-value = curs.Data;
+found = aivo_check_found(sorted_subjects,tab);
+found_subjects = sorted_subjects(found);
+
+select_statement = sprintf('SELECT %s.%s FROM "megabase"."aivo2".%s',tab,lower(field),tab);
+N = length(found_subjects);
+
+if(N)
+    for i = 1:N
+        if(i == 1)
+            where_statement = sprintf('WHERE %s.image_id = ''%s''',tab,lower(found_subjects{1}));
+        else
+            where_statement = sprintf('%s OR %s.image_id = ''%s''',where_statement,tab,lower(found_subjects{i}));
+        end
+    end
+    q = sprintf('%s %s ORDER BY image_id ASC;',select_statement,where_statement);
+    curs = exec(conn,q);
+    curs = fetch(curs);
+    value = curs.Data;
+    close(curs);
+end
+
 close(conn);
 
 switch field
     case {'age' 'dose' 'weight' 'height' 'freesurfed' 'analyzed' 'found' 'mri_found' 'plasma' 'dc' 'rc' 'hct' 'cut_time' 'fwhm_pre' 'fwhm_post' 'fwhm_roi' 'cpi' 'glucose' 'gu'}
-        value = cell2mat(value);
+        numeric = 1;
+    otherwise
+        numeric = 0;
 end
 
-if(~ischar(subject_id))
-    if(length(value) ~= N)
-        warning('The number of values obtained differs from the number of subject_ids.');
+if(~all(found))
+    if(numeric)
+        value_corrected = nan(size(subjects));
+    else
+        value_corrected = cell(size(subjects));
     end
+    if(N)
+        if(numeric)
+            value = cell2mat(value);
+        end
+        value_corrected(found) = value;
+    end
+    value = value_corrected;
+    warning('Could not find a value for every requested subject. Please make sure the image_ids are not misspelled');
 end
+
+value = value(sort_idx);
 
 end
