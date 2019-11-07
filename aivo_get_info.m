@@ -86,8 +86,19 @@ if(~ischar(subject_id))
         warning('The number of values obtained differs from the number of subject_ids. Switching to loop mode');
         %Resorting with the original order
         subject_id=subject_id_ori;
+        
+        if numeric == 1 
+            
+            value = [];
+            
+        else
+            
+            value = {};
+            
+        end
+        
         for i=1:length(subject_id)
-
+            
             try
 
                 disp(['Proceeding with ' num2str(i) ' out of ' num2str(length(subject_id))])    
@@ -98,7 +109,7 @@ if(~ischar(subject_id))
 
                 else
 
-                    value(i) = {aivo_get_info(subject_id{i},field)};
+                    value{i} = {aivo_get_info(subject_id{i},field)};
 
                 end
 
@@ -108,11 +119,7 @@ if(~ischar(subject_id))
 
                 if numeric == 1
 
-                    value(i) = [];
-
-                else
-
-                    value(i) = {};
+                    value(i) = nan;
 
                 end
 
