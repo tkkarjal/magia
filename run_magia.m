@@ -20,7 +20,7 @@ function run_magia(subject,varargin)
 
 if(nargin == 1) % Read MAGIA processing options and modeling options from AIVO
     aivo = 1;
-    found = aivo_check_found(subject);
+    found = aivo_check_found(subject,'study');
     if(found)
         try
             specs = aivo_read_magia_specs(subject);
