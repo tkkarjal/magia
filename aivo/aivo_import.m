@@ -1,49 +1,60 @@
-function aivo_import(spreadsheet)
+function T = aivo_import(spreadsheet)
 
 T = readtable(spreadsheet);
-N = size(T,1);
 
-%% Extract birthdate and gender from the patient_id
+num_studies = size(T,1);
+num_columns = size(T,2);
 
-birthday = cell(N,1);
-gender = cell(N,1);
+column_names = T.Properties.VariableNames;
 
-for i = 1:N
-    pid = T.patient_id{i};
-    birthday{i} = aivo_extract_birthday(pid);
-    gender{i} = aivo_extract_gender(pid);
+%% First modify the table so that it better satisfies the requirements
+
+for i = 1:num_columns
+    current_column = column_names{i};
+    column_values = T.(current_column);
+    if(strcmp(current_column,'injection_time'))
+        column_values = cellstr(datestr(column_values,13));
+    elseif(ismember(current_column,{'dc' 'weight' 'height' 'dose' 'start_time' 'glucose' 'hct'}))
+        if(iscell(column_values))
+            column_values = str2double(column_values);
+        end
+    end
+    for j = 1:num_studies
+        switch current_column
+            case {'patient_id' 'ac_number' 'study_date' 'project' 'group_name' 'description' 'scanner' 'tracer' 'mri_code' 'notes' 'injection_time'}
+                val = column_values{j};
+                updated_val = aivo_import_check(val,current_column,j);
+                column_values{j} = updated_val;
+            case {'dc' 'weight' 'height' 'dose' 'start_time' 'glucose' 'hct'}
+                val = column_values(j);
+                updated_val = aivo_import_check(val,current_column,j);
+                column_values(j) = updated_val;
+        end
+    end
+    T.(current_column) = column_values;
 end
 
-T.gender = gender;
-T.birthday = birthday;
-T.age = (datenum(T.study_date) - datenum(datetime(T.birthday,'format','yyyy-MM-dd')))/365;
-T.study_date = char(T.study_date);
-T.pet = ones(N,1);
+%% Insert new studies to the study_table table
+% Inserting new rows to study_table will automatically trigger insertion of
+% rows also to patient, lab, study and magia tables
 
-%%
+ac = [T.ac_number;T.mri_code];
+image_id = ac;
+pet = [ones(num_studies,1);zeros(num_studies,1)];
+mri = [zeros(num_studies,1);ones(num_studies,1)];
+t = table(image_id,ac,pet,mri);
 
-fields = T.Properties.VariableNames;
-pet_fields = {'image_id' 'ac' 'study_code' 'study_date' 'project' 'group_name' 'description' 'scanner' 'tracer' 'frames' 'start_time' 'mri' 'plasma' 'dynamic' 'dc' 'weight' 'height' 'dose' 'notes' 'type' 'source' 'injection_time' 'gender' 'age'};
-patient_fields = {'patient_id' 'study_date' 'gender' 'birthday' 'age' 'pet'};
-pet_idx = ismember(fields,pet_fields);
-patient_idx = ismember(fields,patient_fields);
+% insert(conn,'megabase.aivo2.study_table',t.Properties.VariableNames,t);
 
-T_pet = T(:,pet_idx);
-T_patient = T(:,patient_idx);
+project_columns = {'image_id','project','group_name','description'};
+project_T = T(:,ismember(T.Properties.VariableNames,project_columns));
+% insert(conn,'megabase.aivo2.project',project_T.Properties.VariableNames,project_T);
 
-conn = aivo_connect();
+%% Update the contents of the other tables
 
-insert(conn,'megabase.aivo.pet',pet_fields,T_pet);
-N = size(T,1);
-
-image_id_idx = strcmp(fields,'image_id');
-
-for i = 1:N
-    id = table2array(T(i,image_id_idx));
-    whereclause = sprintf('WHERE patient.image_id = ''%s''',id{1});
-    update(conn,'megabase.aivo.patient',patient_fields,T_patient,whereclause);
-end
-
-close(conn);
+% for i = 1:num_columns
+%     field = column_names{i};
+%     aivo_set_info(T.ac_number,field,T.(field));
+% end
 
 end
