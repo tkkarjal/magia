@@ -9,6 +9,7 @@ conn = aivo_connect();
 
 study_cols = columns(conn,'megapet','aivo2','study');
 patient_cols = columns(conn,'megapet','aivo2','patient');
+project_cols = columns(conn,'megapet','aivo2','project');
 magia_cols = columns(conn,'megapet','aivo2','magia');
 lab_cols = columns(conn,'megapet','aivo2','lab');
 inventory_cols = columns(conn,'megapet','aivo2','inventory');
@@ -20,6 +21,8 @@ elseif(ismember(field,magia_cols))
     table_name = 'magia';
 elseif(ismember(field,patient_cols))
     table_name = 'patient';
+elseif(ismember(field,project_cols))
+    table_name = 'project';
 elseif(ismember(field,inventory_cols))
     table_name = 'inventory';
 elseif(ismember(field,lab_cols))
