@@ -214,7 +214,7 @@ for i = 1:length(specs_fields)
     for  j = 1:length(sub_spec_fields)
         f = sub_spec_fields{j};
         switch f
-            case {'cut_time' 'weight' 'scanner' 'dose'}
+            case {'cut_time' 'weight' 'scanner' 'dose' 'glucose'}
                 
             otherwise
                 v = s.(f);
