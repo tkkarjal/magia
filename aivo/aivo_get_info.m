@@ -92,6 +92,10 @@ if(~all(found))
     end
     value = value_corrected;
     warning('Could not find a value for every requested subject. Please make sure the image_ids are not misspelled');
+else
+    if(numeric)
+        value = cell2mat(value);
+    end
 end
 
 value = value(sort_idx);
