@@ -6,10 +6,13 @@ specs.study.tracer = char(aivo_get_info(image_id,'tracer'));
 if(strcmp(specs.study.tracer,'null'))
     error('%s: The tracer has not been specified. Please use aivo_set_info to specify the tracer.',image_id);
 end
-specs.study.frames = parse_frames_string(char(aivo_get_info(image_id,'frames')));
-if(strcmp(specs.study.frames,'null'))
+aivo_frames = char(aivo_get_info(image_id,'frames'));
+if(strcmp(aivo_frames,'null'))
     error('%s: The frames have not been specified. Please use aivo_set_info to specify the frames',image_id);
+else
+    specs.study.frames = parse_frames_string(aivo_frames);
 end
+
 % optional
 specs.study.weight = aivo_get_info(image_id,'weight');
 specs.study.dose = aivo_get_info(image_id,'dose');
