@@ -40,6 +40,8 @@ switch specs.magia.model
             warning('''%s'' was entered as the input_type, even if the model ''%s'' requires plasma & blood inputs. Changing the input type to ''plasma&blood''.',specs.magia.input_type,specs.magia.model);
             specs.magia.input_type = 'plasma&blood';
         end
+    case 'suv'
+    
     otherwise
         error('Did not recognize the model %s.',specs.magia.model);
 end
