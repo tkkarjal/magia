@@ -41,7 +41,6 @@ conn = aivo_connect();
 
 where_statement = 'WHERE ';
 table = {};
-from = {};
 
 if((~mod(nargin,2)))
     
@@ -52,10 +51,9 @@ if((~mod(nargin,2)))
         value = varargin{i+l+1};
         l=l+1;
         % Study table - Values
-        if(ismember(field,{'study_date','tracer','mri_code','dose','scan_start_time','injection_time'})) %value
-            if ismember('study', table)
+        if(ismember(field,{'study_date','mri_code','dose','scan_start_time','injection_time'})) %value
+            if ~ismember('study', table)
                 table{end+1}= 'study';
-                from{end+1} = '"megabase"."aivo2".study';
             end 
             if(ischar(value)) %only one value
                 if(ismember('~',value))  %exclude spesific value
@@ -79,9 +77,8 @@ if((~mod(nargin,2)))
         end
         %Study table - Chars
         if(ismember(field,{'frames','mri_code','scanner','tracer'})) %integer or char
-            if ismember('study', table)
+            if ~ismember('study', table)
                 table{end+1}= 'study';
-                from{end+1} = '"megabase"."aivo2".study';
             end 
             if(ismember('~',value)) %user excludes spesified values, value is char
                 where_statement = [where_statement,' NOT ','study.',lower(field),'=',char(39),value(2:length(value)),char(39)];
@@ -100,9 +97,8 @@ if((~mod(nargin,2)))
         end 
         %Patient table - Values
         if(ismember(field,{'height','weight','age'})) %value
-            if ismember('patient', table)
+            if ~ismember('patient', table)
                 table{end+1}= 'patient';
-                from{end+1} = '"megabase"."aivo2".patient';
             end 
             if(ischar(value)) %only one value
                 if(ismember('~',value))  %exclude spesific value
@@ -122,9 +118,8 @@ if((~mod(nargin,2)))
         end    
         %Inventory table - Chars
         if(ismember(field,{'analyzed','found','freesurfed','magia_time','error','magia_githash'})) %integer or char
-            if ismember('inventory', table)
+            if ~ismember('inventory', table)
                 table{end+1}= 'inventory';
-                from{end+1} = '"megabase"."aivo2".inventory';
             end 
             if(ismember('~',value)) %user excludes spesified values, value is char
                 where_statement = [where_statement,' NOT ','inventory.',lower(field),' =',char(39),value(2:length(value)),char(39)];
@@ -143,9 +138,8 @@ if((~mod(nargin,2)))
         end 
         %Main table - Chars
         if(ismember(field,{'project','group_name','description','scanner','notes','type','source'})) %integer or char
-            if ismember('main', table)
+            if ~ismember('main', table)
                 table{end+1}= 'main';
-                from{end+1} = '"megabase"."aivo2".main';
             end 
             if(ismember('~',value)) %user excludes spesified values, value is char
                 where_statement = [where_statement,' NOT ','main.',lower(field),' =',char(39),value(2:length(value)),char(39)];
@@ -168,38 +162,38 @@ if((~mod(nargin,2)))
     else
         if (numel(table) == 1)
             %Only one table selected
-            select_statement = ['SELECT ' table{1} '.image_id FROM "megabase"."aivo2".' table{1}];
+            select_statement = ['SELECT ' table{1} '.image_id FROM "megabase"."aivo2".' table{1} ' '];
         elseif(ismember('study',table))
             %More than one table and study is one of them
-            select_statement = 'SELECT study.image_id FROM ';
+            select_statement = 'SELECT study.image_id FROM "megabase"."aivo2".study,';
             table(ismember('study',table))=[];
             for t=1:numel(table)
-               select_statement = [select_statement,'"megabase"."aivo2".' table{t}];
-               where_statement = [where_statement, '"aivo2".study.image_id = "aivo2".' table{t} '.image_id'];
+               select_statement = [select_statement,'"megabase"."aivo2".' table{t} ' '];
+               where_statement = [where_statement, ' AND "aivo2".study.image_id = "aivo2".' table{t} '.image_id'];
                if(numel(table)-t > 0)
-                  where_statement = [where_statement,' AND '];
+                  select_statement = [select_statement,' , '];
                end
             end
         elseif(ismember('main',table))
             %More than one table and main is one of them
-            select_statement = 'SELECT main.image_id FROM ';
+            select_statement = 'SELECT main.image_id FROM "megabase"."aivo2".main, ';
             table(ismember('main',table))=[];
             for t=1:numel(table)
-               select_statement = [select_statement,'"megabase"."aivo2".' table{t}];
-               where_statement = [where_statement, '"aivo2".main.image_id = "aivo2".' table{t} '.image_id'];
+               select_statement = [select_statement,'"megabase"."aivo2".' table{t} ' '];
+               where_statement = [where_statement, ' AND "aivo2".main.image_id = "aivo2".' table{t} '.image_id'];
                if(numel(table)-t > 0)
-                  where_statement = [where_statement,' AND '];
+                  select_statement = [select_statement,' , '];
                end
             end
          elseif(ismember('inventory',table))
             %More than one table and main is one of them
-            select_statement = 'SELECT inventory.image_id FROM ';
+            select_statement = 'SELECT inventory.image_id FROM "megabase"."aivo2".inventory, ';
             table(ismember('inventory',table))=[];
             for t=1:numel(table)
-               select_statement = [select_statement,'"megabase"."aivo2".' table{t}];
-               where_statement = [where_statement, '"aivo2".inventory.image_id = "aivo2".' table{t} '.image_id'];
+               select_statement = [select_statement,'"megabase"."aivo2".' table{t} ' '];
+               where_statement = [where_statement, ' AND "aivo2".inventory.image_id = "aivo2".' table{t} '.image_id'];
                if(numel(table)-t > 0)
-                  where_statement = [where_statement,' AND '];
+                  select_statement = [select_statement,' , '];
                end
             end
         end             
