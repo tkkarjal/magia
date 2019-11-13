@@ -241,6 +241,8 @@ if(isfield(specs.magia,'gu'))
                 specified_glucose = specs.study.glucose;
                 if(strcmp(specified_glucose,'No Data'))
                     msg10 = 'Plasma glucose concentration (the field glucose) was not specified even if gu = 1.';
+                else
+                    msg10 = '';
                 end
             else
                 msg10 = 'Plasma glucose concentration (the field glucose) was not specified even if gu = 1.';
