@@ -41,6 +41,7 @@ else
     error('Wrong number of input arguments. Please see help run_magia for more information.');
 end
 
+specs = magia_clean_specs(specs);
 specs = magia_replace_empty_specs_with_defaults(specs);
 magia_check_specs(specs);
 
