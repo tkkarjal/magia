@@ -142,7 +142,7 @@ if(isfield(specs.magia,'input_type'))
         msg7 = '''input_type'' was not specified.';
     else
         specified_input_type = specs.magia.input_type;
-        supported_input_types = {'plasma' 'blood' 'plasma&blood' 'ref' 'sca_ref'};
+        supported_input_types = {'plasma' 'blood' 'plasma&blood' 'ref' 'sca_ref' 'no_input'};
         if(ismember(specified_input_type,supported_input_types))
             if(strcmp(specified_input_type,'sca_ref'))
                 if(isfield(specs.magia,'classfile'))
