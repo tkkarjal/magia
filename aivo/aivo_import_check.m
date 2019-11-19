@@ -16,14 +16,20 @@ switch column
             updated_val = lower(val);
         end
     case 'study_date'
-        h = strsplit(val,'-');
-        y = str2double(h{1});
-        mo = str2double(h{2});
-        d = str2double(h{3});
-        if(y < 1989 || d > 31 || mo <= 0 || mo > 12)
-            error('Invalid study_date on row %.0f',row);
-        else
-            updated_val = lower(val);
+        try
+            val = char(datetime(val,'format','yyyy-MM-dd'));
+            h = strsplit(val,'-');
+            y = str2double(h{1});
+            mo = str2double(h{2});
+            d = str2double(h{3});
+            if(y < 1989 || d > 31 || mo <= 0 || mo > 12)
+                error('Invalid study_date on row %.0f',row);
+            else
+                updated_val = lower(val);
+            end
+        catch
+            
+            
         end
     case 'tracer'
         if(~strcmp(val(1),'['))
