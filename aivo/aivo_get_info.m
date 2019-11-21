@@ -103,7 +103,9 @@ else
     end
 end
 
+if numel(value) > 1 % Resort only if more than one subjects where queried
 value = value(sort_idx);
+end
 
 end
 
