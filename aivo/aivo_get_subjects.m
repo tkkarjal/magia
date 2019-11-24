@@ -289,10 +289,14 @@ if((~mod(nargin,2)))
     curs = exec(conn,q);
     curs = fetch(curs);
     close(curs);
-    if(strcmp(curs.Data{1},'No Data'))
-        subjects = [];
+    if iscell(curs.Data)
+        if(strcmp(curs.Data{1},'No Data'))
+            subjects = [];
+        else
+            subjects = curs.Data;
+        end
     else
-        subjects = curs.Data;
+        error('No items found with the searching criteria!') % Could be improved?
     end
 else
     error('You entered an odd number of input arguments. The input arguments must be given in pairs (criterium, value).');
