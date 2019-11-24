@@ -10,7 +10,7 @@ if(ischar(image_id))
     image_id = {image_id};
 end
 
-available_tables = {'study' 'magia' 'patient' 'lab' 'project' 'inventory' 'mri'};
+available_tables = {'study' 'magia' 'patient' 'lab' 'project' 'inventory' 'mri' 'study_code' 'materia'};
 
 if(~ismember(table_name,available_tables))
     error('Unrecognized table name: %s',table_name);

@@ -14,6 +14,7 @@ magia_cols = columns(conn,'megapet','aivo2','magia');
 lab_cols = columns(conn,'megapet','aivo2','lab');
 inventory_cols = columns(conn,'megapet','aivo2','inventory');
 mri_cols = {'freesurfed'};
+study_code_cols = columns(conn,'megapet','aivo2','study_code');
 
 if(ismember(field,study_cols))
     table_name = 'study';
@@ -29,6 +30,8 @@ elseif(ismember(field,lab_cols))
     table_name = 'lab';
 elseif(ismember(field,mri_cols))
     table_name = 'mri';
+elseif(ismember(field,study_code_cols))
+    table_name = 'study_code';
 else
     error('Could not find the field ''%s'' from AIVO',field);
 end

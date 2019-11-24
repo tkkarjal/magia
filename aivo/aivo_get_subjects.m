@@ -81,11 +81,25 @@ if((~mod(nargin,2)))
                 table{end+1}= 'study';
             end 
             if(ismember('~',value)) %user excludes spesified values, value is char
-                where_statement = [where_statement,' NOT ','study.',lower(field),'=',char(39),value(2:length(value)),char(39)];
+                if(ismember('*',value)) % with wildcards
+                    value=strrep(value,'*','%');
+                    where_statement = [where_statement,' NOT ','study.',lower(field),' LIKE '' ',char(39),value(2:length(value)),char(39),''''];
+                    if(i~=nargin/2)
+                        where_statement = [where_statement,' AND '];
+                    end
+                 else % excluding the exact value/s
+                    where_statement = [where_statement,' NOT ','study.',lower(field),' =',char(39),value(2:length(value)),char(39)];
+                    if(i~=nargin/2)
+                        where_statement = [where_statement,' AND '];
+                    end  
+                end
+            elseif(ismember('*',value)) %user uses wildcards in the spesified values to select, value is char
+                value=strrep(value,'*','%');
+                where_statement = [where_statement,' study.',lower(field),' LIKE ',char(39),value,char(39)];
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
-            else
+            else  
                 if(isnumeric(value)) % value may be char or numeric
                     value = num2str(value);
                 end
@@ -122,11 +136,25 @@ if((~mod(nargin,2)))
                 table{end+1}= 'inventory';
             end 
             if(ismember('~',value)) %user excludes spesified values, value is char
-                where_statement = [where_statement,' NOT ','inventory.',lower(field),' =',char(39),value(2:length(value)),char(39)];
+                if(ismember('*',value)) % with wildcards
+                    value=strrep(value,'*','%');
+                    where_statement = [where_statement,' NOT ','inventory.',lower(field),' LIKE '' ',char(39),value(2:length(value)),char(39),''''];
+                    if(i~=nargin/2)
+                        where_statement = [where_statement,' AND '];
+                    end
+                 else % excluding the exact value/s
+                    where_statement = [where_statement,' NOT ','inventory.',lower(field),' =',char(39),value(2:length(value)),char(39)];
+                    if(i~=nargin/2)
+                        where_statement = [where_statement,' AND '];
+                    end  
+                end
+            elseif(ismember('*',value)) %user uses wildcards in the spesified values to select, value is char
+                value=strrep(value,'*','%');
+                where_statement = [where_statement,' inventory.',lower(field),' LIKE ',char(39),value,char(39)];
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
-            else
+            else 
                 if(isnumeric(value)) % value may be char or numeric
                     value = num2str(value);
                 end
@@ -136,13 +164,27 @@ if((~mod(nargin,2)))
                 end
             end
         end 
-        %Main table - Chars
-        if(ismember(field,{'project','group_name','description','scanner','notes','type','source'})) %integer or char
-            if ~ismember('main', table)
-                table{end+1}= 'main';
+        %Materia table - Chars
+        if(ismember(field,{'project','group_name','description','scanner','type','source'})) %integer or char
+            if ~ismember('materia', table)
+                table{end+1}= 'materia';
             end 
             if(ismember('~',value)) %user excludes spesified values, value is char
-                where_statement = [where_statement,' NOT ','main.',lower(field),' =',char(39),value(2:length(value)),char(39)];
+                if(ismember('*',value)) % with wildcards
+                    value=strrep(value,'*','%');
+                    where_statement = [where_statement,' NOT ','materia.',lower(field),' LIKE ',char(39),value(2:length(value)),char(39)];
+                    if(i~=nargin/2)
+                        where_statement = [where_statement,' AND '];
+                    end
+                 else % excluding the exact value/s
+                    where_statement = [where_statement,' NOT ','materia.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
+                    if(i~=nargin/2)
+                        where_statement = [where_statement,' AND '];
+                    end  
+                end
+            elseif(ismember('*',value)) %user uses wildcards in the spesified values to select, value is char
+                value=strrep(value,'*','%');
+                where_statement = [where_statement,' materia.',lower(field),' LIKE ',char(39),value,char(39)];
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
@@ -150,7 +192,41 @@ if((~mod(nargin,2)))
                 if(isnumeric(value)) % value may be char or numeric
                     value = num2str(value);
                 end
-                where_statement = [where_statement,'main.',lower(field),' =',char(39),value,char(39)];
+                where_statement = [where_statement,'materia.',lower(field),' = ',char(39),value,char(39)];
+                if(i~=nargin/2)
+                    where_statement = [where_statement,' AND '];
+                end
+            end
+        end
+        %Study_code table - Chars
+        if(ismember(field,{'notes'})) %char
+            if ~ismember('study_code', table)
+                table{end+1}= 'study_code';
+            end 
+            if(ismember('~',value)) %user excludes spesified values, value is char
+                if(ismember('*',value)) % with wildcards
+                    value=strrep(value,'*','%');
+                    where_statement = [where_statement,' NOT ','study_code.',lower(field),' LIKE ',char(39),value(2:length(value)),char(39)];
+                    if(i~=nargin/2)
+                        where_statement = [where_statement,' AND '];
+                    end
+                 else % excluding the exact value/s
+                    where_statement = [where_statement,' NOT ','study_code.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
+                    if(i~=nargin/2)
+                        where_statement = [where_statement,' AND '];
+                    end  
+                end
+            elseif(ismember('*',value)) %user uses wildcards in the spesified values to select, value is char
+                value=strrep(value,'*','%');
+                where_statement = [where_statement,' study_code.',lower(field),' LIKE ',char(39),value,char(39)];
+                if(i~=nargin/2)
+                    where_statement = [where_statement,' AND '];
+                end
+            else
+                if(isnumeric(value)) % value may be char or numeric
+                    value = num2str(value);
+                end
+                where_statement = [where_statement,'study_code.',lower(field),' = ',char(39),value,char(39)];
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
@@ -174,13 +250,13 @@ if((~mod(nargin,2)))
                   select_statement = [select_statement,' , '];
                end
             end
-        elseif(ismember('main',table))
+        elseif(ismember('materia',table))
             %More than one table and main is one of them
-            select_statement = 'SELECT main.image_id FROM "megabase"."aivo2".main, ';
-            table(ismember('main',table))=[];
+            select_statement = 'SELECT materia.image_id FROM "megabase"."aivo2".materia, ';
+            table(ismember('materia',table))=[];
             for t=1:numel(table)
                select_statement = [select_statement,'"megabase"."aivo2".' table{t} ' '];
-               where_statement = [where_statement, ' AND "aivo2".main.image_id = "aivo2".' table{t} '.image_id'];
+               where_statement = [where_statement, ' AND "aivo2".materia.image_id = "aivo2".' table{t} '.image_id'];
                if(numel(table)-t > 0)
                   select_statement = [select_statement,' , '];
                end
@@ -192,6 +268,17 @@ if((~mod(nargin,2)))
             for t=1:numel(table)
                select_statement = [select_statement,'"megabase"."aivo2".' table{t} ' '];
                where_statement = [where_statement, ' AND "aivo2".inventory.image_id = "aivo2".' table{t} '.image_id'];
+               if(numel(table)-t > 0)
+                  select_statement = [select_statement,' , '];
+               end
+            end
+        elseif(ismember('study_code',table))
+            %More than one table and main is one of them
+            select_statement = 'SELECT study_code.image_id FROM "megabase"."aivo2".study_code, ';
+            table(ismember('study_code',table))=[];
+            for t=1:numel(table)
+               select_statement = [select_statement,'"megabase"."aivo2".' table{t} ' '];
+               where_statement = [where_statement, ' AND "aivo2".study_code.image_id = "aivo2".' table{t} '.image_id'];
                if(numel(table)-t > 0)
                   select_statement = [select_statement,' , '];
                end
