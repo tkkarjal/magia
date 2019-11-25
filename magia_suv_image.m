@@ -2,6 +2,7 @@ function suv_img_file = magia_suv_image(pet_file,dose,weight)
 
 [p,n] = fileparts(pet_file);
 files = cellstr(spm_select('ExtList',p,n));
+files = strcat(p,'/',files);
 suv_factor = dose/weight;
 
 n_frames = size(files,1);
