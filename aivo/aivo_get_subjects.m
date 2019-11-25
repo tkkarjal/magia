@@ -39,6 +39,8 @@ function subjects = aivo_get_subjects(varargin)
 
 conn = aivo_connect();
 
+refresh(conn); %Refresh materia view
+
 where_statement = 'WHERE ';
 table = {};
 
@@ -50,16 +52,13 @@ if((~mod(nargin,2)))
         field = varargin{i+l};
         value = varargin{i+l+1};
         l=l+1;
-        % Study table - Values
-        if(ismember(field,{'study_date','mri_code','dose','scan_start_time','injection_time'})) %value
-            if ~ismember('study', table)
-                table{end+1}= 'study';
-            end 
+        % Materia view - Values
+        if(ismember(field,{'study_date','mri_code','dose','scan_start_time','injection_time','height','weight','age'}))
             if(ischar(value)) %only one value
                 if(ismember('~',value))  %exclude spesific value
-                    where_statement = [where_statement,' NOT ','study.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
+                    where_statement = [where_statement,' NOT ','materia.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
                 else
-                    where_statement = [where_statement,'study.',lower(field),' = ',char(39),value,char(39)];
+                    where_statement = [where_statement,'materia.',lower(field),' = ',char(39),value,char(39)];
                 end
             else
                 lb = value{1}; % lower bound
@@ -69,19 +68,16 @@ if((~mod(nargin,2)))
                 else
                     value = [num2str(lb),' AND ',num2str(ub)];
                 end
-                where_statement = [where_statement,'study.',lower(field),' BETWEEN ',value];
+                where_statement = [where_statement,'materia.',lower(field),' BETWEEN ',value];
             end
             if(i~=nargin/2)
                 where_statement = [where_statement,' AND '];
             end
         end
-        %Study table - Chars
-        if(ismember(field,{'frames','mri_code','scanner','tracer'})) %integer or char
-            if ~ismember('study', table)
-                table{end+1}= 'study';
-            end 
+        %Materia view - Chars or integers
+        if(ismember(field,{'frames','mri_code','scanner','tracer','analyzed','found','freesurfed','magia_time','error','magia_githash','project','group_name','description','notes'})) %integer or char
             if(ismember('~',value)) %user excludes spesified values, value is char
-                where_statement = [where_statement,' NOT ','study.',lower(field),'=',char(39),value(2:length(value)),char(39)];
+                where_statement = [where_statement,' NOT ','materia.',lower(field),'=',char(39),value(2:length(value)),char(39)];
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
@@ -89,119 +85,24 @@ if((~mod(nargin,2)))
                 if(isnumeric(value)) % value may be char or numeric
                     value = num2str(value);
                 end
-                where_statement = [where_statement,'study.',lower(field),'=',char(39),value,char(39)];
-                if(i~=nargin/2)
-                    where_statement = [where_statement,' AND '];
-                end
-            end
-        end 
-        %Patient table - Values
-        if(ismember(field,{'height','weight','age'})) %value
-            if ~ismember('patient', table)
-                table{end+1}= 'patient';
-            end 
-            if(ischar(value)) %only one value
-                if(ismember('~',value))  %exclude spesific value
-                    where_statement = [where_statement,' NOT ','patient.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
-                else
-                    where_statement = [where_statement,'patient.',lower(field),' = ',char(39),value,char(39)];
-                end
-            else
-                lb = value{1}; % lower bound
-                ub = value{2}; % upper bound
-                value = [num2str(lb),' AND ',num2str(ub)];
-                where_statement = [where_statement,'patient.',lower(field),' BETWEEN ',value];
-            end
-            if(i~=nargin/2)
-                where_statement = [where_statement,' AND '];
-            end
-        end    
-        %Inventory table - Chars
-        if(ismember(field,{'analyzed','found','freesurfed','magia_time','error','magia_githash'})) %integer or char
-            if ~ismember('inventory', table)
-                table{end+1}= 'inventory';
-            end 
-            if(ismember('~',value)) %user excludes spesified values, value is char
-                where_statement = [where_statement,' NOT ','inventory.',lower(field),' =',char(39),value(2:length(value)),char(39)];
-                if(i~=nargin/2)
-                    where_statement = [where_statement,' AND '];
-                end
-            else
-                if(isnumeric(value)) % value may be char or numeric
-                    value = num2str(value);
-                end
-                where_statement = [where_statement,'inventory.',lower(field),' =',char(39),value,char(39)];
-                if(i~=nargin/2)
-                    where_statement = [where_statement,' AND '];
-                end
-            end
-        end 
-        %Main table - Chars
-        if(ismember(field,{'project','group_name','description','scanner','notes','type','source'})) %integer or char
-            if ~ismember('main', table)
-                table{end+1}= 'main';
-            end 
-            if(ismember('~',value)) %user excludes spesified values, value is char
-                where_statement = [where_statement,' NOT ','main.',lower(field),' =',char(39),value(2:length(value)),char(39)];
-                if(i~=nargin/2)
-                    where_statement = [where_statement,' AND '];
-                end
-            else
-                if(isnumeric(value)) % value may be char or numeric
-                    value = num2str(value);
-                end
-                where_statement = [where_statement,'main.',lower(field),' =',char(39),value,char(39)];
+                where_statement = [where_statement,'materia.',lower(field),'=',char(39),value,char(39)];
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
             end
         end 
     end
-    if(nargin==0)
-        q = 'SELECT study.image_id FROM "megabase"."aivo2".study';
-    else
-        if (numel(table) == 1)
-            %Only one table selected
-            select_statement = ['SELECT ' table{1} '.image_id FROM "megabase"."aivo2".' table{1} ' '];
-        elseif(ismember('study',table))
-            %More than one table and study is one of them
-            select_statement = 'SELECT study.image_id FROM "megabase"."aivo2".study,';
-            table(ismember('study',table))=[];
-            for t=1:numel(table)
-               select_statement = [select_statement,'"megabase"."aivo2".' table{t} ' '];
-               where_statement = [where_statement, ' AND "aivo2".study.image_id = "aivo2".' table{t} '.image_id'];
-               if(numel(table)-t > 0)
-                  select_statement = [select_statement,' , '];
-               end
-            end
-        elseif(ismember('main',table))
-            %More than one table and main is one of them
-            select_statement = 'SELECT main.image_id FROM "megabase"."aivo2".main, ';
-            table(ismember('main',table))=[];
-            for t=1:numel(table)
-               select_statement = [select_statement,'"megabase"."aivo2".' table{t} ' '];
-               where_statement = [where_statement, ' AND "aivo2".main.image_id = "aivo2".' table{t} '.image_id'];
-               if(numel(table)-t > 0)
-                  select_statement = [select_statement,' , '];
-               end
-            end
-         elseif(ismember('inventory',table))
-            %More than one table and main is one of them
-            select_statement = 'SELECT inventory.image_id FROM "megabase"."aivo2".inventory, ';
-            table(ismember('inventory',table))=[];
-            for t=1:numel(table)
-               select_statement = [select_statement,'"megabase"."aivo2".' table{t} ' '];
-               where_statement = [where_statement, ' AND "aivo2".inventory.image_id = "aivo2".' table{t} '.image_id'];
-               if(numel(table)-t > 0)
-                  select_statement = [select_statement,' , '];
-               end
-            end
-        end             
-        q = [select_statement,where_statement,' ORDER BY image_id ASC;'];
+    
+    q = 'SELECT materia.image_id FROM "megabase"."aivo2".materia ';
+    
+    if(nargin>0)            
+        q = [q,where_statement,' ORDER BY image_id ASC;'];
     end
+    
     curs = exec(conn,q);
     curs = fetch(curs);
     close(curs);
+    
     if(strcmp(curs.Data{1},'No Data'))
         subjects = [];
     else
@@ -213,5 +114,13 @@ else
 end
 
 close(conn);
+
+end
+
+function refresh(conn)
+
+refresh_cmd = 'REFRESH MATERIALIZED VIEW aivo2.materia';
+curs = exec(conn,refresh_cmd);
+close(curs);
 
 end
