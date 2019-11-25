@@ -442,7 +442,7 @@ switch specs.magia.model
         suvs = tacs./(specs.study.dose/specs.study.weight);
         visualize_suvs(suvs,specs.study.frames,roi_info,results_dir);
         if(specs.magia.cpi)
-            parametric_images = magia_suv_image(pet_file,specs.study.dose,specs.study.weight);
+            parametric_images = {magia_suv_image(pet_file,specs.study.dose,specs.study.weight)};
         end
     case 'suvr'
         X = magia_suvr(cr,tacs,specs.study.frames,modeling_options.start_time,modeling_options.end_time);
