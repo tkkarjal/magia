@@ -77,12 +77,26 @@ if((~mod(nargin,2)))
         %Materia view - Chars or integers
         if(ismember(field,{'frames','mri_code','scanner','tracer','analyzed','found','freesurfed','magia_time','error','magia_githash','project','group_name','description','notes'})) %integer or char
             if(ismember('~',value)) %user excludes spesified values, value is char
-                where_statement = [where_statement,' NOT ','materia.',lower(field),'=',char(39),value(2:length(value)),char(39)];
+                if(ismember('*',value)) % with wildcards
+                    value=strrep(value,'*','%');
+                    where_statement = [where_statement,' NOT ','materia.',lower(field),' LIKE '' ',char(39),value(2:length(value)),char(39),''''];
+                    if(i~=nargin/2)
+                        where_statement = [where_statement,' AND '];
+                    end
+                 else % excluding the exact value/s
+                    where_statement = [where_statement,' NOT ','materia.',lower(field),' =',char(39),value(2:length(value)),char(39)];
+                    if(i~=nargin/2)
+                        where_statement = [where_statement,' AND '];
+                    end  
+                end
+            elseif(ismember('*',value)) %user uses wildcards in the spesified values to select, value is char
+                value=strrep(value,'*','%');
+                where_statement = [where_statement,' materia.',lower(field),' LIKE ',char(39),value,char(39)];
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
-            else
-                if(isnumeric(value)) % value may be char or numeric
+            else                  
+            if(isnumeric(value)) % value may be char or numeric
                     value = num2str(value);
                 end
                 where_statement = [where_statement,'materia.',lower(field),'=',char(39),value,char(39)];
@@ -103,10 +117,14 @@ if((~mod(nargin,2)))
     curs = fetch(curs);
     close(curs);
     
-    if(strcmp(curs.Data{1},'No Data'))
-        subjects = [];
+    if iscell(curs.Data)
+        if(strcmp(curs.Data{1},'No Data'))
+            subjects = [];
+        else
+            subjects = curs.Data;
+        end
     else
-        subjects = curs.Data;
+        error('No items found with the searching criteria!')
     end
 else
     error('You entered an odd number of input arguments. The input arguments must be given in pairs (criterium, value).');
