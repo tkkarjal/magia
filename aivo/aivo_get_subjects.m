@@ -79,12 +79,12 @@ if((~mod(nargin,2)))
             if(ismember('~',value)) %user excludes spesified values, value is char
                 if(ismember('*',value)) % with wildcards
                     value=strrep(value,'*','%');
-                    where_statement = [where_statement,' NOT ','materia.',lower(field),' LIKE '' ',char(39),value(2:length(value)),char(39),''''];
+                    where_statement = [where_statement,' NOT ','materia.',lower(field),' LIKE ',char(39),value(2:length(value)),char(39)];
                     if(i~=nargin/2)
                         where_statement = [where_statement,' AND '];
                     end
                  else % excluding the exact value/s
-                    where_statement = [where_statement,' NOT ','materia.',lower(field),' =',char(39),value(2:length(value)),char(39)];
+                    where_statement = [where_statement,' NOT ','materia.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
                     if(i~=nargin/2)
                         where_statement = [where_statement,' AND '];
                     end  
@@ -99,7 +99,9 @@ if((~mod(nargin,2)))
                 if(isnumeric(value)) % value may be char or numeric
                     value = num2str(value);
                 end
-                where_statement = [where_statement,'materia.',lower(field),' =',char(39),value,char(39)];
+
+                where_statement = [where_statement,'materia.',lower(field),' = ',char(39),value,char(39)];
+                
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
@@ -117,12 +119,14 @@ if((~mod(nargin,2)))
     curs = fetch(curs);
     close(curs);
     
+
     if iscell(curs.Data)
         if(strcmp(curs.Data{1},'No Data'))
             subjects = [];
         else
             subjects = curs.Data;
         end
+
     else
         error('No items found with the searching criteria!')
     end
