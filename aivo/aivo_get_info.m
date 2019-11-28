@@ -23,16 +23,16 @@ if iscell(subject_id) && length(subject_id) > 1 % more than one subject
     
     if iscellstr(subject_id)
         subject_id_ori=subject_id;
-        [subject_id]=sort(subject_id);
+        [subject_id,sort_idx_temp]=sort(subject_id);
     elseif iscell(subject_id)  % Handles lists copied and pasted from Excel in a cell array not of characters. 
         subject_id_ori=string(subject_id); % Sort requires a change from string() first
-        [subject_id]=sort(string(subject_id));
+        [subject_id,sort_idx_temp]=sort(string(subject_id));
     else
         help aivo_get_info;
         error('Input subject list not valid!');
     end
     
-    [~,~,sort_idx] = intersect(subject_id_ori,subject_id,'stable');
+    [~,sort_idx] = sort(sort_idx_temp); % Get indexes to revert to the original sorting
     
 end
 
@@ -40,11 +40,21 @@ conn = aivo_connect();
 
 refresh(conn)
 
-cols = columns(conn,'megapet','aivo2','materia');
+materia_cols = columns(conn,'megapet','aivo2','materia');
+study_code_cols = columns(conn,'megapet','aivo2','study_code'); % Should be added in materia from Janne
 
-if(~ismember(field,cols))
+%if(~ismember(field,cols))
+%    error('Unrecognized field name: %s',field);
+%end
+
+if(ismember(field,materia_cols))
+    tab = 'materia';
+elseif(ismember(field,study_code_cols))
+    tab = 'study_code';
+else
     error('Unrecognized field name: %s',field);
 end
+
 
 if(ischar(subject_id))
     subject_id = {subject_id};
@@ -53,18 +63,18 @@ end
 %[sorted_subjects,sort_idx] = sort(subject_id); Wrong. Sorting happens
 %earlier
 
-found = aivo_check_found(subject_id);
+found = aivo_check_found(subject_id,tab);
 found_subjects = subject_id(found);
 
-select_statement = sprintf('SELECT materia.%s FROM "megabase"."aivo2".materia',lower(field));
+select_statement = sprintf('SELECT %s.%s FROM "megabase"."aivo2".%s',tab,lower(field),tab);
 N = length(found_subjects);
 
 if(N)
     for i = 1:N
         if(i == 1)
-            where_statement = sprintf('WHERE materia.image_id = ''%s''',lower(found_subjects{1}));
+            where_statement = sprintf('WHERE %s.image_id = ''%s''',tab,lower(found_subjects{1}));
         else
-            where_statement = sprintf('%s OR materia.image_id = ''%s''',where_statement,lower(found_subjects{i}));
+            where_statement = sprintf('%s OR %s.image_id = ''%s''',where_statement,tab,lower(found_subjects{i}));
         end
     end
     q = sprintf('%s %s ORDER BY image_id ASC;',select_statement,where_statement);
