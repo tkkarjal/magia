@@ -96,7 +96,7 @@ if((~mod(nargin,2)))
                     where_statement = [where_statement,' AND '];
                 end
             else                  
-            if(isnumeric(value)) % value may be char or numeric
+                if(isnumeric(value)) % value may be char or numeric
                     value = num2str(value);
                 end
                 where_statement = [where_statement,'materia.',lower(field),'=',char(39),value,char(39)];
