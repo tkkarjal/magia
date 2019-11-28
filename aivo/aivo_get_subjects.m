@@ -99,7 +99,7 @@ if((~mod(nargin,2)))
                 if(isnumeric(value)) % value may be char or numeric
                     value = num2str(value);
                 end
-                where_statement = [where_statement,'materia.',lower(field),'=',char(39),value,char(39)];
+                where_statement = [where_statement,'materia.',lower(field),' =',char(39),value,char(39)];
                 if(i~=nargin/2)
                     where_statement = [where_statement,' AND '];
                 end
