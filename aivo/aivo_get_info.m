@@ -23,16 +23,16 @@ if iscell(subject_id) && length(subject_id) > 1 % more than one subject
     
     if iscellstr(subject_id)
         subject_id_ori=subject_id;
-        [subject_id]=sort(subject_id);
+        [subject_id,sort_idx_temp]=sort(subject_id);
     elseif iscell(subject_id)  % Handles lists copied and pasted from Excel in a cell array not of characters. 
         subject_id_ori=string(subject_id); % Sort requires a change from string() first
-        [subject_id]=sort(string(subject_id));
+        [subject_id,sort_idx_temp]=sort(string(subject_id));
     else
         help aivo_get_info;
         error('Input subject list not valid!');
     end
     
-    [~,~,sort_idx] = intersect(subject_id_ori,subject_id,'stable');
+    [~,sort_idx] = sort(sort_idx_temp); % Get indexes to revert to the original sorting
     
 end
 
