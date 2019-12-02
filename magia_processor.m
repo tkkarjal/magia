@@ -517,12 +517,10 @@ switch specs.magia.model
         magia_write_roi_results(T,results_dir);
         magia_visualize_fit_patlak(Ki,intercept,x,Y,k,roi_labels,results_dir);
         if(specs.magia.cpi)
-            [Ki_img,Ic_img] = magia_patlak_image(pet_file,cp,specs.study.frames,brainmask,modeling_options.start_time,modeling_options.end_frame,results_dir);
+            parametric_images = magia_patlak_image(pet_file,cp,specs.study.frames,brainmask,modeling_options.start_time,modeling_options.end_frame,results_dir);
             if(specs.magia.gu)
-                GU_img = magia_convert_ki_to_gu_img(Ki_img,specs.study.glucose);
-                parametric_images = {GU_img;Ki_img;Ic_img};
-            else
-                parametric_images = {Ki_img;Ic_img};
+                GU_img = magia_convert_ki_to_gu_img(parametric_images{1},specs.study.glucose);
+                parametric_images = [{GU_img};parametric_images];
             end
         end
     case 'patlak_ref'
