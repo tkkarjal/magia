@@ -519,7 +519,7 @@ switch specs.magia.model
         if(specs.magia.cpi)
             parametric_images = magia_patlak_image(pet_file,cp,specs.study.frames,brainmask,modeling_options.start_time,modeling_options.end_frame,results_dir);
             if(specs.magia.gu)
-                GU_img = magia_convert_ki_to_gu_img(Ki_img,specs.study.glucose);
+                GU_img = magia_convert_ki_to_gu_img(parametric_images{1},specs.study.glucose);
                 parametric_images = [{GU_img};parametric_images];
             end
         end
