@@ -16,7 +16,7 @@ else
     fig = figure('Visible','Off'); clf;
     plot(input(:,1),input(:,2),'ko-');
     xlabel('Time (min)'); box off;
-    if(max(input(:,2) < 100))
+    if(max(input(:,2) < 200))
         ylabel('Radioactivity concentration (kBq/ml)');
     else
         ylabel('Radioactivity concentration (Bq/ml)');
