@@ -53,7 +53,7 @@ if((~mod(nargin,2)))
         value = varargin{i+l+1};
         l=l+1;
         % Materia view - Values
-        if(ismember(field,{'study_date','mri_code','dose','scan_start_time','injection_time','height','weight','age'}))
+        if(ismember(field,{'study_date','dose','scan_start_time','injection_time','height','weight','age'}))
             if(ischar(value)) %only one value
                 if(ismember('~',value))  %exclude spesific value
                     where_statement = [where_statement,' NOT ','materia.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
@@ -84,7 +84,7 @@ if((~mod(nargin,2)))
                         where_statement = [where_statement,' AND '];
                     end
                  else % excluding the exact value/s
-                    where_statement = [where_statement,' NOT ','materia.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
+                    where_statement = [where_statement,' NOT ',' materia.',lower(field),' = ',char(39),value(2:length(value)),char(39)];
                     if(i~=nargin/2)
                         where_statement = [where_statement,' AND '];
                     end  
