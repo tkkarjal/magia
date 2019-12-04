@@ -13,7 +13,7 @@ end
 
 [p,n] = fileparts(V.fname);
 
-gu_img_file = sprintf('%s/%s_GU.nii',p,n);
+gu_img_file = sprintf('%s/%s_GU.nii',p,strrep(n,'_Ki_','_'));
 V.fname = gu_img_file;
 V.dt = [spm_type('int16') spm_platform('bigend')];
 V.pinfo = [Inf Inf Inf]';
