@@ -29,7 +29,7 @@ for i = 1:N
     prop_pos_x = max_consecutive_pos_x/nx;
     prop_pos_y = max_consecutive_pos_y/ny;
     
-    if(prop_pos_x < 0.4 || prop_pos_y < 0.5)
+    if(prop_pos_x < 0.3 || prop_pos_y < 0.3)
         bad_frames(i) = true;
     end
 
