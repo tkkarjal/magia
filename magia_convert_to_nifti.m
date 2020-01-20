@@ -13,7 +13,7 @@ if(isempty(e))
 end
 filename = fullfile(p,[n e]);
 
-cmd = sprintf('gunzip -r %s',source_dir);
+cmd = sprintf('gunzip -rf %s',source_dir);
 system(cmd);
 
 f = get_filenames(source_dir,'*.dcm');
