@@ -22,22 +22,29 @@ num_columns = size(T,2);
 %% First modify the table so that it better satisfies the requirements
 
 for i = 1:num_columns
+    
     current_column = column_names{i};
     column_values = T.(current_column);
-    if(ismember(current_column,{'dc' 'weight' 'height' 'dose' 'start_time' 'glucose' 'hct'}))
+    if(ismember(current_column,{'dc' 'weight' 'height' 'dose' 'scan_start_time' 'glucose' 'hct'}))
         if(iscell(column_values))
             column_values = str2double(column_values);
+        end
+    end
+    if(ismember(current_column,{'mri_code'}))
+        if(isnumeric(column_values))
+            column_values = cellstr(int2str(column_values));
         end
     end
     for j = 1:num_studies
         switch current_column
             case {'patient_id' 'ac_number' 'study_date' 'project' 'group_name' 'description' 'scanner' 'tracer' 'mri_code' 'notes' 'injection_time'}
-                    val = column_values{j}
+                
+                val = column_values{j}
                     if(~isempty(val))
                         updated_val = aivo_import_check(val,current_column,j);
                         column_values{j} = updated_val;
                     end
-            case {'dc' 'weight' 'height' 'dose' 'start_time' 'glucose' 'hct'}
+            case {'dc' 'weight' 'height' 'dose' 'scan_start_time' 'glucose' 'hct'}
                 val = column_values(j);
                 if(~isempty(val))
                     updated_val = aivo_import_check(val,current_column,j);
@@ -47,7 +54,7 @@ for i = 1:num_columns
     end
     T.(current_column) = column_values;
 end
-return
+% return
 %% Insert new studies to the study_table table
 % Inserting new rows to study_table will automatically trigger insertion of
 % rows also to patient, lab, study and magia tables
@@ -74,13 +81,33 @@ group_name = T.group_name;
 project_T = table(image_id,project,description,group_name);
 
 conn = aivo_connect;
+try
 insert(conn,'megabase.aivo2.study_code',t.Properties.VariableNames,t);
-insert(conn,'megabase.aivo2.project',{'image_id' 'project' 'description' 'group_name'},project_T);
+%insert(conn,'megabase.aivo2.project',{'image_id' 'project' 'description' 'group_name'},project_T);
+catch ME
+    if (contains(ME.message,'duplicate key'))
+     
+        columns = {	'image_id'	'project'	'group_name' ...
+            'description'			'frames'	 ...
+           			'scan_start_time'	'glucose'	'hct'};
+
+        for i = 1:length(columns)
+            field = columns{i};
+            aivo_set_info(T.ac_number,field,T.(field));
+        end
+        
+    else
+        rethrow(ME)
+    end 
+end  %plasma dynamic notes type source?
 close(conn);
+
 
 %% Update the contents of the other tables
 
-remaining_columns = {'patient_id' 'study_date' 'scanner' 'tracer' 'mri_code' 'notes' 'injection_time' 'dc' 'weight' 'height' 'dose' 'start_time' 'glucose' 'hct'};
+% remaining_columns = {'patient_id' 'study_date' 'scanner' 'tracer' 'mri_code' 'notes' 'injection_time' 'dc' 'weight' 'height' 'dose' 'scan_start_time' 'glucose' 'hct'};
+remaining_columns = {'patient_id' 'study_date' 'scanner' 'tracer' 'mri_code' 'notes' 'injection_time' 'dc' 'weight' 'height' 'dose' };
+
 
 for i = 1:length(remaining_columns)
     field = remaining_columns{i};
