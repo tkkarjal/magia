@@ -91,7 +91,9 @@ if(specs.magia.cut_time)
     frame_idx = specs.study.frames(:,2) <= specs.magia.cut_time;
     specs.study.frames = specs.study.frames(frame_idx,:);
     num_frames = sum(frame_idx);
-    pet_file = magia_select_frames(pet_file,num_frames);
+    if(num_frames > 0)
+        pet_file = magia_select_frames(pet_file,num_frames);
+    end
 end
 
 %% Preprocessing
