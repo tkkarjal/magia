@@ -16,6 +16,7 @@ end
 
 num_clusters = 3;
 
+original_mask = original_mask > 0;
 roi_idx = find(original_mask);
 X = meanpet_image(roi_idx);
 
