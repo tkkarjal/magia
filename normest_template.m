@@ -8,7 +8,7 @@ matlabbatch{1}.spm.tools.oldnorm.est.eoptions.smosrc = smosrc;
 matlabbatch{1}.spm.tools.oldnorm.est.eoptions.smoref = smoref;
 matlabbatch{1}.spm.tools.oldnorm.est.eoptions.regtype = regtype;
 matlabbatch{1}.spm.tools.oldnorm.est.eoptions.cutoff = 25;
-matlabbatch{1}.spm.tools.oldnorm.est.eoptions.nits = 10;
+matlabbatch{1}.spm.tools.oldnorm.est.eoptions.nits = 16;
 matlabbatch{1}.spm.tools.oldnorm.est.eoptions.reg = 1;
 
 spm_jobman('initcfg');
