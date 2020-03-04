@@ -249,6 +249,7 @@ end
 % If atlas-based ROIs are used, then the anatomical reference-region-
 % correction is skipped.
 
+
 if(strcmp(specs.magia.input_type,'ref'))
     fprintf('%s: Creating reference region mask\n',subject);
     if(strcmp(specs.magia.roi_type,'freesurfer'))
@@ -444,7 +445,7 @@ switch specs.magia.model
         suvs = tacs./(specs.study.dose/specs.study.weight);
         visualize_suvs(suvs,specs.study.frames,roi_info,results_dir);
         if(specs.magia.cpi)
-            parametric_images = magia_suv_image(pet_file,specs.study.dose,specs.study.weight,brainmask,results_dir);
+            parametric_images = {magia_suv_image(pet_file,specs.study.dose,specs.study.weight,brainmask,results_dir)};
         end
     case 'suvr'
         X = magia_suvr(cr,tacs,specs.study.frames,modeling_options.start_time,modeling_options.end_time);
