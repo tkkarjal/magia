@@ -28,6 +28,12 @@ switch model
     case 'suv'
         modeling_options.model = 'suv';
     case 'suvr'
+        frames = parse_frames_string(char(aivo_get_info(subject_id,'frames')));
+        if(size(frames,1)>1)
+            dyn = 1;
+        else
+            dyn = 0;
+        end
         modeling_options = aivo_read_suvr_modeling_options(subject_id,dyn);
     case 'logan'
         modeling_options = aivo_read_logan_modeling_options(subject_id);
