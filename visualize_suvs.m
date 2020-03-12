@@ -1,4 +1,4 @@
-function visualize_suvs(suvs,frames,roi_info,results_dir)
+function visualize_suvs(suvs,frames,roi_labels,results_dir)
 
 d = sprintf('%s/suvs',results_dir);
 if(~exist(d,'dir'))
@@ -12,8 +12,8 @@ if(length(t)>1)
         fig = figure('Visible','Off');
         plot(t,suvs(i,:),'ko-');
         xlabel('Time (min)'); ylabel('Standardized uptake value');
-        title(roi_info.labels{i});
-        img_name = sprintf('%s/%s.png',d,roi_info.labels{i});
+        title(roi_labels{i});
+        img_name = sprintf('%s/%s.png',d,roi_labels{i});
         print('-noui',img_name,'-dpng');
         close(fig);
     end

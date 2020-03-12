@@ -443,7 +443,7 @@ switch specs.magia.model
             error('%s: Could not calculate SUVs because the weight of the subject was not specified.',subject);
         end
         suvs = tacs./(specs.study.dose/specs.study.weight);
-        visualize_suvs(suvs,specs.study.frames,roi_info,results_dir);
+        visualize_suvs(suvs,specs.study.frames,roi_labels,results_dir);
         if(specs.magia.cpi)
             parametric_images = {magia_suv_image(pet_file,specs.study.dose,specs.study.weight,brainmask,results_dir)};
         end
