@@ -60,4 +60,16 @@ if(input(1,1)>0)
     input = [0 0;input];
 end
 
+zero_time_idx = input(:,1) == 0;
+if(sum(zero_time_idx)>1)
+    last_zero_time_idx = find(zero_time_idx,1,'last');
+    input = input(last_zero_time_idx:end,:);
+end
+
+% Throw an error if there are duplicate time points
+T = tabulate(input(:,1));
+if(any(T(:,2) > 1))
+    error('Found duplicate time-points from the input file %s',filename);
+end
+
 end
