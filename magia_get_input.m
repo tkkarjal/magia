@@ -9,6 +9,11 @@ f = get_filenames(input_folder,'*.');
 if(isempty(f))
     error('%s: Could not find input data from %s',subject,input_folder);
 else
+    if(iscell(f))
+        [~,~,ext] = cellfun(@fileparts,f,'uniformoutput',false);
+        idx = ismember(ext,'.png');
+        f(idx) = [];
+    end
     % Read input
     input = magia_read_input(f);
     
