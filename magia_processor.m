@@ -58,6 +58,12 @@ found = magia_check_found(subject);
 if(~found)
     error('%s: Could not find image files. Please make sure the subject has its own folder under %s.',subject,data_path);
 end
+if(strcmp(specs.magia.norm_method,'mri'))
+    found = magia_check_found_mri(specs.study.mri_code);
+    if(~found)
+        error('%s: Could not find the MR image files.', subject);
+    end
+end
 
 % Clean the working directory
 magia_clean_files(subject);
