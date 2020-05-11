@@ -576,7 +576,11 @@ if(specs.magia.cpi)
         case 'mri'
             normalized_images = normwrite_df([mri_file;parametric_images],sub2mni,1);
         case 'pet'
-            normalized_images = normwrite_sn([meanpet_file;parametric_images],sub2mni,1);
+            if(strcmp(roi_type,'freesurfer'))
+                normalized_images = normwrite_sn([meanpet_file;parametric_images],sub2mni,1);
+            else
+                normalized_images = parametric_images;
+            end
     end
     if(specs.magia.fwhm_post)
         % Smooth the normalized parametric images
