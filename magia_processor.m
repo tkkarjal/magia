@@ -152,9 +152,6 @@ end
 % even with relatively low-quality MRIs. In other words, it is recommended
 % to do spatial normalization via MRIs, unless you know what you are doing.
 %
-% The ROI masks will be written in the native PET space. Thus, if atlas-
-% based ROIs are used, they are mapped from MNI space to the subject space.
-%
 % As a quality-control check, please always ensure that the ROIs look good
 % on top of the (mean) PET-image.
 
@@ -186,26 +183,25 @@ switch specs.magia.roi_type
                 roi_masks = remove_first_characters(roi_masks,2);
                 cellfun(@delete,roi_masks_temp);
             case 'pet'
-                if(specs.magia.cpi)
-                    fprintf('%s: Estimating the subject-to-MNI transformation using the template file %s\n',subject,specs.magia.template);
-                    if(exist(specs.magia.template,'file'))
-                        sub2mni = normest_template(meanpet_file,specs.magia.template,8,0,'mni');
-                    else
-                        error('%s: Could not estimate the subject-to-MNI transformation because the specified template file %s does not exist.',subject,specs.magia.template);
-                    end
-                end
-                fprintf('%s: Estimating the MNI-to-subject transformation using the template file %s\n',subject,specs.magia.template);
+                fprintf('%s: Estimating the subject-to-MNI transformation using the template file %s\n',subject,specs.magia.template);
                 if(exist(specs.magia.template,'file'))
-                    mni2sub = normest_template(specs.magia.template,meanpet_file,0,8,'none');
+                    sub2mni = normest_template(meanpet_file,specs.magia.template,8,0,'mni');
                 else
-                    error('%s: Could not estimate the MNI-to-subject transformation because the specified template file %s does not exist.',subject,specs.magia.template);
+                    error('%s: Could not estimate the subject-to-MNI transformation because the specified template file %s does not exist.',subject,specs.magia.template);
                 end
-                fprintf('%s: Warping the atlas-based ROIs into native space\n',subject);
-                roi_masks_temp = normwrite_sn(mni_roi_masks,mni2sub,0);
-                fprintf('%s: Reslicing the ROI masks to match the PET data\n',subject);
-                roi_masks = spm_coregister_reslice(meanpet_file,roi_masks_temp,0);
-                roi_masks = remove_first_characters(roi_masks,2);
-                cellfun(@delete,roi_masks_temp);
+                % Warp the PET data to MNI space
+                if(dyn)
+                    image_files = {meanpet_file;pet_file};
+                    normalized_images = normwrite_sn(image_files,sub2mni,1);
+                    meanpet_file = normalized_images{1};
+                    pet_file = normalized_images{2};
+                else
+                    normalized_images = normwrite_sn({pet_file},sub2mni,1);
+                    pet_file = normalized_images{1};
+                    meanpet_file = normalized_images{1};
+                end
+                roi_masks = spm_coregister_reslice(meanpet_file,mni_roi_masks,0);
+                roi_masks = remove_first_characters(roi_masks,1);
             otherwise
                 error('%s: Unknown ''norm_method'' ''%s''. The ''norm_method'' varialbe must be either ''mri'' or ''pet''. ',subject,specs.magia.norm_method);
         end
@@ -577,7 +573,11 @@ if(specs.magia.cpi)
         case 'mri'
             normalized_images = normwrite_df([mri_file;parametric_images],sub2mni,1);
         case 'pet'
-            normalized_images = normwrite_sn([meanpet_file;parametric_images],sub2mni,1);
+            if(strcmp(specs.magia.roi_type,'freesurfer'))
+                normalized_images = normwrite_sn([meanpet_file;parametric_images],sub2mni,1);
+            else
+                normalized_images = parametric_images;
+            end
     end
     if(specs.magia.fwhm_post)
         % Smooth the normalized parametric images
