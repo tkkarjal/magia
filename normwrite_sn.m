@@ -5,7 +5,7 @@ matlabbatch{1}.spm.tools.oldnorm.write.subj.resample = image_files;
 matlabbatch{1}.spm.tools.oldnorm.write.roptions.preserve = 0;
 matlabbatch{1}.spm.tools.oldnorm.write.roptions.bb = [-78 -112 -70
                                                       78 76 85];
-matlabbatch{1}.spm.tools.oldnorm.write.roptions.vox = [1 1 1];
+matlabbatch{1}.spm.tools.oldnorm.write.roptions.vox = [2 2 2];
 matlabbatch{1}.spm.tools.oldnorm.write.roptions.interp = interp;
 matlabbatch{1}.spm.tools.oldnorm.write.roptions.wrap = [0 0 0];
 matlabbatch{1}.spm.tools.oldnorm.write.roptions.prefix = 'w';
