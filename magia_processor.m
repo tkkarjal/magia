@@ -163,16 +163,16 @@ switch specs.magia.roi_type
         if(isfield(specs.magia,'mni_roi_mask_dir'))
             mni_roi_masks = get_filenames(specs.magia.mni_roi_mask_dir,'*.nii');
             [~,roi_labels] = cellfun(@fileparts,mni_roi_masks,'UniformOutput',false);
-            fprintf('%s: Copying atlas-based ROI masks\n',subject);
-            for i = 1:length(mni_roi_masks)
-                copyfile(mni_roi_masks{i},masks_dir,'f');
-                mni_roi_masks{i} = fullfile(masks_dir,[roi_labels{i} '.nii']);
-            end
         else
             error('%s: Could not use atlas-based ROIs because the directory containing the atlas-based ROI masks was not specified.',subject);
         end
         switch specs.magia.norm_method
             case 'mri'
+                fprintf('%s: Copying atlas-based ROI masks\n',subject);
+                for i = 1:length(mni_roi_masks)
+                    copyfile(mni_roi_masks{i},masks_dir,'f');
+                    mni_roi_masks{i} = fullfile(masks_dir,[roi_labels{i} '.nii']);
+                end
                 fprintf('%s: Fetching the MRI file\n',subject);
                 mri_file = magia_get_mri_file(subject,specs.study.mri_code);
                 fprintf('%s: Coregistering the MRI to the PET\n',subject);
@@ -186,26 +186,25 @@ switch specs.magia.roi_type
                 roi_masks = remove_first_characters(roi_masks,2);
                 cellfun(@delete,roi_masks_temp);
             case 'pet'
-                if(specs.magia.cpi)
-                    fprintf('%s: Estimating the subject-to-MNI transformation using the template file %s\n',subject,specs.magia.template);
-                    if(exist(specs.magia.template,'file'))
-                        sub2mni = normest_template(meanpet_file,specs.magia.template,8,0,'mni');
-                    else
-                        error('%s: Could not estimate the subject-to-MNI transformation because the specified template file %s does not exist.',subject,specs.magia.template);
-                    end
-                end
-                fprintf('%s: Estimating the MNI-to-subject transformation using the template file %s\n',subject,specs.magia.template);
+                roi_masks = mni_roi_masks; % if spatial normalization is done using pet and atlas-based ROIs are used then do not warp the MNI ROIs into native space
+                fprintf('%s: Estimating the subject-to-MNI transformation using the template file %s\n',subject,specs.magia.template);
                 if(exist(specs.magia.template,'file'))
-                    mni2sub = normest_template(specs.magia.template,meanpet_file,0,8,'none');
+                    sub2mni = normest_template(meanpet_file,specs.magia.template,8,0,'mni');
                 else
-                    error('%s: Could not estimate the MNI-to-subject transformation because the specified template file %s does not exist.',subject,specs.magia.template);
+                    error('%s: Could not estimate the subject-to-MNI transformation because the specified template file %s does not exist.',subject,specs.magia.template);
                 end
-                fprintf('%s: Warping the atlas-based ROIs into native space\n',subject);
-                roi_masks_temp = normwrite_sn(mni_roi_masks,mni2sub,0);
-                fprintf('%s: Reslicing the ROI masks to match the PET data\n',subject);
-                roi_masks = spm_coregister_reslice(meanpet_file,roi_masks_temp,0);
-                roi_masks = remove_first_characters(roi_masks,2);
-                cellfun(@delete,roi_masks_temp);
+                % Warp the PET data to MNI space
+                if(dyn)
+                    image_files = {meanpet_file pet_file};
+                    normalized_images = normwrite_sn(image_files,sub2mni,1);
+                    meanpet_file = normalized_images{1};
+                    pet_file = normalized_images{2};
+                else
+                    normalized_images = normwrite_sn({pet_file},sub2mni,1);
+                    pet_file = normalized_images{1};
+                    meanpet_file = normalized_images{1};
+                end
+                
             otherwise
                 error('%s: Unknown ''norm_method'' ''%s''. The ''norm_method'' varialbe must be either ''mri'' or ''pet''. ',subject,specs.magia.norm_method);
         end
