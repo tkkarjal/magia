@@ -133,6 +133,18 @@ switch roi_set
             [1026 2026] % racc
             [9 10 48 49] % tha
             };
+    case 'striat_unil'
+        roi_info.labels = {'cau_l' 'cau_r' 'nacc_l' 'nacc_r' 'pal_l' 'pal_r' 'put_l' 'put_r'};
+        roi_info.codes = {
+            11 % cau_l
+            50 % cau_r
+            26 % nacc_l
+            58 % nacc_r
+            13 % pal_l
+            52 % pal_r
+            [12 102] % put_l
+            [51 111] % put_r
+            };
     otherwise
         error('The roi_set %s has not been defined. Please use another roi_set.',roi_set);
 end
