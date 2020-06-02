@@ -304,6 +304,12 @@ if(specs.magia.rc)
     magia_correct_rois(roi_masks,meanpet_file);
 end
 
+%% Calculate ROI volumes
+
+vol = magia_calc_roi_volume(roi_masks);
+V = table(vol);
+V.Properties.RowNames = roi_labels;
+
 %% Read the input
 %
 % Note that Magia does not correct for metabolites, extrapolate the curves,
@@ -452,6 +458,7 @@ switch specs.magia.model
     case 'suvr'
         X = magia_suvr(cr,tacs,specs.study.frames,modeling_options.start_time,modeling_options.end_time);
         T = array2table(X,'VariableNames',{'SUVR'},'RowNames',roi_labels);
+        T = [T V];
         magia_write_roi_results(T,results_dir);
         if(specs.magia.cpi)
             parametric_images = {magia_suvr_image(modeling_options.start_time,modeling_options.end_time,cr,specs.study.frames,pet_file,brainmask,results_dir)};
@@ -463,6 +470,7 @@ switch specs.magia.model
             [~,X(i,:)] = fit_srtm(tacs(i,:),cr,specs.study.frames,modeling_options.lb,modeling_options.ub,50);
         end
         T = array2table(X,'VariableNames',{'R1','k2','BPnd'},'RowNames',roi_labels);
+        T = [T V];
         magia_write_roi_results(T,results_dir);
         magia_visualize_fit_srtm(T,tacs,cr,specs.study.frames,roi_labels,results_dir);
         if(specs.magia.cpi)
@@ -472,6 +480,7 @@ switch specs.magia.model
     case 'logan'
         [Vt,intercept,X,Y,k] = magia_fit_logan(tacs,cp,specs.study.frames,modeling_options.start_time,modeling_options.end_time);
         T = array2table([Vt intercept],'VariableNames',{'Vt','intercept'},'RowNames',roi_labels);
+        T = [T V];
         magia_write_roi_results(T,results_dir);
         magia_visualize_fit_logan(Vt,intercept,X,Y,k,roi_labels,results_dir);
         if(specs.magia.cpi)
@@ -480,6 +489,7 @@ switch specs.magia.model
     case 'logan_ref'
         [DVR,intercept,X,Y,k] = magia_fit_logan_ref(tacs,cr,specs.study.frames,modeling_options.start_time,modeling_options.end_time,modeling_options.refk2);
         T = array2table([DVR intercept],'VariableNames',{'DVR','intercept'},'RowNames',roi_labels);
+        T = [T V];
         magia_write_roi_results(T,results_dir);
         magia_visualize_fit_logan_ref(DVR,intercept,X,Y,k,roi_labels,results_dir);
         if(specs.magia.cpi)
@@ -488,6 +498,7 @@ switch specs.magia.model
     case 'ma1'
         [Vt,intercept,k,b1,b2,auc_input,auc_pet] = magia_fit_ma1(tacs,cp,specs.study.frames,modeling_options.start_time,modeling_options.end_time);
         T = array2table([Vt intercept],'VariableNames',{'Vt','intercept'},'RowNames',roi_labels);
+        T = [T V];
         magia_write_roi_results(T,results_dir);
         magia_visualize_fit_ma1(tacs,b1,b2,auc_input,auc_pet,k,specs.study.frames,roi_labels,results_dir)
         if(specs.magia.cpi)
@@ -501,6 +512,7 @@ switch specs.magia.model
         else
             T = array2table(furs,'VariableNames',{'FUR'},'RowNames',roi_labels);
         end
+        T = [T V];
         magia_write_roi_results(T,results_dir);
         if(specs.magia.cpi)
             fur_image_file = magia_calculate_fur_image(cp,specs.study.frames,modeling_options.start_time,modeling_options.end_time,modeling_options.ic,pet_file,brainmask,results_dir);
@@ -519,6 +531,7 @@ switch specs.magia.model
         else
             T = array2table([Ki intercept],'VariableNames',{'Ki','intercept'},'RowNames',roi_labels);
         end
+        T = [T V];
         magia_write_roi_results(T,results_dir);
         magia_visualize_fit_patlak(Ki,intercept,x,Y,k,roi_labels,results_dir);
         if(specs.magia.cpi)
@@ -531,6 +544,7 @@ switch specs.magia.model
     case 'patlak_ref'
         [Ki_ref,intercept,x,Y,k] = magia_fit_patlak_ref(cr,tacs,specs.study.frames,modeling_options.start_time,modeling_options.end_time);
         T = array2table([Ki_ref intercept],'VariableNames',{'Ki_ref','intercept'},'RowNames',roi_labels);
+        T = [T V];
         magia_write_roi_results(T,results_dir);
         magia_visualize_fit_patlak_ref(Ki_ref,intercept,x,Y,k,roi_labels,results_dir);
         if(specs.magia.cpi)
@@ -548,6 +562,7 @@ switch specs.magia.model
             X(i,6) = vt;
         end
         T = array2table(X,'VariableNames',{'K1','K1k2','k3','k3k4','vb','vt'},'RowNames',roi_labels);
+        T = [T V];
         magia_write_roi_results(T,results_dir);
         % magia_visualize_fit_2tcm(T,tacs,cp,cb,specs.study.frames,modeling_options,roi_info,results_dir);
         if(specs.magia.cpi)
