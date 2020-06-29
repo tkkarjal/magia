@@ -6,8 +6,9 @@ pet_img = reshape(pet_img,[prod(V(1).dim(1:3)) size(V,1)])';
 V = spm_vol(brainmask_filename);
 mask = spm_read_vols(V) > 0;
 non_nan_mask = reshape(~any(isnan(pet_img)),V.dim);
-non_zero_mask = reshape(~any(pet_img <= 0),V.dim);
-mask = mask & non_nan_mask & non_zero_mask;
+% non_zero_mask = reshape(~any(pet_img <= 0),V.dim);
+% mask = mask & non_nan_mask & non_zero_mask;
+mask = mask & non_nan_mask;
 pet_img = pet_img(:,mask);
 
 fprintf('Starting Logan fit with reference input to %.0f voxels...',sum(mask(:)));
