@@ -56,7 +56,7 @@ else
     end
     cmd = sprintf('recon-all -s %s -i %s -all -cw256 -brainstem-structures',mri_code,sub_mri_file);
     system(cmd);
-    cmd = sprintf('gzip -r %s',sub_mri_dir);
+    cmd = sprintf('gzip -rf %s',sub_mri_dir);
     system(cmd);
     cmd = sprintf('rm -rf %s',final_freesurfer_sub_dir);
     system(cmd);
