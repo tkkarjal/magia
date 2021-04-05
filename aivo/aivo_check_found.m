@@ -21,10 +21,11 @@ q = sprintf('SELECT %s.image_id FROM "megabase"."aivo2".%s ',table_name,table_na
 conn = aivo_connect();
 curs = exec(conn,q);
 curs = fetch(curs);
-close(curs);
-close(conn);
 
 table_image_ids = curs.Data;
+
+close(curs);
+close(conn);
 
 found = ismember(image_id,table_image_ids);
 

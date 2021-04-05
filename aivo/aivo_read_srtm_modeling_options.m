@@ -5,7 +5,7 @@ if(isempty(conn))
     conn = aivo_connect();
 end
 
-cols = columns(conn,'megapet','aivo2','srtm');
+cols = aivo_columns(conn,'srtm');
 cols = setdiff(cols,'tracer','stable');
 M = length(cols);
 select_statement = 'SELECT * FROM "megabase"."aivo2".srtm';
@@ -15,8 +15,8 @@ q = sprintf('%s %s ORDER BY image_id ASC;',select_statement,where_statement);
 
 curs = exec(conn,q);
 curs = fetch(curs);
-close(curs);
 value = curs.Data;
+close(curs);
 close(conn);
 
 modeling_options.model = 'srtm';

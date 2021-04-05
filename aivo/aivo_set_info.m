@@ -7,14 +7,14 @@ function aivo_set_info(subject_id,field,value)
 
 conn = aivo_connect();
 
-study_cols = columns(conn,'megapet','aivo2','study');
-patient_cols = columns(conn,'megapet','aivo2','patient');
-project_cols = columns(conn,'megapet','aivo2','project');
-magia_cols = columns(conn,'megapet','aivo2','magia');
-lab_cols = columns(conn,'megapet','aivo2','lab');
-inventory_cols = columns(conn,'megapet','aivo2','inventory');
+study_cols = aivo_columns(conn, 'study');
+patient_cols = aivo_columns(conn, 'patient');
+project_cols = aivo_columns(conn, 'project');
+magia_cols = aivo_columns(conn, 'magia');
+lab_cols = aivo_columns(conn, 'lab');
+inventory_cols = aivo_columns(conn, 'inventory');
 mri_cols = {'freesurfed'};
-study_code_cols = columns(conn,'megapet','aivo2','study_code');
+study_code_cols = aivo_columns(conn, 'study_code');
 
 if(ismember(field,study_cols))
     table_name = 'study';

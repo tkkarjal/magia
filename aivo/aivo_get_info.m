@@ -40,8 +40,8 @@ conn = aivo_connect();
 
 refresh(conn)
 
-materia_cols = columns(conn,'megapet','aivo2','materia');
-study_code_cols = columns(conn,'megapet','aivo2','study_code'); % Should be added in materia from Janne
+materia_cols = aivo_columns(conn,'materia');
+study_code_cols = aivo_columns(conn,'study_code'); % Should be added in materia from Janne
 
 %if(~ismember(field,cols))
 %    error('Unrecognized field name: %s',field);
