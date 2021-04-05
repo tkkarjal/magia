@@ -10,7 +10,7 @@ end
 
 %% If the input_type is not classfile, then the field classfile is not needed and can be removed
 
-if(isfield(magia_specs,'classfile') && strcmp(magia_specs.classfile,'null'))
+if(isfield(magia_specs,'classfile') && isempty(magia_specs.classfile))
     if(~strcmp(magia_specs.input_type,'sca_ref'))
         if(isfield(magia_specs,'classfile'))
             magia_specs = rmfield(magia_specs,'classfile');
