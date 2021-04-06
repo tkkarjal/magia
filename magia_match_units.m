@@ -10,10 +10,10 @@ max_input = max(input(:,2));
 
 corrected_input = input;
 
-if(max_pet > 100 && max_input < 100)
+if(max_pet > 100 && max_input < 200)
     % pet bq, input kbq
     corrected_input(:,2) = input(:,2)*1000;
-elseif(max_pet < 100 && max_input > 100)
+elseif(max_pet < 100 && max_input > 200)
     % pet kbq, input bq
     corrected_input(:,2) = input(:,2)*0.001;
 end
