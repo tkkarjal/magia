@@ -2,7 +2,7 @@ function modeling_options = aivo_read_patlak_ref_modeling_options(subject_id)
 
 conn = aivo_connect();
 
-cols = columns(conn,'megapet','aivo2','patlak_ref');
+cols = aivo_columns(conn,'patlak_ref');
 cols = setdiff(cols,'tracer','stable');
 M = length(cols);
 select_statement = 'SELECT * FROM "megabase"."aivo2".patlak_ref';
