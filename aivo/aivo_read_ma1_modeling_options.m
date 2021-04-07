@@ -5,7 +5,7 @@ if(isempty(conn))
     conn = aivo_connect();
 end
 
-cols = columns(conn,'megapet','aivo2','ma1');
+cols = aivo_columns(conn,'ma1');
 cols = setdiff(cols,'tracer','stable');
 M = length(cols);
 select_statement = 'SELECT * FROM "megabase"."aivo2".ma1';
