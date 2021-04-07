@@ -16,7 +16,7 @@ else
     value = curs.Data;
     close(curs);
     
-    magia_cols = columns(conn,'megabase','aivo2','magia');
+    magia_cols = aivo_columns(conn,'magia');
     [magia_cols,idx] = setdiff(magia_cols,'image_id');
     value = value(idx);
     

@@ -8,7 +8,7 @@ if(exist(githashfile,'file'))
   githash = fgetl(fid);
   fclose(fid);
 else
-  fprintf('Could not find the git hash file. Please download Magia using via command line using the command git clone https://github.com/tkkarjal/magia.git.);
+  fprintf('Could not find the git hash file. Please download Magia using via command line using the command git clone https://github.com/tkkarjal/magia.git');
   githash = 'Not available';
 end
 

@@ -117,8 +117,6 @@ if((~mod(nargin,2)))
     
     curs = exec(conn,q);
     curs = fetch(curs);
-    close(curs);
-    
 
     if iscell(curs.Data)
         if(strcmp(curs.Data{1},'No Data'))
@@ -126,7 +124,7 @@ if((~mod(nargin,2)))
         else
             subjects = curs.Data;
         end
-
+        close(curs);
     else
         error('No items found with the searching criteria!')
     end
