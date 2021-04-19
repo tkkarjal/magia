@@ -11,8 +11,8 @@ q = sprintf('%s %s ORDER BY image_id ASC;',select_statement,where_statement);
 
 curs = exec(conn,q);
 curs = fetch(curs);
-close(curs);
 value = curs.Data;
+close(curs);
 close(conn);
 
 modeling_options.model = 'patlak';
