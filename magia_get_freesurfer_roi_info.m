@@ -102,7 +102,7 @@ switch roi_set
             [9 10 48 49] % tha
             };
     case 'rs6'
-        roi_info.labels = {'CGA' 'CGP' 'LOC' 'LTC' 'MTC' 'PARCALL' 'PIB1PFCALL' 'PIBcomp' 'PREC' 'STR'};
+        roi_info.labels = {'CGA' 'CGP' 'LOC' 'LTC' 'MTC' 'PARCALL' 'PIB1PFCALL' 'PIBcomp' 'PREC' 'STR' 'CER'};
         roi_info.codes = {
             [1002 2002 1026 2026] % anterior cingulate
             [1010 2010 1023 2023] % posterior cingulate
@@ -114,6 +114,7 @@ switch roi_set
             [1003 2003 1012 2012 1014 2014 1018 2018 1019 2019 1020 2020 1027 2027 1028 2028 1032 2032 1009 2009 1015 2015 1030 2030 1033 2033 1034 2034 1008 2008 1029 2029 1031 2031 1025 2025 1002 2002 1026 2026 1010 2010 		 1023 2023] % pibcomp
             [1025 2025] % precuneus
             [11 50 12 51] % striatum
+            [8 47] % cerebellum
             };
     case 'rs7'
         roi_info.labels = {'amy' 'cau' 'dacc' 'hip' 'ins' 'nacc' 'oc' 'ofc' 'pal' 'parhip' 'pcc' 'put' 'racc' 'tha'};
