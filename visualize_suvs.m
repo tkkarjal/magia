@@ -12,7 +12,7 @@ if(length(t)>1)
         fig = figure('Visible','Off');
         plot(t,suvs(i,:),'ko-');
         xlabel('Time (min)'); ylabel('Standardized uptake value');
-        title(roi_info.labels{i});
+        title(roi_labels{i});
         img_name = sprintf('%s/%s.png',d,roi_info.labels{i});
         print('-noui',img_name,'-dpng');
         close(fig);
