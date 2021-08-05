@@ -57,7 +57,7 @@ switch tracer
             case 'nbases'
                 value = 300;
         end
-    case {'[11c]pk11195','[11c]tmsx'}
+    case {'[11c]pk11195','[11c]tmsx','[11c]ro15-4513'}
         switch var
             case 'lb'
                 value = [0 0 0];
