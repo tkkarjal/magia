@@ -34,6 +34,7 @@ end
 clear idxmask;
 clear DYNframe
 weights = (frameDur.^2)./tots;
+weights(isinf(weights)) = 0; %if frame mean==0;
 %weights = ones(length(frameMid),1); %no weights
 W = diag(sqrt(weights));
 
