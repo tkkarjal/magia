@@ -1,5 +1,6 @@
 function magia_visualize_fit_srtm(T,tacs,input,frames,roi_labels,results_dir)
 
+subject = strtok(extractAfter(results_dir,getenv('MAGIA_ARCHIVE')),'/');
 fit_dir = sprintf('%s/fits',results_dir);
 if(~exist(fit_dir,'dir'))
     mkdir(fit_dir);
@@ -17,7 +18,7 @@ for i = 1:size(tacs,1)
     y = simSRTM_1_0_0(k,t,input,cri,dt,M);
     plot(t,y,'k');
     xlabel('Time (min)'); ylabel('Radioactivity concentration');
-    title(roi_labels{i});
+    title([subject ' ' roi_labels{i}]);
     img_name = sprintf('%s/%s.png',fit_dir,roi_labels{i});
     a = annotation('textbox', [0.5 0.13 0.1 0.1], 'String',...
         sprintf('R1 = %.2f; k2 = %.2f; BPnd = %.2f',...
