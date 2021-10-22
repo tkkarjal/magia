@@ -27,4 +27,8 @@ for i = 1:size(tacs,1)
     close(fig);
 end
 
+fname = sprintf('%s/modelfits.mat',results_dir);
+s = struct('modelfits',y,'tacs',tacs,'input',input,'frames',frames,'t',t,'roi_labels',{roi_labels}); 
+save(fname,'-struct','s');
+
 end
