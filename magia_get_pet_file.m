@@ -17,7 +17,7 @@ nii_pet_file = sprintf('%s/pet_%s.nii',nii_dir,subject);
 if(~exist(nii_pet_file,'file'))
     gz_file = sprintf('%s.gz',nii_pet_file);
     if(exist(gz_file,'file'))
-        cmd = sprintf('gunzip %s',gz_file);
+        cmd = sprintf('gunzip -rf %s',gz_file);
         status = system(cmd);
         if(status)
             error('Could not unzip %s.',gz_file);
@@ -37,7 +37,7 @@ end
 
 pet_file = sprintf('%s/pet_%s.nii',pet_dir,subject);
 copyfile(nii_pet_file,pet_file,'f');
-cmd = sprintf('gzip %s',nii_pet_file);
+cmd = sprintf('gzip -rf %s',nii_pet_file);
 system(cmd);
 
 end
