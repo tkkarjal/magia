@@ -52,6 +52,7 @@ switch roi_set
             [1030 2030] % suptemp
             [1033 2033] % tempol
             [9 10 48 49] % tha
+            [13 52] % pal
             };
     case 'rs3'
         roi_info.labels = {'amy' 'cau' 'nacc' 'pal' 'put' 'tha'};
