@@ -29,7 +29,7 @@ switch roi_set
             [9 10 48 49] % tha
             };
     case 'rs2'
-        roi_info.labels = {'amy' 'cau' 'cer' 'dacc' 'hip' 'inftemp' 'ins' 'medul' 'midbr' 'midtemp' 'nacc' 'ofc' 'parsop' 'pcc' 'pons' 'put' 'racc' 'supfront' 'suptemp' 'tempol' 'tha'};
+        roi_info.labels = {'amy' 'cau' 'cer' 'dacc' 'hip' 'inftemp' 'ins' 'medul' 'midbr' 'midtemp' 'nacc' 'ofc' 'pal' 'parsop' 'pcc' 'pons' 'put' 'racc' 'supfront' 'suptemp' 'tempol' 'tha'};
         roi_info.codes = {
             [18 54] % amy
             [11 50] % cau
@@ -43,6 +43,7 @@ switch roi_set
             [1015 2015] % midtemp
             [26 58] % nacc
             [1012 1014 2012 2014] % ofc
+            [13 52] % pal
             [1018 2018] % parsop
             [1023 2023] % pcc
             [174] % pons
@@ -51,8 +52,7 @@ switch roi_set
             [1028 2028] % supfront
             [1030 2030] % suptemp
             [1033 2033] % tempol
-            [9 10 48 49] % tha
-            [13 52] % pal
+            [9 10 48 49] % tha        
             };
     case 'rs3'
         roi_info.labels = {'amy' 'cau' 'nacc' 'pal' 'put' 'tha'};
