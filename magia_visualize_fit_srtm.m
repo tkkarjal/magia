@@ -10,12 +10,14 @@ cri = cumtrapz(t,input);
 dt = [t(1); t(2:end)-t(1:end-1)];
 M = length(t);
 
+modelfits = zeros(size(tacs,1),length(t));
 for i = 1:size(tacs,1)
     fig = figure('Visible','Off','Position',[100 100 700 400]);
     plot(t,input,'k--'); hold on;
     plot(t,tacs(i,:),'ko');
     k = table2array(T(i,:));
     y = simSRTM_1_0_0(k,t,input,cri,dt,M);
+    modelfits(i,:)=y';
     plot(t,y,'k');
     xlabel('Time (min)'); ylabel('Radioactivity concentration');
     title([subject ' ' roi_labels{i}]);
@@ -29,7 +31,7 @@ for i = 1:size(tacs,1)
 end
 
 fname = sprintf('%s/modelfits.mat',results_dir);
-s = struct('modelfits',y,'tacs',tacs,'input',input,'frames',frames,'t',t,'roi_labels',{roi_labels}); 
+s = struct('modelfits',modelfits,'tacs',tacs,'input',input,'frames',frames,'t',t,'roi_labels',{roi_labels}); 
 save(fname,'-struct','s');
 
 end
