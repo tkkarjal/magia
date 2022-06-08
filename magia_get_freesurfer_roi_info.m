@@ -147,6 +147,32 @@ switch roi_set
             [12 102] % put_l
             [51 111] % put_r
             };
+    case 'rs_CB1R_new'
+        roi_info.labels = {'amy' 'hip' 'cau' 'put' 'nacc' 'tha' 'cer' 'acc' 'pcc' 'ins' 'ofc' 'suptemp' 'midtemp' 'inftemp' 'supfront' 'midbr' 'pons' 'medul' 'entorhinal' 'pallidum' 'midfront' 'cingulate'};
+        roi_info.codes = {
+            [18 54] % amy
+            [17 53] % hip
+            [11 50] % cau
+            [12 102 51 111] % put
+            [26 58] % nacc
+            [9 10 48 49] % tha 
+            [8 47] % cer
+            [1002 2002 1026 2026] % dacc + racc = acc
+            [1023 2023] % pcc
+            [1035 2035] % ins    
+            [1012 1014 2012 2014] % ofc
+            [1030 2030] % suptemp
+            [1015 2015] % midtemp
+            [1009 2009] % inftemp
+            [1028 2028] % supfront
+            [173] % midbr
+            [174] % pons
+            [175] % medul
+            [1006 2006 ] % entorhinal cortex
+            [13 52] % pallidum
+            [1003 1027 2003 2027] % middle frontal   
+            [1002 2002 1026 2026 1023 2023 1010 2010] % cingulate = acc + pcc + isthmus
+            };
     otherwise
         error('The roi_set %s has not been defined. Please use another roi_set.',roi_set);
 end
