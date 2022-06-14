@@ -1,4 +1,4 @@
-function [corrected_reference_region,thr] = data_driven_reference_region_correction_fwhm(uncorrected_reference_region,mean_pet_image,varargin)
+function [corrected_reference_region,thr,fig] = data_driven_reference_region_correction_fwhm(uncorrected_reference_region,mean_pet_image,varargin)
 
 [~,n,e] = fileparts(uncorrected_reference_region);
 V = spm_vol(uncorrected_reference_region);
@@ -52,13 +52,13 @@ end
 
 V.descrip = sprintf('ll = %.0f; ul = %.0f',ll,ul);
 spm_write_vol(V,corrected_reference_region);
-corrected_reference_region = V.fname;
-p = fileparts(V.fname);
-
-idx = regexp(p,'/');
-subject = p(idx(end-1)+1:idx(end)-1);
-add_to_qc_pic(subject,fig);
-
-close(fig);
+% corrected_reference_region = V.fname;
+% p = fileparts(V.fname);
+% 
+% idx = regexp(p,'/');
+% subject = p(idx(end-1)+1:idx(end)-1);
+% add_to_qc_pic(subject,fig);
+% 
+% close(fig);
 
 end
