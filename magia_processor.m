@@ -268,7 +268,10 @@ if(strcmp(specs.magia.input_type,'ref'))
             error('%s: Could not find reference region mask among the atlas-specified ROIs. Please make sure that the correct reference region for the tracer is among the ROIs.',subject);
         end
     end
-    ref_mask = data_driven_reference_region_correction_fwhm(ref_mask,meanpet_file);
+    [ref_mask,~,ref_fig] = data_driven_reference_region_correction_fwhm(ref_mask,meanpet_file);
+    add_to_qc_pic(subject,ref_fig);
+    close(ref_fig);
+   
 end
 
 %% ROI-correction
