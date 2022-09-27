@@ -173,6 +173,16 @@ switch roi_set
             [1003 1027 2003 2027] % middle frontal   
             [1002 2002 1026 2026 1023 2023 1010 2010] % cingulate = acc + pcc + isthmus
             };
+        
+    case 'FSlobes'
+        roi_info.labels = {'fro' 'par' 'tmp' 'occ' 'cin'}; %see freesurfer cortical lobe parcellation: https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation
+        roi_info.codes = {
+            [ 70   105    69   104    46    81    60    95    62    97    61    96    56    91    54    89    66   101    59    94    74   109] % frontal lobe
+            [ 71   106    50    85    73   108    64    99    67   102] %parietal lobe
+            [ 51    86    57    92    72   107    44    79    49    84    76   111    48    83    75   110    58    93] %temporal lobe
+            [ 53    88    55    90    47    67    82   102    63    98] %occipital lobe
+            [ 45    80    68   103    52    87    65   100] %cingulate (included as a lobe)
+            };
     otherwise
         error('The roi_set %s has not been defined. Please use another roi_set.',roi_set);
 end
