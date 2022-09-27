@@ -177,11 +177,13 @@ switch roi_set
     case 'FSlobes'
         roi_info.labels = {'fro' 'par' 'tmp' 'occ' 'cin'}; %see freesurfer cortical lobe parcellation: https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation
         roi_info.codes = {
-            [ 70   105    69   104    46    81    60    95    62    97    61    96    56    91    54    89    66   101    59    94    74   109] % frontal lobe
-            [ 71   106    50    85    73   108    64    99    67   102] %parietal lobe
-            [ 51    86    57    92    72   107    44    79    49    84    76   111    48    83    75   110    58    93] %temporal lobe
-            [ 53    88    55    90    47    67    82   102    63    98] %occipital lobe
-            [ 45    80    68   103    52    87    65   100] %cingulate (included as a lobe)
+            [   1028        2028        1027        2027        1003        2003        1018        2018        1020        2020        1019        2019 ...
+                1014        2014        1012        2012        1024        2024        1017        2017        1032        2032] % frontal lobe
+            [  1029        2029        1008        2008        1031        2031        1022        2022        1025        2025 ] %parietal lobe
+            [  1009        2009        1015        2015        1030        2030        1001        2001        1007        2007        1034        2034 ...
+               1006        2006        1033        2033        1016        2016] %temporal lobe
+            [  1011        2011        1013        2013        1005        1025        2005        2025        1021        2021 ] %occipital lobe
+            [  1002        2002        1026        2026        1010        2010        1023        2023 ] %cingulate (included as a lobe)
             };
     otherwise
         error('The roi_set %s has not been defined. Please use another roi_set.',roi_set);
