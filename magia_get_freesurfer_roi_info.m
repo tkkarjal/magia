@@ -135,8 +135,8 @@ switch roi_set
             [1026 2026] % racc
             [9 10 48 49] % tha
             };
-    case 'striat_unil'
-        roi_info.labels = {'cau_l' 'cau_r' 'nacc_l' 'nacc_r' 'pal_l' 'pal_r' 'put_l' 'put_r'};
+     case 'striat_unil'
+        roi_info.labels = {'cau_l' 'cau_r' 'nacc_l' 'nacc_r' 'pal_l' 'pal_r' 'put_l' 'put_r' 'tha_l' 'tha_r'};
         roi_info.codes = {
             11 % cau_l
             50 % cau_r
@@ -146,6 +146,8 @@ switch roi_set
             52 % pal_r
             [12 102] % put_l
             [51 111] % put_r
+            [9 10 ] %tha_l
+            [48 49] % tha_r
             };
     case 'rs_CB1R_new'
         roi_info.labels = {'amy' 'hip' 'cau' 'put' 'nacc' 'tha' 'cer' 'acc' 'pcc' 'ins' 'ofc' 'suptemp' 'midtemp' 'inftemp' 'supfront' 'midbr' 'pons' 'medul' 'entorhinal' 'pallidum' 'midfront' 'cingulate'};
@@ -175,7 +177,7 @@ switch roi_set
             };
         
     case 'FSlobes'
-        roi_info.labels = {'fro' 'par' 'tmp' 'occ' 'cin'}; %see freesurfer cortical lobe parcellation: https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation
+        roi_info.labels = {'fro' 'par' 'tmp' 'occ' 'cin' 'cau' 'put' 'tha' 'hip' 'amy' 'ins' 'pal' 'bs' 'cc' 'cer'}; %see freesurfer cortical lobe parcellation: https://surfer.nmr.mgh.harvard.edu/fswiki/CorticalParcellation
         roi_info.codes = {
             [   1028        2028        1027        2027        1003        2003        1018        2018        1020        2020        1019        2019 ...
                 1014        2014        1012        2012        1024        2024        1017        2017        1032        2032] % frontal lobe
@@ -184,6 +186,16 @@ switch roi_set
                1006        2006        1033        2033        1016        2016] %temporal lobe
             [  1011        2011        1013        2013        1005        1025        2005        2025        1021        2021 ] %occipital lobe
             [  1002        2002        1026        2026        1010        2010        1023        2023 ] %cingulate (included as a lobe)
+            [11 50] % cau
+            [12 102 51 111] % put
+            [9 10 48 49] % tha
+            [17 53] % hip
+            [18 54] % amy
+            [1035 2035] % ins
+            [13 52] % pallidum
+            [16] %brain stem
+            [251 252 253 254 255] %corpus callosum
+            [8 47] % cer
             };
     otherwise
         error('The roi_set %s has not been defined. Please use another roi_set.',roi_set);
