@@ -35,7 +35,7 @@ spm_write_vol(V,Ki_img);
 
 parametric_images{1} = niftiname;
 
-niftiname = fullfile(outputdir,[filename '_Patlak_intercept' int2str(start_time) '_' int2str(end_frame) '.nii']);
+niftiname = fullfile(outputdir,[filename '_Patlak_Intercept_' int2str(start_time) '_' int2str(end_frame) '.nii']);
 V.fname = niftiname;
 V.private.dat.fname = niftiname;  
 spm_write_vol(V,intercept_img);
